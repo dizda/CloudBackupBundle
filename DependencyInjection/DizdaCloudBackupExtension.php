@@ -22,7 +22,12 @@ class DizdaCloudBackupExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('config.yml');
+
+
+        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.user',      $config['cloud_storages']['dropbox']['user']);
+        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.password',  $config['cloud_storages']['dropbox']['password']);
+
     }
 }

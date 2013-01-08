@@ -20,9 +20,32 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('dizda_cloud_backup');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+        ->children()
+            ->arrayNode('cloud_storages')
+                ->children()
+                    ->arrayNode('dropbox')
+                    ->info('Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)')
+                        ->children()
+                            ->scalarNode('user')->isRequired()->end()
+                            ->scalarNode('password')->isRequired()->end()
+                        ->end()
+                    ->end()
+                    ->arrayNode('cloudapp')
+                    ->info('CloudApp')
+                        ->children()
+                            ->scalarNode('user')->isRequired()->end()
+                            ->scalarNode('password')->isRequired()->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+            ->arrayNode('databases')
+                ->children()
+                    ->booleanNode('mongodb')->defaultFalse()->end()
+                ->end()
+            ->end()
+        ->end();
 
         return $treeBuilder;
     }

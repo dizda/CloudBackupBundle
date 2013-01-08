@@ -26,7 +26,10 @@ class BackupCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
+        $user = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.user');
 
+
+        $client = $this->getContainer()->get('dizda.cloudbackup.database.mongodb')->dump();
 
         /*$tmpfname = tempnam("/tmp");
 
@@ -35,9 +38,9 @@ class BackupCommand extends ContainerAwareCommand
         fclose($handle);*/
 
 
-        $dropbox = new DropboxUploader('dizzda@gmail.com', '5335JDDJdX');
+        /*$dropbox = new DropboxUploader('dizzda@gmail.com', '5335JDDJdX');
         $dropbox->upload($tmpfname, '/Backups/bankmanager/', 'test.txt');
-
+*/
 
 
         $output->writeln('All ok.');
