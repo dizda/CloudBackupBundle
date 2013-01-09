@@ -18,7 +18,7 @@ class BackupCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('dizda:cloud:backup')
+            ->setName('dizda:backup:start')
             ->setDescription('Upload backup to the cloud service\'s')
         ;
     }
