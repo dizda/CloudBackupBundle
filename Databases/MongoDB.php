@@ -2,38 +2,38 @@
 namespace Dizda\CloudBackupBundle\Databases;
 
 use JMS\DiExtraBundle\Annotation as DI;
-use Symfony\Component\Filesystem\Filesystem;
-
 
 /**
  * @DI\Service("dizda.cloudbackup.database.mongodb");
  */
-class MongoDB
+class MongoDB extends BaseDatabase
 {
-    private $kernelCacheDir;
+    const DB_PATH = 'mongo';
 
-    /**
-     * @DI\InjectParams({
-     *     "kernelCacheDir" = @DI\Inject("%kernel.cache_dir%")
-     * })
-     */
-    public function __construct($kernelCacheDir)
+
+    /*public function __construct()
     {
         $this->kernelCacheDir = $kernelCacheDir;
-    }
 
-    public function dump()
-    {
         $path   = $this->kernelCacheDir . '/db/mongo/';
         $file   = new Filesystem();
         $file->mkdir($path);
+    }*/
 
-        $cmd    = "mongodump --db creditmanager --out $path";
+    public function dump()
+    {
+        parent::before();
+
+        $cmd    = sprintf('mongodump --db creditmanager --out %s',
+                           $this->dataPath);
+
         exec($cmd);
 
-        var_dump($path);
-
+        parent::after();
     }
+
+
+
 
 
 
