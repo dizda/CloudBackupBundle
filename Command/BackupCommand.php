@@ -26,24 +26,23 @@ class BackupCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $user = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.user');
+        $user     = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.user');
+        $password = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.password');
 
 
-        $client = $this->getContainer()->get('dizda.cloudbackup.database.mongodb')->dump();
-
-        /*$tmpfname = tempnam("/tmp");
-
-        $handle = fopen($tmpfname, "w");
-        fwrite($handle, "Écriture dans le fichier temporaire");
-        fclose($handle);*/
+        $mongodb = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
+        $mongodb->dump();
 
 
-        /*$dropbox = new DropboxUploader('dizzda@gmail.com', '5335JDDJdX');
-        $dropbox->upload($tmpfname, '/Backups/bankmanager/', 'test.txt');
-*/
+        // TODO: add cloud upload bellow
 
+        $output->writeln('- <info>Archive created</info> ' . $mongodb->getArchivePath());
+        $output->writeln('- <comment>Uploading to Dropbox...</comment>');
 
-        $output->writeln('All ok.');
+        $dropbox = new DropboxUploader($user, $password);
+        $dropbox->upload($mongodb->getArchivePath(), '/Backups/bankmanager/');
+
+        $output->writeln('- <info>Upload done</info>.');
 
     }
 }

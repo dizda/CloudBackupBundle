@@ -37,8 +37,6 @@ abstract class BaseDatabase
         $this->dataPath     = $this->basePath . $localDate . '/';
         $this->archivePath  = $this->basePath . $localDate . '.tar';
 
-        var_dump($this->dataPath);
-        var_dump($this->archivePath);
 
         $this->fileSystem->mkdir($this->dataPath);
     }
@@ -61,6 +59,12 @@ abstract class BaseDatabase
      * @return mixed
      */
     abstract public function dump();
+
+
+    public function getArchivePath()
+    {
+        return $this->archivePath;
+    }
 
 
     /**
