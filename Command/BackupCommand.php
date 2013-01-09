@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Dizda\CloudBackupBundle\Client\DropboxUploader;
+use Dizda\CloudBackupBundle\Clients\DropboxUploader;
 
 /**
  * @author Jonathan Dizdarevic <dizda@dizda.fr>

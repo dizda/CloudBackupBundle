@@ -2,7 +2,7 @@
 
 // https://github.com/hakre/DropboxUploader
 
-namespace Dizda\CloudBackupBundle\Client;
+namespace Dizda\CloudBackupBundle\Clients;
 use \Exception;
 
 /**
