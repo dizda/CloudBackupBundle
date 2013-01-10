@@ -9,6 +9,7 @@ use Symfony\Component\Filesystem\Filesystem;
 abstract class BaseDatabase
 {
     const DB_PATH = '';
+
     protected $kernelCacheDir;
     protected $fileSystem;
     protected $basePath;
@@ -43,7 +44,7 @@ abstract class BaseDatabase
 
     final public function after()
     {
-        $archive = sprintf('tar -czf %s %s',
+        $archive = sprintf('tar -czf %s %s 2>/dev/null',
                             $this->archivePath,
                             $this->dataPath);
 
