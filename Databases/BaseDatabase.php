@@ -28,29 +28,33 @@ abstract class BaseDatabase
      * Preparation of directory
      *
      * TODO: Add a config prefix to archive (with default value : '')
-     * TODO: Few compression mode
+     * TODO: Many compression mode
      */
-    final public function before()
+    final public function prepare()
     {
-        $localDate = date('Y_m_d-H_i_s');
-
-        $this->basePath     = $this->kernelCacheDir . '/db/' . static::DB_PATH . '/';
-        $this->dataPath     = $this->basePath . $localDate . '/';
-        $this->archivePath  = $this->basePath . $localDate . '.tar';
-
+        $this->basePath     = $this->kernelCacheDir . '/db/backup/';
+        $this->dataPath     = $this->basePath . static::DB_PATH . '/';
 
         $this->fileSystem->mkdir($this->dataPath);
     }
 
-    final public function after()
+
+    /**
+     * Compress with format name like : hostname_2013_01_12-00_06_40.tar
+     */
+    final public function compression()
     {
-        $archive = sprintf('tar -czf %s %s 2>/dev/null',
+        $localDate          = date('Y_m_d-H_i_s');
+        $this->archivePath  = gethostname() . '_' . $localDate . '.tar';
+
+
+        $archive = sprintf('tar -czf %s -C %s . 2>/dev/null',
                             $this->archivePath,
-                            $this->dataPath);
+                            $this->basePath);
 
         exec($archive);
 
-        $this->fileSystem->remove($this->dataPath);
+        $this->fileSystem->remove($this->basePath);
     }
 
 

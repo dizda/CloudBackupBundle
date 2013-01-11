@@ -19,7 +19,7 @@ class BackupCommand extends ContainerAwareCommand
     {
         $this
             ->setName('dizda:backup:start')
-            ->setDescription('Upload backup to the cloud service\'s')
+            ->setDescription('Upload a backup of your database to cloud service\'s')
         ;
     }
 
@@ -32,9 +32,9 @@ class BackupCommand extends ContainerAwareCommand
 
         $mongodb = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
         $mongodb->dump();
+        $mongodb->compression();
 
 
-        // TODO: add cloud upload bellow
 
         $output->writeln('- <info>Archive created</info> ' . $mongodb->getArchivePath());
         $output->writeln('- <comment>Uploading to Dropbox...</comment>');
