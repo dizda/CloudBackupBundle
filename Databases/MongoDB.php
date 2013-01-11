@@ -21,7 +21,6 @@ class MongoDB extends BaseDatabase
                            $this->dataPath);
 
         exec($cmd);
-
     }
 
 
