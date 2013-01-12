@@ -42,7 +42,11 @@ class BackupCommand extends ContainerAwareCommand
         $dropbox = new DropboxUploader($user, $password);
         $dropbox->upload($mongodb->getArchivePath(), '/Backups/bankmanager/');
 
-        $output->writeln('- <info>Upload done</info>.');
+        $output->writeln('- <info>Upload done</info>');
+
+        $mongodb->cleanUp();
+
+        $output->writeln('- <info>Temporary files have been cleared</info>.');
 
     }
 }

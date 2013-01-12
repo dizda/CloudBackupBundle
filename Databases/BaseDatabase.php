@@ -27,12 +27,16 @@ abstract class BaseDatabase
     /**
      * Preparation of directory
      *
+     * $this->basePath      /Users/high/Sites/dizdabundles/app/cache/dev/db/
+     * $this->dataPath      /Users/high/Sites/dizdabundles/app/cache/dev/db/mongo/
+     * $this->archivePath   /Users/high/Sites/dizdabundles/app/cache/dev/db/bambou_2013_01_12-01_36_33.tar
+     *
      * TODO: Add a config prefix to archive (with default value : '')
      * TODO: Many compression mode
      */
     final public function prepare()
     {
-        $this->basePath     = $this->kernelCacheDir . '/db/backup/';
+        $this->basePath     = $this->kernelCacheDir . '/db/';
         $this->dataPath     = $this->basePath . static::DB_PATH . '/';
 
         $this->fileSystem->mkdir($this->dataPath);
@@ -45,7 +49,7 @@ abstract class BaseDatabase
     final public function compression()
     {
         $localDate          = date('Y_m_d-H_i_s');
-        $this->archivePath  = gethostname() . '_' . $localDate . '.tar';
+        $this->archivePath  = $this->basePath . gethostname() . '_' . $localDate . '.tar';
 
 
         $archive = sprintf('tar -czf %s -C %s . 2>/dev/null',
@@ -53,7 +57,15 @@ abstract class BaseDatabase
                             $this->basePath);
 
         exec($archive);
+    }
 
+
+    /**
+     * Remove all dirs with files
+     *
+     */
+    final public function cleanUp()
+    {
         $this->fileSystem->remove($this->basePath);
     }
 
