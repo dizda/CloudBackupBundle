@@ -122,4 +122,4 @@ $ crontab -u www-data -e
 
 End
 ---
-Enjoy, PR are welcomes !
+Enjoy, PR are welcome !
