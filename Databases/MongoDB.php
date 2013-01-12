@@ -41,7 +41,7 @@ class MongoDB extends BaseDatabase
         /* if user is set, we add authentification */
         if($user)
         {
-            $this->auth = sprintf('-u %s', $user, $password);
+            $this->auth = sprintf('-u %s', $user);
 
             if($password) $this->auth = sprintf('-u %s -p %s', $user, $password);
         }
