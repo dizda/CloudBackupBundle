@@ -33,6 +33,7 @@ abstract class BaseDatabase
      *
      * TODO: Add a config prefix to archive (with default value : '')
      * TODO: Many compression mode
+     * TODO: Local copy, if option is activated, keep a local copy at path specified
      */
     final public function prepare()
     {
@@ -48,11 +49,12 @@ abstract class BaseDatabase
      */
     final public function compression()
     {
-        $localDate          = date('Y_m_d-H_i_s');
-        $this->archivePath  = $this->basePath . gethostname() . '_' . $localDate . '.tar';
+        $fileName           = gethostname() . '_' . date('Y_m_d-H_i_s') . '.tar';
+        $this->archivePath  = $this->basePath . $fileName;
 
 
-        $archive = sprintf('tar -czf %s -C %s . 2>/dev/null',
+        $archive = sprintf('tar --exclude=%s -czf %s -C %s . 2>/dev/null',
+                            $fileName,  // Yo dawg, I heard you don't like so much tar archive, so I don't make tar in a tar archive, you cannot extracting while you extract, damn!
                             $this->archivePath,
                             $this->basePath);
 
