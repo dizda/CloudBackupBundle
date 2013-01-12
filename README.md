@@ -120,3 +120,6 @@ Info : To edit crontab for the user www-data (to prevent permissions error) :
 $ crontab -u www-data -e
 ```
 
+End
+---
+Enjoy, PR are welcomes !
