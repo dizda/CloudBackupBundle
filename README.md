@@ -8,9 +8,11 @@ You can :
 * Dump all databases
 * Different types of databases can be dumped each time
 * Upload to several Cloud services
+
 Databases supported
 * MongoDB
 * MySQL (soon..)
+
  Cloud service supported
 * Dropbox (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
 * CloudApp (soon..)
