@@ -65,8 +65,8 @@ dizda_cloud_backup:
         mongodb:
             all_databases: false # Only required when no database is set
             database:     ~ # Required if all_databases if false
-#            db_user:     ~ # Not required, leave empty if no auth is required
-#            db_password: ~ # Not required
+            db_user:     ~ # Not required, leave empty if no auth is required
+            db_password: ~ # Not required
 ```
 
 It is recommended to keep real values for logins and passwords in your parameters.yml file, e.g.:
