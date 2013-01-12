@@ -13,7 +13,7 @@ Databases supported
 * MongoDB
 * MySQL (soon..)
 
- Cloud service supported
+Cloud service supported
 * Dropbox (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
 * CloudApp (soon..)
 * Google Drive (soon..)
