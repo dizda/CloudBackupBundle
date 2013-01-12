@@ -7,7 +7,7 @@ You can :
 * Dump one database
 * Dump all databases
 * Different types of databases can be dumped each time
-* Upload to several Cloud services
+* Upload to several Cloud services\n
 
 Databases supported
 * MongoDB
