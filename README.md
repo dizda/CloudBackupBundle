@@ -115,7 +115,7 @@ For example the following cron command dumps your database every days at 6am on 
 0 6 * * * php /opt/www/symfony-project/app/console dizda:backup:start
 ```
 
-To edit crontab for the user www-data (to prevent permissions error) :
+Info : To edit crontab for the user www-data (to prevent permissions error) :
 ```bash
 $ crontab -u www-data -e
 ```
