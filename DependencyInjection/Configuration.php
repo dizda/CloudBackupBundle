@@ -42,7 +42,15 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->arrayNode('databases')
                 ->children()
-                    ->booleanNode('mongodb')->defaultFalse()->end()
+                    ->arrayNode('mongodb')
+                        ->children()
+                            ->booleanNode('all_databases')->defaultTrue()->end()
+                            ->scalarNode('database')->defaultFalse()->end()
+                            ->scalarNode('db_user')->defaultValue(null)->end()
+                            ->scalarNode('db_password')->defaultValue(null)->end()
+                        ->end()
+                    ->end()
+                    /*->booleanNode('mongodb')->defaultFalse()->end()*/
                 ->end()
             ->end()
         ->end();

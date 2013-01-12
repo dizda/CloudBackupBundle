@@ -14,6 +14,7 @@ use Dizda\CloudBackupBundle\Clients\DropboxUploader;
  */
 class BackupCommand extends ContainerAwareCommand
 {
+    private $mongoActive;
 
     protected function configure()
     {
@@ -23,16 +24,23 @@ class BackupCommand extends ContainerAwareCommand
         ;
     }
 
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->mongoActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mongodb.active');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $user     = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.user');
         $password = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.password');
 
 
-        $mongodb = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
-        $mongodb->dump();
-        $mongodb->compression();
+        if($this->mongoActive)
+        {
+            $mongodb = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
+            $mongodb->dump();
+            $mongodb->compression();
+        }
 
 
 
