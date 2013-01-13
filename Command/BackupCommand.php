@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Dizda\CloudBackupBundle\Clients\DropboxUploader;
-use CloudApp\API as CloudApp;
+/*use CloudApp\API as CloudApp;*/
 
 /**
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
@@ -85,7 +85,7 @@ class BackupCommand extends ContainerAwareCommand
         $this->output->writeln('- <info>Upload done</info>');
     }
 
-    private function cloudAppUploading($archivePath)
+/*    private function cloudAppUploading($archivePath)
     {
         $user     = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.user');
         $password = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.password');
@@ -96,5 +96,5 @@ class BackupCommand extends ContainerAwareCommand
         $cloudapp->addFile($archivePath);
 
         $this->output->writeln('- <info>Upload done</info>');
-    }
+    }*/
 }
