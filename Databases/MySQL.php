@@ -13,17 +13,20 @@ class MySQL extends BaseDatabase
     private $allDatabases;
     private $database;
     private $auth = '';
+    private $fileName;
 
 
     /**
      * @DI\InjectParams({
-     *     "allDatabases" = @DI\Inject("%dizda_cloud_backup.databases.mongodb.all_databases%"),
-     *     "database"     = @DI\Inject("%dizda_cloud_backup.databases.mongodb.database%"),
-     *     "user"         = @DI\Inject("%dizda_cloud_backup.databases.mongodb.db_user%"),
-     *     "password"     = @DI\Inject("%dizda_cloud_backup.databases.mongodb.db_password%")
+     *     "allDatabases" = @DI\Inject("%dizda_cloud_backup.databases.mysql.all_databases%"),
+     *     "host"         = @DI\Inject("%dizda_cloud_backup.databases.mysql.host%"),
+     *     "port"         = @DI\Inject("%dizda_cloud_backup.databases.mysql.port%"),
+     *     "database"     = @DI\Inject("%dizda_cloud_backup.databases.mysql.database%"),
+     *     "user"         = @DI\Inject("%dizda_cloud_backup.databases.mysql.db_user%"),
+     *     "password"     = @DI\Inject("%dizda_cloud_backup.databases.mysql.db_password%")
      * })
      */
-    public function __construct($allDatabases, $database, $user, $password)
+    public function __construct($allDatabases, $host, $port, $database, $user, $password)
     {
         parent::__construct();
 
@@ -34,8 +37,9 @@ class MySQL extends BaseDatabase
         if($this->allDatabases)
         {
             $this->database = '--all-databases';
+            $this->fileName = 'all-databases.sql';
         }else{
-            $this->database = $this->database;
+            $this->fileName = $this->database . '.sql';
         }
 
         /* if user is set, we add authentification */
@@ -43,7 +47,7 @@ class MySQL extends BaseDatabase
         {
             $this->auth = sprintf('-u%s', $user);
 
-            if($password) $this->auth = sprintf('-u%s -p%s', $user, $password);
+            if($password) $this->auth = sprintf('--host=%s --port=%d --user=%s --password=%s', $host, $port, $user, $password);
         }
 
     }
@@ -54,9 +58,9 @@ class MySQL extends BaseDatabase
         parent::prepare();
 
         $cmd    = sprintf('mysqldump %s %s > %s',
-            $this->auth,
-            $this->database,
-            $this->dataPath);
+                           $this->auth,
+                           $this->database,
+                           $this->dataPath . $this->fileName);
 
         exec($cmd);
     }

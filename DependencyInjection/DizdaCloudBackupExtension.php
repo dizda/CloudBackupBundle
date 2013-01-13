@@ -45,13 +45,33 @@ class DizdaCloudBackupExtension extends Extension
         {
             $container->setParameter('dizda_cloud_backup.databases.mysql.active',         true);
             $container->setParameter('dizda_cloud_backup.databases.mysql.all_databases',  $config['databases']['mysql']['all_databases']);
-            $container->setParameter('dizda_cloud_backup.databases.mysql.database',       $config['databases']['mysql']['database']);
-            $container->setParameter('dizda_cloud_backup.databases.mysql.host',           $config['databases']['mysql']['host']);
-            $container->setParameter('dizda_cloud_backup.databases.mysql.port',           $config['databases']['mysql']['port']);
-            $container->setParameter('dizda_cloud_backup.databases.mysql.db_user',        $config['databases']['mysql']['db_user']);
-            $container->setParameter('dizda_cloud_backup.databases.mysql.db_password',    $config['databases']['mysql']['db_password']);
+
+            if($config['databases']['mysql']['db_host'] !== null && $config['databases']['mysql']['db_user'] !== null)
+            {
+                $container->setParameter('dizda_cloud_backup.databases.mysql.database',    $config['databases']['mysql']['database']);
+                $container->setParameter('dizda_cloud_backup.databases.mysql.host',        $config['databases']['mysql']['db_host']);
+                $container->setParameter('dizda_cloud_backup.databases.mysql.port',        $config['databases']['mysql']['db_port']);
+                $container->setParameter('dizda_cloud_backup.databases.mysql.db_user',     $config['databases']['mysql']['db_user']);
+                $container->setParameter('dizda_cloud_backup.databases.mysql.db_password', $config['databases']['mysql']['db_password']);
+            }else{ /* if mysql config is not set, we taking from the parameters.yml values */
+                $container->setParameter('dizda_cloud_backup.databases.mysql.database',    $container->getParameter('database_name'));
+                $container->setParameter('dizda_cloud_backup.databases.mysql.host',        $container->getParameter('database_host'));
+
+                if($container->getParameter('database_port') === null)
+                {
+                    $container->setParameter('dizda_cloud_backup.databases.mysql.port',    $config['databases']['mysql']['db_port']);
+                }else{
+                    $container->setParameter('dizda_cloud_backup.databases.mysql.port',    $container->getParameter('database_port'));
+                }
+
+                $container->setParameter('dizda_cloud_backup.databases.mysql.db_user',     $container->getParameter('database_user'));
+                $container->setParameter('dizda_cloud_backup.databases.mysql.db_password', $container->getParameter('database_password'));
+            }
+
+
         }else{
             $container->setParameter('dizda_cloud_backup.databases.mysql.active',         false);
         }
+
     }
 }
