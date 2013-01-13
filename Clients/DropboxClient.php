@@ -9,7 +9,7 @@ use Dizda\CloudBackupBundle\Clients\DropboxUploader;
 /**
  * @DI\Service("dizda.cloudbackup.client.dropbox");
  */
-class Dropbox
+class DropboxClient
 {
     private $output;
     private $user;
