@@ -63,7 +63,6 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('db_password')->defaultNull()->end()
                         ->end()
                     ->end()
-                    /*->booleanNode('mongodb')->defaultFalse()->end()*/
                 ->end()
             ->end()
         ->end();

@@ -40,7 +40,15 @@ class DizdaCloudBackupExtension extends Extension
             $container->setParameter('dizda_cloud_backup.databases.mongodb.db_user',        $config['databases']['mongodb']['db_user']);
             $container->setParameter('dizda_cloud_backup.databases.mongodb.db_password',    $config['databases']['mongodb']['db_password']);
         }else{
-            $container->setParameter('dizda_cloud_backup.databases.mongodb.active',         false);
+            /* If mongodb is not specified in config, we set all parameters to false, and it will be not used */
+            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.databases.mongodb.active',
+                                                            'dizda_cloud_backup.databases.mongodb.all_databases',
+                                                            'dizda_cloud_backup.databases.mongodb.database',
+                                                            'dizda_cloud_backup.databases.mongodb.host',
+                                                            'dizda_cloud_backup.databases.mongodb.port',
+                                                            'dizda_cloud_backup.databases.mongodb.db_user',
+                                                            'dizda_cloud_backup.databases.mongodb.db_password',
+            ));
         }
 
         if(isset($config['databases']['mysql']))
@@ -72,8 +80,30 @@ class DizdaCloudBackupExtension extends Extension
 
 
         }else{
-            $container->setParameter('dizda_cloud_backup.databases.mysql.active',         false);
+            /* If mysql is not specified in config, we set all parameters to false, and it will be not used */
+            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.databases.mysql.active',
+                                                            'dizda_cloud_backup.databases.mysql.all_databases',
+                                                            'dizda_cloud_backup.databases.mysql.database',
+                                                            'dizda_cloud_backup.databases.mysql.host',
+                                                            'dizda_cloud_backup.databases.mysql.port',
+                                                            'dizda_cloud_backup.databases.mysql.db_user',
+                                                            'dizda_cloud_backup.databases.mysql.db_password',
+            ));
         }
 
+    }
+
+    /**
+     * Setting all params to false
+     *
+     * @param $container
+     * @param array $parameters vars to set to false
+     */
+    private function setDefaultsParameters($container, array $parameters)
+    {
+        foreach($parameters as $parameter)
+        {
+            $container->setParameter($parameter, false);
+        }
     }
 }
