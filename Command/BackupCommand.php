@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Dizda\CloudBackupBundle\Clients\DropboxUploader;
 /*use CloudApp\API as CloudApp;*/
 
 /**
@@ -39,7 +38,6 @@ class BackupCommand extends ContainerAwareCommand
 
 
 
-
         if($this->mongoActive)
         {
             $this->output ->write('- <comment>Dumping MongoDB database...</comment>');
@@ -64,26 +62,13 @@ class BackupCommand extends ContainerAwareCommand
         $this->output->writeln('- <info>Archive created</info> ' . $database->getArchivePath());
 
 
-        $this->dropboxUploading($database->getArchivePath());
+        $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($database->getArchivePath());
 
         $database->cleanUp();
         $this->output->writeln('- <info>Temporary files have been cleared</info>.');
     }
 
 
-    private function dropboxUploading($archivePath)
-    {
-        $user       = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.user');
-        $password   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.password');
-        $remotePath = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.remote_path');
-
-        $this->output->writeln('- <comment>Uploading to Dropbox...</comment>');
-
-        $dropbox = new DropboxUploader($user, $password);
-        $dropbox->upload($archivePath, $remotePath);
-
-        $this->output->writeln('- <info>Upload done</info>');
-    }
 
 /*    private function cloudAppUploading($archivePath)
     {
