@@ -46,6 +46,8 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->booleanNode('all_databases')->defaultTrue()->end()
                             ->scalarNode('database')->defaultFalse()->end()
+                            ->scalarNode('db_host')->defaultValue('localhost')->end()
+                            ->scalarNode('db_port')->defaultValue(27017)->end()
                             ->scalarNode('db_user')->defaultValue(null)->end()
                             ->scalarNode('db_password')->defaultValue(null)->end()
                         ->end()

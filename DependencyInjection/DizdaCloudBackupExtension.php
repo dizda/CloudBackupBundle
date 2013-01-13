@@ -35,6 +35,8 @@ class DizdaCloudBackupExtension extends Extension
             $container->setParameter('dizda_cloud_backup.databases.mongodb.active',         true);
             $container->setParameter('dizda_cloud_backup.databases.mongodb.all_databases',  $config['databases']['mongodb']['all_databases']);
             $container->setParameter('dizda_cloud_backup.databases.mongodb.database',       $config['databases']['mongodb']['database']);
+            $container->setParameter('dizda_cloud_backup.databases.mongodb.host',           $config['databases']['mongodb']['db_host']);
+            $container->setParameter('dizda_cloud_backup.databases.mongodb.port',           $config['databases']['mongodb']['db_port']);
             $container->setParameter('dizda_cloud_backup.databases.mongodb.db_user',        $config['databases']['mongodb']['db_user']);
             $container->setParameter('dizda_cloud_backup.databases.mongodb.db_password',    $config['databases']['mongodb']['db_password']);
         }else{
