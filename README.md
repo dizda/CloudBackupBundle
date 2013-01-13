@@ -58,8 +58,9 @@ dizda_cloud_backup:
     cloud_storages:
         # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
         dropbox:
-            user:     ~ # Required
-            password: ~ # Required
+            user:     ~  # Required
+            password: ~  # Required
+            remote_path: ~ # Not required, default "/", but you can use path like "/Accounts/backups/"
 
     databases:
         mongodb:
@@ -84,8 +85,9 @@ It is recommended to keep real values for logins and passwords in your parameter
 dizda_cloud_backup:
     cloud_storages:
         dropbox:
-            user:     %dizda_cloud_dropbox_user%
-            password: %dizda_cloud_dropbox_password%
+            user:        %dizda_cloud_dropbox_user%
+            password:    %dizda_cloud_dropbox_password%
+            remote_path: %dizda_cloud_dropbox_remote_path%
 
     databases:
         mongodb:

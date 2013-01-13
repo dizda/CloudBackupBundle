@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Dizda\CloudBackupBundle\Clients\DropboxUploader;
+use CloudApp\API as CloudApp;
 
 /**
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
@@ -35,6 +36,8 @@ class BackupCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
+
+
 
 
         if($this->mongoActive)
@@ -70,13 +73,27 @@ class BackupCommand extends ContainerAwareCommand
 
     private function dropboxUploading($archivePath)
     {
-        $user     = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.user');
-        $password = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.password');
+        $user       = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.user');
+        $password   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.password');
+        $remotePath = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.remote_path');
 
         $this->output->writeln('- <comment>Uploading to Dropbox...</comment>');
 
         $dropbox = new DropboxUploader($user, $password);
-        $dropbox->upload($archivePath, '/Backups/bankmanager/');
+        $dropbox->upload($archivePath, $remotePath);
+
+        $this->output->writeln('- <info>Upload done</info>');
+    }
+
+    private function cloudAppUploading($archivePath)
+    {
+        $user     = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.user');
+        $password = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.password');
+
+        $this->output->writeln('- <comment>Uploading to CloudApp...</comment>');
+
+        $cloudapp = new CloudApp($user, $password);
+        $cloudapp->addFile($archivePath);
 
         $this->output->writeln('- <info>Upload done</info>');
     }

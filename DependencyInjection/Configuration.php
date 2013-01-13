@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('user')->isRequired()->end()
                             ->scalarNode('password')->isRequired()->end()
+                            ->scalarNode('remote_path')->defaultValue('/')->end()
                         ->end()
                     ->end()
                     ->arrayNode('cloudapp')

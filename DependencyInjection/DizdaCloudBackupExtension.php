@@ -26,8 +26,9 @@ class DizdaCloudBackupExtension extends Extension
         $loader->load('config.yml');
 
 
-        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.user',      $config['cloud_storages']['dropbox']['user']);
-        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.password',  $config['cloud_storages']['dropbox']['password']);
+        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.user',        $config['cloud_storages']['dropbox']['user']);
+        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.password',    $config['cloud_storages']['dropbox']['password']);
+        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.remote_path', $config['cloud_storages']['dropbox']['remote_path']);
 
 
         if(isset($config['databases']['mongodb']))
