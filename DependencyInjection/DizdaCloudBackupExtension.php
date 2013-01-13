@@ -40,5 +40,18 @@ class DizdaCloudBackupExtension extends Extension
         }else{
             $container->setParameter('dizda_cloud_backup.databases.mongodb.active',         false);
         }
+
+        if(isset($config['databases']['mysql']))
+        {
+            $container->setParameter('dizda_cloud_backup.databases.mysql.active',         true);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.all_databases',  $config['databases']['mysql']['all_databases']);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.database',       $config['databases']['mysql']['database']);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.host',           $config['databases']['mysql']['host']);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.port',           $config['databases']['mysql']['port']);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.db_user',        $config['databases']['mysql']['db_user']);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.db_password',    $config['databases']['mysql']['db_password']);
+        }else{
+            $container->setParameter('dizda_cloud_backup.databases.mysql.active',         false);
+        }
     }
 }

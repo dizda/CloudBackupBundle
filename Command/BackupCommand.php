@@ -15,6 +15,8 @@ use Dizda\CloudBackupBundle\Clients\DropboxUploader;
 class BackupCommand extends ContainerAwareCommand
 {
     private $mongoActive;
+    private $mysqlActive;
+    private $output;
 
     protected function configure()
     {
@@ -27,34 +29,55 @@ class BackupCommand extends ContainerAwareCommand
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->mongoActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mongodb.active');
+        $this->mysqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mysql.active');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $user     = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.user');
-        $password = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.password');
+        $this->output = $output;
 
 
         if($this->mongoActive)
         {
-            $mongodb = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
-            $mongodb->dump();
-            $mongodb->compression();
+            $this->output ->write('- <comment>Dumping MongoDB database...</comment>');
+
+            $database = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
+            $database->dump();
+
+            $this->output->writeln('<info>OK</info>');
         }
 
+        if($this->mysqlActive)
+        {
+            $this->output->write('- <comment>Dumping MySQL database...</comment>');
+
+            $database = $this->getContainer()->get('dizda.cloudbackup.database.mysql');
+            $database->dump();
+
+            $this->output->writeln('<info>OK</info>');
+        }
+
+        $database->compression();
+        $this->output->writeln('- <info>Archive created</info> ' . $database->getArchivePath());
 
 
-        $output->writeln('- <info>Archive created</info> ' . $mongodb->getArchivePath());
-        $output->writeln('- <comment>Uploading to Dropbox...</comment>');
+        $this->dropboxUploading($database->getArchivePath());
+
+        $database->cleanUp();
+        $this->output->writeln('- <info>Temporary files have been cleared</info>.');
+    }
+
+
+    private function dropboxUploading($archivePath)
+    {
+        $user     = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.user');
+        $password = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.password');
+
+        $this->output->writeln('- <comment>Uploading to Dropbox...</comment>');
 
         $dropbox = new DropboxUploader($user, $password);
-        $dropbox->upload($mongodb->getArchivePath(), '/Backups/bankmanager/');
+        $dropbox->upload($archivePath, '/Backups/bankmanager/');
 
-        $output->writeln('- <info>Upload done</info>');
-
-        $mongodb->cleanUp();
-
-        $output->writeln('- <info>Temporary files have been cleared</info>.');
-
+        $this->output->writeln('- <info>Upload done</info>');
     }
 }

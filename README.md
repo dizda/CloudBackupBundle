@@ -122,4 +122,5 @@ $ crontab -u www-data -e
 
 End
 ---
+This bundle was inspired from [KachkaevDropboxBackupBundle](https://github.com/kachkaev/KachkaevDropboxBackupBundle).
 Enjoy, PR are welcome !
