@@ -1,7 +1,7 @@
 CloudBackupBundle
 =================
 
-This bundle helps you to backup your databases and upload it to the cloud with only one symfony2 command.
+This bundle helps you to backup your databases and upload it to the cloud with only one Symfony2 command.
 
 You can :
 * Dump one database
@@ -11,7 +11,7 @@ You can :
 
 Databases supported
 * MongoDB
-* MySQL (soon..)
+* MySQL
 
 Cloud service supported
 * Dropbox (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
@@ -20,7 +20,7 @@ Cloud service supported
 
 
 
-Installation
+Installation (Symfony 2.1)
 ------------
 
 ### Composer
@@ -64,9 +64,17 @@ dizda_cloud_backup:
     databases:
         mongodb:
             all_databases: false # Only required when no database is set
-            database:     ~ # Required if all_databases if false
+            database:     ~ # Required if all_databases is false
             db_user:     ~ # Not required, leave empty if no auth is required
             db_password: ~ # Not required
+
+        mysql:
+            all_databases: false # Only required when no database is set
+            database: ~          # Required if all_databases is false
+            db_host: localhost   # This, and following is not required and if not specified, the bundle will take ORM configuration in parameters.yml
+            db_port: ~           # Default 3306
+            db_user: ~
+            db_password: ~
 ```
 
 It is recommended to keep real values for logins and passwords in your parameters.yml file, e.g.:
@@ -85,6 +93,9 @@ dizda_cloud_backup:
             database: %dizda_cloud_mongodb_user%
             db_user:  %dizda_cloud_mongodb_user%
             db_pass:  %dizda_cloud_mongodb_password%
+
+        mysql:
+            # When no parameters is specified under mysql, the bundle taking those from parameters.yml
 ```
 
 ```yml
@@ -123,5 +134,7 @@ $ crontab -u www-data -e
 End
 ---
 This bundle was inspired from [KachkaevDropboxBackupBundle](https://github.com/kachkaev/KachkaevDropboxBackupBundle).
+
+It is 2.1.x compatible, I'll make some tests as soon as time permits.
 
 Enjoy, PR are welcome !
