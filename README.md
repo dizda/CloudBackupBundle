@@ -16,6 +16,7 @@ Databases supported
 Cloud service supported
 * Dropbox (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
 * CloudApp (soon..)
+* Amazon S3 (soon..)
 * Google Drive (soon..)
 
 
