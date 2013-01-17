@@ -140,6 +140,12 @@ Info : To edit crontab for the user www-data (to prevent permissions error) :
 $ crontab -u www-data -e
 ```
 
+or simply
+
+```bash
+$ php app/console dizda:backup:start
+```
+
 End
 ---
 This bundle was inspired from [KachkaevDropboxBackupBundle](https://github.com/kachkaev/KachkaevDropboxBackupBundle).
