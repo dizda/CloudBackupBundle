@@ -79,7 +79,11 @@ abstract class BaseDatabase
      */
     abstract public function dump();
 
-
+    /**
+     * Return path of archive
+     *
+     * @return mixed
+     */
     public function getArchivePath()
     {
         return $this->archivePath;

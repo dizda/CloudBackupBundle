@@ -33,10 +33,9 @@ class MongoDB extends BaseDatabase
         $this->database     = $database;
         $this->auth         = '';
 
-        if($this->allDatabases)
-        {
+        if ($this->allDatabases) {
             $this->database = '';
-        }else{
+        } else {
             $this->database = sprintf('--db %s', $this->database);
         }
 
@@ -44,11 +43,12 @@ class MongoDB extends BaseDatabase
         $this->auth = sprintf('-h %s --port %d', $host, $port);
 
         /* if user is set, we add authentification */
-        if($user)
-        {
+        if ($user) {
             $this->auth = sprintf('-h %s --port %d -u %s', $host, $port, $user);
 
-            if($password) $this->auth = sprintf('-h %s --port %d -u %s -p %s', $host, $port, $user, $password);
+            if ($password) {
+                $this->auth = sprintf('-h %s --port %d -u %s -p %s', $host, $port, $user, $password);
+            }
         }
 
     }
