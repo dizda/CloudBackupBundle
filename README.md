@@ -16,6 +16,7 @@ Databases supported
 Cloud service supported
 * Dropbox (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
 * CloudApp (soon..)
+* Amazon S3 (soon..)
 * Google Drive (soon..)
 
 
@@ -54,6 +55,12 @@ Configuration
 Here is the default configuration for the bundle:
 
 ```yml
+jms_di_extra:
+    locations:
+        all_bundles: false
+        bundles: [ DizdaCloudBackupBundle ]       # Add the bundle to JMSDiExtra conf to allow DI (if all_bundles is false)
+        directories: ["%kernel.root_dir%/../src"]
+
 dizda_cloud_backup:
     cloud_storages:
         # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
@@ -131,6 +138,12 @@ For example the following cron command dumps your database every days at 6am on 
 Info : To edit crontab for the user www-data (to prevent permissions error) :
 ```bash
 $ crontab -u www-data -e
+```
+
+or simply
+
+```bash
+$ php app/console dizda:backup:start
 ```
 
 End
