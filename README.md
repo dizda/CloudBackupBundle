@@ -146,6 +146,9 @@ or simply
 $ php app/console dizda:backup:start
 ```
 
+![](https://github.com/dizda/CloudBackupBundle/raw/master/Resources/doc/dizda-Cloud-Backup-Bundle-symfony2.png)
+
+
 End
 ---
 This bundle was inspired from [KachkaevDropboxBackupBundle](https://github.com/kachkaev/KachkaevDropboxBackupBundle).
