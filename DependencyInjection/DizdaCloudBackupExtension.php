@@ -25,10 +25,30 @@ class DizdaCloudBackupExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('config.yml');
 
+        /* Config dropbox */
+        if (isset($config['cloud_storages']['dropbox'])) {
+            $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.active',      true);
+            $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.user',        $config['cloud_storages']['dropbox']['user']);
+            $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.password',    $config['cloud_storages']['dropbox']['password']);
+            $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.remote_path', $config['cloud_storages']['dropbox']['remote_path']);
+        }else{
+            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.cloud_storages.dropbox.active',
+                                                            'dizda_cloud_backup.cloud_storages.dropbox.user',
+                                                            'dizda_cloud_backup.cloud_storages.dropbox.password',
+                                                            'dizda_cloud_backup.cloud_storages.dropbox.remote_path'));
+        }
 
-        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.user',        $config['cloud_storages']['dropbox']['user']);
-        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.password',    $config['cloud_storages']['dropbox']['password']);
-        $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.remote_path', $config['cloud_storages']['dropbox']['remote_path']);
+        /* Config CloudApp */
+        if (isset($config['cloud_storages']['cloudapp'])) {
+            $container->setParameter('dizda_cloud_backup.cloud_storages.cloudapp.active',      true);
+            $container->setParameter('dizda_cloud_backup.cloud_storages.cloudapp.user',        $config['cloud_storages']['cloudapp']['user']);
+            $container->setParameter('dizda_cloud_backup.cloud_storages.cloudapp.password',    $config['cloud_storages']['cloudapp']['password']);
+        }else{
+            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.cloud_storages.cloudapp.active',
+                                                            'dizda_cloud_backup.cloud_storages.cloudapp.user',
+                                                            'dizda_cloud_backup.cloud_storages.cloudapp.password' ));
+        }
+
 
 
         if(isset($config['databases']['mongodb']))
