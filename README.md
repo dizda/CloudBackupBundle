@@ -15,7 +15,7 @@ Databases supported
 
 Cloud service supported
 * Dropbox (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
-* CloudApp (soon..)
+* CloudApp (thanks to [CloudAPP-API-PHP-wrapper](https://github.com/matthiasplappert/CloudApp-API-PHP-wrapper))
 * Amazon S3 (soon..)
 * Google Drive (soon..)
 
@@ -68,6 +68,10 @@ dizda_cloud_backup:
             user:     ~  # Required
             password: ~  # Required
             remote_path: ~ # Not required, default "/", but you can use path like "/Accounts/backups/"
+        # CloudApp account. Can be optional, like dropbox.
+        cloudapp:
+            user:        ~ # Required
+            password:    ~ # Required
 
     databases:
         mongodb:
