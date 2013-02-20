@@ -31,12 +31,12 @@ class CloudAppClient
 
     public function upload($archive)
     {
-        $this->output->writeln('- <comment>Uploading to CloudApp...</comment>');
+        $this->output->write('- <comment>Uploading to CloudApp...</comment>');
 
         $cloudapp = new CloudApp($this->user, $this->password);
         $cloudapp->addFile($archive);
 
-        $this->output->writeln('- <info>Upload done</info>');
+        $this->output->writeln('<info>OK</info>');
     }
 
 }

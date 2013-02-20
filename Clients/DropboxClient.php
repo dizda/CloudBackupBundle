@@ -33,12 +33,12 @@ class DropboxClient
 
     public function upload($archive)
     {
-        $this->output->writeln('- <comment>Uploading to Dropbox...</comment>');
+        $this->output->write('- <comment>Uploading to Dropbox...</comment>');
 
         $dropbox = new DropboxUploader($this->user, $this->password);
         $dropbox->upload($archive, $this->remotePath);
 
-        $this->output->writeln('- <info>Upload done</info>');
+        $this->output->writeln('<info>OK</info>');
     }
 
 }
