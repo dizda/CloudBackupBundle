@@ -72,6 +72,9 @@ dizda_cloud_backup:
         cloudapp:
             user:        ~ # Required
             password:    ~ # Required
+        # or you can use Gaufrette as well (optional)
+        gaufrette:
+            service_name: ~  # Gaufrette filesystem service name
 
     databases:
         mongodb:
@@ -99,6 +102,7 @@ dizda_cloud_backup:
             user:        %dizda_cloud_dropbox_user%
             password:    %dizda_cloud_dropbox_password%
             remote_path: %dizda_cloud_dropbox_remote_path%
+
 
     databases:
         mongodb:
