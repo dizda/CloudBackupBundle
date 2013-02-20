@@ -18,6 +18,7 @@ class BackupCommand extends ContainerAwareCommand
     private $mysqlActive;
     private $dropboxActive;
     private $cloudappActive;
+    private $gaufretteActive;
     private $output;
 
     protected function configure()
@@ -31,15 +32,14 @@ class BackupCommand extends ContainerAwareCommand
         $this->mongoActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mongodb.active');
         $this->mysqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mysql.active');
 
-        $this->dropboxActive  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.active');
-        $this->cloudappActive = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.active');
+        $this->dropboxActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.active');
+        $this->cloudappActive  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.active');
+        $this->gaufretteActive = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.active');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-
-
 
         if ($this->mongoActive) {
             $this->output ->write('- <comment>Dumping MongoDB database...</comment>');
@@ -69,6 +69,14 @@ class BackupCommand extends ContainerAwareCommand
 
         if ($this->cloudappActive) {
             $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($database->getArchivePath());
+        }
+
+        if ($this->gaufretteActive) {
+            $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.service_name');
+
+            $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
+            $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
+            $gaufrette->upload($database->getArchivePath());
         }
 
 

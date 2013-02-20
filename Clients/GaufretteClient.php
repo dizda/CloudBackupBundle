@@ -1,0 +1,44 @@
+<?php
+namespace Dizda\CloudBackupBundle\Clients;
+
+use Symfony\Component\Console\Output\ConsoleOutput;
+use JMS\DiExtraBundle\Annotation as DI;
+
+use Gaufrette\Filesystem;
+
+/**
+ * @DI\Service("dizda.cloudbackup.client.gaufrette");
+ */
+class GaufretteClient
+{
+    private $output;
+    private $filesystem;
+
+
+    public function __construct()
+    {
+        $this->output     = new ConsoleOutput();
+    }
+
+    public function upload($archive)
+    {
+        $this->output->write('- <comment>Uploading using Gaufrette...</comment>');
+
+        $fileName = explode('/', $archive);
+
+        $this->filesystem->write(end($fileName), $archive, true);
+
+        $this->output->writeln('<info>OK</info>');
+    }
+
+    /**
+     * Setting gaufrette filesystem according to bundle configurations
+     *
+     * @param \Gaufrette\Filesystem $filesystem
+     */
+    public function setFilesystem(Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
+
+}

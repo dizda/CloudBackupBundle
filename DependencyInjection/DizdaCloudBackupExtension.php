@@ -50,6 +50,16 @@ class DizdaCloudBackupExtension extends Extension
         }
 
 
+        /* Config Gaufrette */
+        if (isset($config['cloud_storages']['gaufrette'])) {
+            $container->setParameter('dizda_cloud_backup.cloud_storages.gaufrette.active',      true);
+            $container->setParameter('dizda_cloud_backup.cloud_storages.gaufrette.service_name',$config['cloud_storages']['gaufrette']['service_name']);
+        }else{
+            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.cloud_storages.gaufrette.active',
+                                                            'dizda_cloud_backup.cloud_storages.gaufrette.service_name'  ));
+        }
+
+
 
         if(isset($config['databases']['mongodb']))
         {
