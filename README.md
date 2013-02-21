@@ -16,8 +16,14 @@ Databases supported
 Cloud service supported
 * Dropbox (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
 * CloudApp (thanks to [CloudAPP-API-PHP-wrapper](https://github.com/matthiasplappert/CloudApp-API-PHP-wrapper))
-* Amazon S3 (soon..)
+* Amazon S3 (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* FTP (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* GridFS (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* Local (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* MogileFS (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* sFTP (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
 * Google Drive (soon..)
+
 
 
 
@@ -44,6 +50,7 @@ public function registerBundles()
     $bundles = array(
         // ...
         new Dizda\CloudBackupBundle\DizdaCloudBackupBundle(),
+        new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
         // ...
     );
 }
