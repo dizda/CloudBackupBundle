@@ -26,7 +26,7 @@ class GaufretteClient
 
         $fileName = explode('/', $archive);
 
-        $this->filesystem->write(end($fileName), $archive, true);
+        $this->filesystem->write(end($fileName), file_get_contents($archive), true);
 
         $this->output->writeln('<info>OK</info>');
     }
