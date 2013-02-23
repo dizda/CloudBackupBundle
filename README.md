@@ -14,14 +14,14 @@ Databases supported
 * MySQL
 
 Cloud service supported
-* Dropbox (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
-* CloudApp (thanks to [CloudAPP-API-PHP-wrapper](https://github.com/matthiasplappert/CloudApp-API-PHP-wrapper))
-* Amazon S3 (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
-* FTP (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
-* GridFS (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
-* Local (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
-* MogileFS (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
-* sFTP (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* __Dropbox__ (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
+* __CloudApp__ (thanks to [CloudAPP-API-PHP-wrapper](https://github.com/matthiasplappert/CloudApp-API-PHP-wrapper))
+* __Amazon S3__ (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* __FTP__ (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* __GridFS__ (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* __Local__ (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* __MogileFS__ (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
+* __sFTP__ (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
 * Google Drive (soon..)
 
 
