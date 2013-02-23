@@ -63,7 +63,7 @@ class MongoDB extends BaseDatabase
                            $this->database,
                            $this->dataPath);
 
-        exec($cmd);
+        $this->execute($cmd);
     }
 
 }

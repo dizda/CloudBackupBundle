@@ -62,7 +62,7 @@ class MySQL extends BaseDatabase
                            $this->database,
                            $this->dataPath . $this->fileName);
 
-        exec($cmd);
+        $this->execute($cmd);
     }
 
 }

@@ -3,7 +3,7 @@ namespace Dizda\CloudBackupBundle\Databases;
 
 use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\Filesystem\Filesystem;
-
+use Symfony\Component\Process\Process;
 
 
 abstract class BaseDatabase
@@ -58,7 +58,26 @@ abstract class BaseDatabase
                             $this->archivePath,
                             $this->basePath);
 
-        exec($archive);
+        $this->execute($archive);
+    }
+
+
+    /**
+     * Handle process error on fails
+     *
+     * @param $command
+     * @throws \RuntimeException
+     */
+    protected function execute($command)
+    {
+        $process = new Process($command);
+
+
+        $process->run(function ($type, $data) {
+            if (Process::ERR == $type) {
+                throw new \RuntimeException($data);
+            }
+        });
     }
 
 
