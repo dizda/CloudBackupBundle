@@ -49,8 +49,8 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Dizda\CloudBackupBundle\DizdaCloudBackupBundle(),
         new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
+        new Dizda\CloudBackupBundle\DizdaCloudBackupBundle(),
         // ...
     );
 }
