@@ -9,11 +9,11 @@ You can :
 * Different types of databases can be dumped each time
 * Upload to several Cloud services
 
-Databases supported
+Databases supported :
 * MongoDB
 * MySQL
 
-Cloud service supported
+Cloud service supported :
 * __Dropbox__       (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
 * __CloudApp__      (thanks to [CloudAPP-API-PHP-wrapper](https://github.com/matthiasplappert/CloudApp-API-PHP-wrapper))
 * __Amazon S3__     (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
