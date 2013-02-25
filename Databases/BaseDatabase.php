@@ -98,7 +98,7 @@ abstract class BaseDatabase
     abstract public function dump();
 
     /**
-     * Return path of archive
+     * Return path of the archive
      *
      * @return mixed
      */
