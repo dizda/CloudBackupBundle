@@ -11,7 +11,7 @@ abstract class BaseDatabase
     const DB_PATH = '';
 
     protected $kernelCacheDir;
-    protected $fileSystem;
+    protected $filesystem;
     protected $basePath;
     protected $dataPath;
     protected $archivePath;
@@ -20,7 +20,7 @@ abstract class BaseDatabase
 
     public function __construct()
     {
-        $this->fileSystem = new Filesystem();
+        $this->filesystem = new Filesystem();
     }
 
 
@@ -39,7 +39,7 @@ abstract class BaseDatabase
         $this->basePath     = $this->kernelCacheDir . '/db/';
         $this->dataPath     = $this->basePath . static::DB_PATH . '/';
 
-        $this->fileSystem->mkdir($this->dataPath);
+        $this->filesystem->mkdir($this->dataPath);
     }
 
 
@@ -86,7 +86,7 @@ abstract class BaseDatabase
      */
     final public function cleanUp()
     {
-        $this->fileSystem->remove($this->basePath);
+        $this->filesystem->remove($this->basePath);
     }
 
 
