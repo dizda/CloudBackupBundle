@@ -33,7 +33,6 @@ abstract class BaseDatabase
      *
      * TODO: Add a config prefix to archive (with default value : '')
      * TODO: Many compression mode
-     * TODO: Local copy, if option is activated, keep a local copy at path specified
      */
     final public function prepare()
     {
