@@ -66,7 +66,7 @@ class BackupCommand extends ContainerAwareCommand
 
 
         if ($this->dropboxActive) {
-            //$this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($database->getArchivePath());
+            $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($database->getArchivePath());
         }
 
         if ($this->cloudappActive) {
