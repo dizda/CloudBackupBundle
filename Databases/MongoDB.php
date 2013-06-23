@@ -1,7 +1,12 @@
 <?php
 namespace Dizda\CloudBackupBundle\Databases;
 
-
+/**
+ * Class MongoDB
+ *
+ * @package Dizda\CloudBackupBundle\Databases
+ * @author  Jonathan Dizdarevic <dizda@dizda.fr>
+ */
 class MongoDB extends BaseDatabase
 {
     const DB_PATH = 'mongo';
@@ -10,7 +15,16 @@ class MongoDB extends BaseDatabase
     private $database;
     private $auth = '';
 
-
+    /**
+     * DB Auth
+     *
+     * @param bool   $allDatabases
+     * @param string $host
+     * @param int    $port
+     * @param string $database
+     * @param string $user
+     * @param string $password
+     */
     public function __construct($allDatabases, $host, $port, $database, $user, $password)
     {
         parent::__construct();
@@ -39,7 +53,9 @@ class MongoDB extends BaseDatabase
 
     }
 
-
+    /**
+     * {@
+     */
     public function dump()
     {
         parent::prepare();

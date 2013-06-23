@@ -4,7 +4,12 @@ namespace Dizda\CloudBackupBundle\Databases;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
-
+/**
+ * Class BaseDatabase
+ *
+ * @package Dizda\CloudBackupBundle\Databases
+ * @author  Jonathan Dizdarevic <dizda@dizda.fr>
+ */
 abstract class BaseDatabase
 {
     const DB_PATH = '';
@@ -16,7 +21,9 @@ abstract class BaseDatabase
     protected $archivePath;
 
 
-
+    /**
+     * Get SF2 Filesystem
+     */
     public function __construct()
     {
         $this->filesystem = new Filesystem();
@@ -109,9 +116,9 @@ abstract class BaseDatabase
 
 
     /**
-     * @DI\InjectParams({
-     *     "kernelCacheDir" = @DI\Inject("%kernel.cache_dir%")
-     * })
+     * @param string $kernelCacheDir
+     *
+     * Setting Kernel cache directory
      */
     public function setKernelCacheDir($kernelCacheDir)
     {

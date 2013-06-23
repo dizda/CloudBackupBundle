@@ -6,7 +6,12 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Dizda\CloudBackupBundle\Clients\DropboxUploader;
 
 
-
+/**
+ * Class DropboxClient
+ *
+ * @package Dizda\CloudBackupBundle\Clients
+ * @author  Jonathan Dizdarevic <dizda@dizda.fr>
+ */
 class DropboxClient
 {
     private $output;
@@ -14,7 +19,11 @@ class DropboxClient
     private $password;
     private $remotePath;
 
-
+    /**
+     * @param string $user       user
+     * @param string $password   password
+     * @param string $remotePath On Dropbox storage
+     */
     public function __construct($user, $password, $remotePath)
     {
         $this->output     = new ConsoleOutput();

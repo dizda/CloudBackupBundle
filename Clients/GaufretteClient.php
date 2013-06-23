@@ -5,13 +5,21 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 use Gaufrette\Filesystem;
 
-
+/**
+ * Class GaufretteClient
+ * Client for Gaufrette drivers
+ *
+ * @package Dizda\CloudBackupBundle\Clients
+ * @author  Jonathan Dizdarevic <dizda@dizda.fr>
+ */
 class GaufretteClient
 {
     private $output;
     private $filesystem;
 
-
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->output     = new ConsoleOutput();

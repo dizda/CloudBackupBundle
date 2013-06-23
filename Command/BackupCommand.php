@@ -10,6 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 
 /**
+ * Run backup command
+ *
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class BackupCommand extends ContainerAwareCommand

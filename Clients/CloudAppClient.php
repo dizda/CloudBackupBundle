@@ -5,13 +5,22 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 use CloudApp\API as CloudApp;
 
-
+/**
+ * Class CloudAppClient
+ *
+ * @package Dizda\CloudBackupBundle\Clients
+ * @author  Jonathan Dizdarevic <dizda@dizda.fr>
+ */
 class CloudAppClient
 {
     private $output;
     private $user;
     private $password;
 
+    /**
+     * @param string $user
+     * @param string $password
+     */
     public function __construct($user, $password)
     {
         $this->output     = new ConsoleOutput();
