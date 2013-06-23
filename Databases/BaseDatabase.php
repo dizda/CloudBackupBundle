@@ -1,7 +1,6 @@
 <?php
 namespace Dizda\CloudBackupBundle\Databases;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
@@ -64,7 +63,8 @@ abstract class BaseDatabase
     /**
      * Handle process error on fails
      *
-     * @param $command
+     * @param string $command
+     *
      * @throws \RuntimeException
      */
     protected function execute($command)

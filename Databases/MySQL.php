@@ -1,10 +1,9 @@
 <?php
 namespace Dizda\CloudBackupBundle\Databases;
 
-use JMS\DiExtraBundle\Annotation as DI;
 
 /**
- * @DI\Service("dizda.cloudbackup.database.mysql");
+ * Service("dizda.cloudbackup.database.mysql");
  */
 class MySQL extends BaseDatabase
 {
@@ -17,13 +16,13 @@ class MySQL extends BaseDatabase
 
 
     /**
-     * @DI\InjectParams({
-     *     "allDatabases" = @DI\Inject("%dizda_cloud_backup.databases.mysql.all_databases%"),
-     *     "host"         = @DI\Inject("%dizda_cloud_backup.databases.mysql.host%"),
-     *     "port"         = @DI\Inject("%dizda_cloud_backup.databases.mysql.port%"),
-     *     "database"     = @DI\Inject("%dizda_cloud_backup.databases.mysql.database%"),
-     *     "user"         = @DI\Inject("%dizda_cloud_backup.databases.mysql.db_user%"),
-     *     "password"     = @DI\Inject("%dizda_cloud_backup.databases.mysql.db_password%")
+     * InjectParams({
+     *     "allDatabases" = Inject("%dizda_cloud_backup.databases.mysql.all_databases%"),
+     *     "host"         = DI\Inject("%dizda_cloud_backup.databases.mysql.host%"),
+     *     "port"         = DI\Inject("%dizda_cloud_backup.databases.mysql.port%"),
+     *     "database"     = DI\Inject("%dizda_cloud_backup.databases.mysql.database%"),
+     *     "user"         = DI\Inject("%dizda_cloud_backup.databases.mysql.db_user%"),
+     *     "password"     = DI\Inject("%dizda_cloud_backup.databases.mysql.db_password%")
      * })
      */
     public function __construct($allDatabases, $host, $port, $database, $user, $password)

@@ -30,7 +30,7 @@ are supported :-)
 
 
 
-Installation (Symfony 2.1)
+Installation (>=Symfony 2.1)
 ------------
 
 ### Composer

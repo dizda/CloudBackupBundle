@@ -1,10 +1,8 @@
 <?php
 namespace Dizda\CloudBackupBundle\Databases;
 
-use JMS\DiExtraBundle\Annotation as DI;
-
 /**
- * @DI\Service("dizda.cloudbackup.database.mongodb");
+ * Service("dizda.cloudbackup.database.mongodb");
  */
 class MongoDB extends BaseDatabase
 {
@@ -16,13 +14,13 @@ class MongoDB extends BaseDatabase
 
 
     /**
-     * @DI\InjectParams({
-     *     "allDatabases" = @DI\Inject("%dizda_cloud_backup.databases.mongodb.all_databases%"),
-     *     "host"         = @DI\Inject("%dizda_cloud_backup.databases.mongodb.host%"),
-     *     "port"         = @DI\Inject("%dizda_cloud_backup.databases.mongodb.port%"),
-     *     "database"     = @DI\Inject("%dizda_cloud_backup.databases.mongodb.database%"),
-     *     "user"         = @DI\Inject("%dizda_cloud_backup.databases.mongodb.db_user%"),
-     *     "password"     = @DI\Inject("%dizda_cloud_backup.databases.mongodb.db_password%")
+     * DI\InjectParams({
+     *     "allDatabases" = DI\Inject("%dizda_cloud_backup.databases.mongodb.all_databases%"),
+     *     "host"         = DI\Inject("%dizda_cloud_backup.databases.mongodb.host%"),
+     *     "port"         = DI\Inject("%dizda_cloud_backup.databases.mongodb.port%"),
+     *     "database"     = DI\Inject("%dizda_cloud_backup.databases.mongodb.database%"),
+     *     "user"         = DI\Inject("%dizda_cloud_backup.databases.mongodb.db_user%"),
+     *     "password"     = DI\Inject("%dizda_cloud_backup.databases.mongodb.db_password%")
      * })
      */
     public function __construct($allDatabases, $host, $port, $database, $user, $password)

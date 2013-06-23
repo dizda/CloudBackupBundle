@@ -2,12 +2,11 @@
 namespace Dizda\CloudBackupBundle\Clients;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
-use JMS\DiExtraBundle\Annotation as DI;
 
 use Dizda\CloudBackupBundle\Clients\DropboxUploader;
 
 /**
- * @DI\Service("dizda.cloudbackup.client.dropbox");
+ * DI\Service("dizda.cloudbackup.client.dropbox");
  */
 class DropboxClient
 {
@@ -17,10 +16,10 @@ class DropboxClient
     private $remotePath;
 
     /**
-     * @DI\InjectParams({
-     *     "user"         = @DI\Inject("%dizda_cloud_backup.cloud_storages.dropbox.user%"),
-     *     "password"     = @DI\Inject("%dizda_cloud_backup.cloud_storages.dropbox.password%"),
-     *     "remotePath"   = @DI\Inject("%dizda_cloud_backup.cloud_storages.dropbox.remote_path%")
+     * DI\InjectParams({
+     *     "user"         = DI\Inject("%dizda_cloud_backup.cloud_storages.dropbox.user%"),
+     *     "password"     = DI\Inject("%dizda_cloud_backup.cloud_storages.dropbox.password%"),
+     *     "remotePath"   = DI\Inject("%dizda_cloud_backup.cloud_storages.dropbox.remote_path%")
      * })
      */
     public function __construct($user, $password, $remotePath)

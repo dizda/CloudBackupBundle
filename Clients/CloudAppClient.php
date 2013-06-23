@@ -2,12 +2,11 @@
 namespace Dizda\CloudBackupBundle\Clients;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
-use JMS\DiExtraBundle\Annotation as DI;
 
 use CloudApp\API as CloudApp;
 
 /**
- * @DI\Service("dizda.cloudbackup.client.cloudapp");
+ * DI\Service("dizda.cloudbackup.client.cloudapp");
  */
 class CloudAppClient
 {
@@ -16,7 +15,7 @@ class CloudAppClient
     private $password;
 
     /**
-     * @DI\InjectParams({
+     * DI\InjectParams({
      *     "user"         = @DI\Inject("%dizda_cloud_backup.cloud_storages.cloudapp.user%"),
      *     "password"     = @DI\Inject("%dizda_cloud_backup.cloud_storages.cloudapp.password%")
      * })

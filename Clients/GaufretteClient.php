@@ -2,12 +2,11 @@
 namespace Dizda\CloudBackupBundle\Clients;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
-use JMS\DiExtraBundle\Annotation as DI;
 
 use Gaufrette\Filesystem;
 
 /**
- * @DI\Service("dizda.cloudbackup.client.gaufrette");
+ * DI\Service("dizda.cloudbackup.client.gaufrette");
  */
 class GaufretteClient
 {
