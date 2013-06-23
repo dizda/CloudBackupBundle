@@ -25,7 +25,7 @@ class MongoDB extends BaseDatabase
      * @param string $user
      * @param string $password
      */
-    public function __construct($allDatabases, $host, $port, $database, $user, $password)
+    public function __construct($allDatabases, $host, $port = 27017, $database, $user, $password)
     {
         parent::__construct();
 
@@ -54,18 +54,23 @@ class MongoDB extends BaseDatabase
     }
 
     /**
-     * {@
+     * {@inheritdoc}
      */
     public function dump()
     {
         parent::prepare();
 
-        $cmd    = sprintf('mongodump %s %s --out %s',
-                           $this->auth,
-                           $this->database,
-                           $this->dataPath);
-
-        $this->execute($cmd);
+        $this->execute($this->getCommand());
     }
 
+    /**
+     * @return string
+     */
+    public function getCommand()
+    {
+        return sprintf('mongodump %s %s --out %s',
+            $this->auth,
+            $this->database,
+            $this->dataPath);
+    }
 }

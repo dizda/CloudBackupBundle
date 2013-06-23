@@ -2,14 +2,14 @@
 
 namespace Dizda\CloudBackupBundle\Tests\Databases;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 
 /**
  * Class MySQLTest
  *
  * @package Dizda\CloudBackupBundle\Tests\Databases
  */
-class MySQLTest extends WebTestCase
+class MySQLTest extends AbstractTesting
 {
     /**
      * Test different commands
@@ -39,16 +39,4 @@ class MySQLTest extends WebTestCase
         $this->assertEquals($mysql->getCommand(), 'mysqldump  --all-databases > all-databases.sql');
     }
 
-    /**
-     * Setup the kernel.
-     *
-     * @return null
-     */
-    public function setUp()
-    {
-        $kernel = self::getKernelClass();
-
-        self::$kernel = new $kernel('test', true);
-        self::$kernel->boot();
-    }
 }
