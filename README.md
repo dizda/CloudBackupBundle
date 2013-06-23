@@ -65,12 +65,6 @@ Configuration
 Here is the default configuration for the bundle:
 
 ```yml
-jms_di_extra:
-    locations:
-        all_bundles: false
-        bundles: [ DizdaCloudBackupBundle ]       # Add the bundle to JMSDiExtra conf to allow DI (if all_bundles is false)
-        directories: ["%kernel.root_dir%/../src"]
-
 dizda_cloud_backup:
     cloud_storages:
         # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
