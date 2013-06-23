@@ -94,6 +94,11 @@ class DizdaCloudBackupExtension extends Extension
                 $container->setParameter('dizda_cloud_backup.databases.mysql.port',        $config['databases']['mysql']['db_port']);
                 $container->setParameter('dizda_cloud_backup.databases.mysql.db_user',     $config['databases']['mysql']['db_user']);
                 $container->setParameter('dizda_cloud_backup.databases.mysql.db_password', $config['databases']['mysql']['db_password']);
+
+                // if port not setted in parameters.yml, we set default port
+                if ($container->getParameter('dizda_cloud_backup.databases.mysql.port') == null) {
+                    $container->setParameter('dizda_cloud_backup.databases.mysql.port', 3306);
+                }
             }else{ /* if mysql config is not set, we taking from the parameters.yml values */
                 $container->setParameter('dizda_cloud_backup.databases.mysql.database',    $container->getParameter('database_name'));
                 $container->setParameter('dizda_cloud_backup.databases.mysql.host',        $container->getParameter('database_host'));

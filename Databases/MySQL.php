@@ -26,7 +26,7 @@ class MySQL extends BaseDatabase
      * @param string $user
      * @param string $password
      */
-    public function __construct($allDatabases, $host, $port, $database, $user, $password)
+    public function __construct($allDatabases, $host, $port = 3306, $database, $user, $password)
     {
         parent::__construct();
 
@@ -59,12 +59,18 @@ class MySQL extends BaseDatabase
     {
         parent::prepare();
 
-        $cmd    = sprintf('mysqldump %s %s > %s',
-                           $this->auth,
-                           $this->database,
-                           $this->dataPath . $this->fileName);
+        $this->execute($this->getCommand());
+    }
 
-        $this->execute($cmd);
+    /**
+     * @return string
+     */
+    public function getCommand()
+    {
+        return sprintf('mysqldump %s %s > %s',
+            $this->auth,
+            $this->database,
+            $this->dataPath . $this->fileName);
     }
 
 }
