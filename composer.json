@@ -27,6 +27,7 @@
     },
 
     "require-dev": {
+        "symfony/symfony": "v2.3.1"
     },
 
     "suggest": {
