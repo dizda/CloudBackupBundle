@@ -142,6 +142,37 @@ dizda_cloud_backup:
 	# ...
 ```
 
+For Symfony 2.3 (Without jms_di_extra)
+-----
+
+You need to add all services you need :
+
+```yml
+# app/config/services.yml
+	# ...
+	
+	# For mysql
+    dizda.cloudbackup.database.mysql:
+        class:      Dizda\CloudBackupBundle\Databases\MySQL
+        arguments:  [%dizda_cloud_backup.databases.mysql.all_databases%, %dizda_cloud_backup.databases.mysql.host%, %dizda_cloud_backup.databases.mysql.port%, %dizda_cloud_backup.databases.mysql.database%, %dizda_cloud_backup.databases.mysql.db_user%, %dizda_cloud_backup.databases.mysql.db_password%]
+
+	# For mongoDB
+    dizda.cloudbackup.database.mongodb:
+        class:      Dizda\CloudBackupBundle\Databases\MongoDB
+        arguments:  [%dizda_cloud_backup.databases.mongodb.all_databases%, %dizda_cloud_backup.databases.mongodb.host%, %dizda_cloud_backup.databases.mongodb.port%, %dizda_cloud_backup.databases.mongodb.database%, %dizda_cloud_backup.databases.mongodb.db_user%, %dizda_cloud_backup.databases.mongodb.db_password%]
+
+	# For Dropbox
+    dizda.cloudbackup.client.dropbox:
+        class:      Dizda\CloudBackupBundle\Clients\DropboxClient
+        arguments:  [%dizda_cloud_backup.cloud_storages.dropbox.user%, %dizda_cloud_backup.cloud_storages.dropbox.password%, %dizda_cloud_backup.cloud_storages.dropbox.remote_path%]
+
+	# For CloudApp
+    dizda.cloudbackup.client.cloudapp:
+        class:      Dizda\CloudBackupBundle\Clients\CloudAppClient
+        arguments:  [%dizda_cloud_backup.cloud_storages.cloudapp.user%, %dizda_cloud_backup.cloud_storages.cloudapp.password%]
+
+	# ...
+```
 
 Usage
 -----
