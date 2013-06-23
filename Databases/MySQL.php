@@ -63,7 +63,7 @@ class MySQL extends BaseDatabase
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCommand()
     {

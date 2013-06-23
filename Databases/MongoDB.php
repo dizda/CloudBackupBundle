@@ -64,7 +64,7 @@ class MongoDB extends BaseDatabase
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCommand()
     {

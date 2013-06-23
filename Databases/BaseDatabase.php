@@ -103,6 +103,13 @@ abstract class BaseDatabase
     abstract public function dump();
 
     /**
+     * Get command to execute dump
+     *
+     * @return string
+     */
+    abstract public function getCommand();
+
+    /**
      * Return path of the archive
      *
      * @return mixed
