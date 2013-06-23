@@ -5,9 +5,8 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 use Dizda\CloudBackupBundle\Clients\DropboxUploader;
 
-/**
- * DI\Service("dizda.cloudbackup.client.dropbox");
- */
+
+
 class DropboxClient
 {
     private $output;
@@ -15,13 +14,7 @@ class DropboxClient
     private $password;
     private $remotePath;
 
-    /**
-     * DI\InjectParams({
-     *     "user"         = DI\Inject("%dizda_cloud_backup.cloud_storages.dropbox.user%"),
-     *     "password"     = DI\Inject("%dizda_cloud_backup.cloud_storages.dropbox.password%"),
-     *     "remotePath"   = DI\Inject("%dizda_cloud_backup.cloud_storages.dropbox.remote_path%")
-     * })
-     */
+
     public function __construct($user, $password, $remotePath)
     {
         $this->output     = new ConsoleOutput();

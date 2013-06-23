@@ -1,9 +1,7 @@
 <?php
 namespace Dizda\CloudBackupBundle\Databases;
 
-/**
- * Service("dizda.cloudbackup.database.mongodb");
- */
+
 class MongoDB extends BaseDatabase
 {
     const DB_PATH = 'mongo';
@@ -13,16 +11,6 @@ class MongoDB extends BaseDatabase
     private $auth = '';
 
 
-    /**
-     * DI\InjectParams({
-     *     "allDatabases" = DI\Inject("%dizda_cloud_backup.databases.mongodb.all_databases%"),
-     *     "host"         = DI\Inject("%dizda_cloud_backup.databases.mongodb.host%"),
-     *     "port"         = DI\Inject("%dizda_cloud_backup.databases.mongodb.port%"),
-     *     "database"     = DI\Inject("%dizda_cloud_backup.databases.mongodb.database%"),
-     *     "user"         = DI\Inject("%dizda_cloud_backup.databases.mongodb.db_user%"),
-     *     "password"     = DI\Inject("%dizda_cloud_backup.databases.mongodb.db_password%")
-     * })
-     */
     public function __construct($allDatabases, $host, $port, $database, $user, $password)
     {
         parent::__construct();

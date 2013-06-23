@@ -5,9 +5,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 use Gaufrette\Filesystem;
 
-/**
- * DI\Service("dizda.cloudbackup.client.gaufrette");
- */
+
 class GaufretteClient
 {
     private $output;

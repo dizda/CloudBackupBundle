@@ -2,9 +2,6 @@
 namespace Dizda\CloudBackupBundle\Databases;
 
 
-/**
- * Service("dizda.cloudbackup.database.mysql");
- */
 class MySQL extends BaseDatabase
 {
     const DB_PATH = 'mysql';
@@ -15,16 +12,6 @@ class MySQL extends BaseDatabase
     private $fileName;
 
 
-    /**
-     * InjectParams({
-     *     "allDatabases" = Inject("%dizda_cloud_backup.databases.mysql.all_databases%"),
-     *     "host"         = DI\Inject("%dizda_cloud_backup.databases.mysql.host%"),
-     *     "port"         = DI\Inject("%dizda_cloud_backup.databases.mysql.port%"),
-     *     "database"     = DI\Inject("%dizda_cloud_backup.databases.mysql.database%"),
-     *     "user"         = DI\Inject("%dizda_cloud_backup.databases.mysql.db_user%"),
-     *     "password"     = DI\Inject("%dizda_cloud_backup.databases.mysql.db_password%")
-     * })
-     */
     public function __construct($allDatabases, $host, $port, $database, $user, $password)
     {
         parent::__construct();

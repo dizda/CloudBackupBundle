@@ -5,21 +5,13 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 use CloudApp\API as CloudApp;
 
-/**
- * DI\Service("dizda.cloudbackup.client.cloudapp");
- */
+
 class CloudAppClient
 {
     private $output;
     private $user;
     private $password;
 
-    /**
-     * DI\InjectParams({
-     *     "user"         = @DI\Inject("%dizda_cloud_backup.cloud_storages.cloudapp.user%"),
-     *     "password"     = @DI\Inject("%dizda_cloud_backup.cloud_storages.cloudapp.password%")
-     * })
-     */
     public function __construct($user, $password)
     {
         $this->output     = new ConsoleOutput();
