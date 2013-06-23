@@ -77,13 +77,11 @@ abstract class BaseDatabase
     protected function execute($command)
     {
         $process = new Process($command);
+        $process->run();
 
-
-        $process->run(function ($type, $data) {
-            if (Process::ERR == $type) {
-                throw new \RuntimeException($data);
-            }
-        });
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException($process->getErrorOutput());
+        }
     }
 
 
