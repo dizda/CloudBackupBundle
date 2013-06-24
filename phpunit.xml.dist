@@ -9,9 +9,9 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="true"
-         bootstrap="./vendor/autoload.php"
+         bootstrap="Tests/bootstrap.php"
         >
-
+    <!--bootstrap="./vendor/autoload.php"-->
     <testsuites>
         <testsuite name="CloudBackupBundle Test Suite">
             <directory suffix="Test.php">./Tests</directory>
