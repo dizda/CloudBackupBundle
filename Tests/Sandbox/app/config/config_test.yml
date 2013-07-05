@@ -4,23 +4,23 @@ framework:
     form: true
     csrf_protection: true
     validation: { enable_annotations: true }
-    templating: { engines: ['twig'] }
+    #templating: { engines: ['twig'] }
     profiler: { only_exceptions: false }
     test: ~
     session:
         storage_id: session.storage.filesystem
 
-monolog:
-    handlers:
-        main:
-            type: stream
-            path: %kernel.logs_dir%/%kernel.environment%.log
-            level: debug
-        firephp:
-            type: firephp
-            level: info
+#monolog:
+#    handlers:
+#        main:
+#            type: stream
+#            path: %kernel.logs_dir%/%kernel.environment%.log
+#            level: debug
+#        firephp:
+#            type: firephp
+#            level: info
 
-twig:
-    debug: %kernel.debug%
-    strict_variables: %kernel.debug%
+#twig:
+#    debug: %kernel.debug%
+#    strict_variables: %kernel.debug%
 
