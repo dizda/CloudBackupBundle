@@ -31,6 +31,7 @@
     },
 
     "suggest": {
+        "matthiasplappert/cloudapp-api": "dev-master"
     },
 
     "autoload": {
