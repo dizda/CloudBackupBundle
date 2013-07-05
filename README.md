@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/dizda/CloudBackupBundle.png?branch=master)](https://travis-ci.org/dizda/CloudBackupBundle)
-
 CloudBackupBundle
 =================
 
