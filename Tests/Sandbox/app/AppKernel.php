@@ -11,9 +11,9 @@ class AppKernel extends Kernel
     {
         return array(
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new \Symfony\Bundle\TwigBundle\TwigBundle(),
-            new \Symfony\Bundle\MonologBundle\MonologBundle(),
-            new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            //new \Symfony\Bundle\TwigBundle\TwigBundle(),
+            //new \Symfony\Bundle\MonologBundle\MonologBundle(),
+            //new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new \Dizda\CloudBackupBundle\DizdaCloudBackupBundle()
         );
     }
