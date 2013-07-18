@@ -58,7 +58,7 @@ abstract class BaseDatabase
         $this->archivePath  = $this->basePath . $fileName;
 
 
-        $archive = sprintf('tar --exclude=%s -czf %s -C %s . 2>/dev/null',
+        $archive = sprintf('tar --exclude=%s -czf %s -C %s .',
                             $fileName,  // Yo dawg, I heard you don't like so much tar archive, so I don't make tar in a tar archive, you cannot extracting while you extract, damn!
                             $this->archivePath,
                             $this->basePath);
