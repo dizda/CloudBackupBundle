@@ -55,13 +55,12 @@ abstract class BaseDatabase
     final public function compression()
     {
         $fileName           = gethostname() . '_' . date('Y_m_d-H_i_s') . '.tar';
-        $this->archivePath  = $this->basePath . $fileName;
+        $archiveDir         = $this->basePath .'../dbcompressed/';
 
+        $this->filesystem->mkdir($archiveDir);
+        $this->archivePath  = $archiveDir . $fileName;
 
-        $archive = sprintf('tar --exclude=%s -czf %s -C %s .',
-                            $fileName,  // Yo dawg, I heard you don't like so much tar archive, so I don't make tar in a tar archive, you cannot extracting while you extract, damn!
-                            $this->archivePath,
-                            $this->basePath);
+        $archive = sprintf('tar -czf %s -C %s .', $this->archivePath, $this->basePath);
 
         $this->execute($archive);
     }
