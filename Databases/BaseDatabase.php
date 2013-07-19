@@ -19,6 +19,7 @@ abstract class BaseDatabase
     protected $basePath;
     protected $dataPath;
     protected $archivePath;
+    protected $compressedArchivePath;
 
 
     /**
@@ -54,11 +55,11 @@ abstract class BaseDatabase
      */
     final public function compression()
     {
-        $fileName           = gethostname() . '_' . date('Y_m_d-H_i_s') . '.tar';
-        $archiveDir         = $this->basePath .'../dbcompressed/';
+        $fileName                       = gethostname() . '_' . date('Y_m_d-H_i_s') . '.tar';
+        $this->compressedArchivePath    = $this->basePath .'../dbcompressed/';
 
-        $this->filesystem->mkdir($archiveDir);
-        $this->archivePath  = $archiveDir . $fileName;
+        $this->filesystem->mkdir($this->compressedArchivePath);
+        $this->archivePath = $this->compressedArchivePath . $fileName;
 
         $archive = sprintf('tar -czf %s -C %s .', $this->archivePath, $this->basePath);
 
@@ -91,6 +92,7 @@ abstract class BaseDatabase
     final public function cleanUp()
     {
         $this->filesystem->remove($this->basePath);
+        $this->filesystem->remove($this->compressedArchivePath);
     }
 
 
