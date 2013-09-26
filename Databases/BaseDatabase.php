@@ -14,6 +14,7 @@ abstract class BaseDatabase
 {
     const DB_PATH = '';
 
+    protected $filePrefix;
     protected $kernelCacheDir;
     protected $filesystem;
     protected $basePath;
@@ -24,9 +25,12 @@ abstract class BaseDatabase
 
     /**
      * Get SF2 Filesystem
+     *
+     * @param string $filePrefix
      */
-    public function __construct()
+    public function __construct($filePrefix)
     {
+        $this->filePrefix = $filePrefix;
         $this->filesystem = new Filesystem();
     }
 
@@ -55,7 +59,7 @@ abstract class BaseDatabase
      */
     final public function compression()
     {
-        $fileName                       = gethostname() . '_' . date('Y_m_d-H_i_s') . '.tar';
+        $fileName                       = $this->filePrefix . '_' . date('Y_m_d-H_i_s') . '.tar';
         $this->compressedArchivePath    = $this->basePath .'../dbcompressed/';
 
         $this->filesystem->mkdir($this->compressedArchivePath);

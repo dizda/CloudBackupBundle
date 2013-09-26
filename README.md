@@ -67,6 +67,9 @@ Here is the default configuration for the bundle:
 
 ```yml
 dizda_cloud_backup:
+    # By default backup files will have your servers hostname as prefix
+    # such as: hostname_2014_01_01-21_08_39.tar
+    output_file_prefix: hostname 
     cloud_storages:
         # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
         dropbox:
