@@ -26,9 +26,9 @@ class MySQL extends BaseDatabase
      * @param string $user
      * @param string $password
      */
-    public function __construct($allDatabases, $host, $port = 3306, $database, $user, $password)
+    public function __construct($allDatabases, $host, $port = 3306, $database, $user, $password, $filePrefix)
     {
-        parent::__construct();
+        parent::__construct($filePrefix);
 
         $this->allDatabases = $allDatabases;
         $this->database     = $database;
