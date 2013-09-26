@@ -25,6 +25,9 @@ class DizdaCloudBackupExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
+        /* Config output file */
+        $container->setParameter('dizda_cloud_backup.output_file_prefix', $config['output_file_prefix']);
+
         /* Config dropbox */
         if (isset($config['cloud_storages']['dropbox'])) {
             $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.active',      true);
