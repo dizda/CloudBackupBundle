@@ -24,6 +24,7 @@ class MongoDB extends BaseDatabase
      * @param string $database
      * @param string $user
      * @param string $password
+     * @param string $filePrefix
      */
     public function __construct($allDatabases, $host, $port = 27017, $database, $user, $password, $filePrefix)
     {

@@ -25,6 +25,8 @@ abstract class BaseDatabase
 
     /**
      * Get SF2 Filesystem
+     *
+     * @param string $filePrefix
      */
     public function __construct($filePrefix)
     {
