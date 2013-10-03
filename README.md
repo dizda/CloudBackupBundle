@@ -164,6 +164,34 @@ $ php app/console dizda:backup:start
 
 ![](https://github.com/dizda/CloudBackupBundle/raw/master/Resources/doc/dizda-Cloud-Backup-Bundle-symfony2.png)
 
+Capifony integration
+--------------------
+
+If you are using capifony for deployment you can grab the sample task for easier backups.
+
+Add the following task in your deploy.rb file
+```ruby
+namespace :symfony do
+    namespace :dizda do
+        namespace :backup do
+            desc "Upload a backup of your database to cloud service's"
+            task :start do
+                run "#{try_sudo} sh -c 'cd #{current_release} && #{php_bin} #{symfony_console} dizda:backup:start #{console_options}'"
+            end
+        end
+    end
+end
+```
+
+This adds symfony:dizda:backup:start command to capifony. To launch it automatically on deploy you might use:
+
+```ruby
+# 1) Launches backup right before deploy
+before "deploy", "symfony:dizda:backup:start"
+
+# 2) Launches backup after deploy
+after "deploy", "symfony:dizda:backup:start"
+```
 
 End
 ---
