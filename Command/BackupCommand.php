@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Run backup command
  *
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
+ * @author István Manzuk <istvan.manzuk@gmail.com>
  */
 class BackupCommand extends ContainerAwareCommand
 {
@@ -33,6 +34,7 @@ class BackupCommand extends ContainerAwareCommand
     {
         $this->mongoActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mongodb.active');
         $this->mysqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mysql.active');
+        $this->postgresqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.postgresql.active');
 
         $this->dropboxActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.active');
         $this->cloudappActive  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.active');
@@ -56,6 +58,15 @@ class BackupCommand extends ContainerAwareCommand
             $this->output->write('- <comment>Dumping MySQL database...</comment>');
 
             $database = $this->getContainer()->get('dizda.cloudbackup.database.mysql');
+            $database->dump();
+
+            $this->output->writeln('<info>OK</info>');
+        }
+
+        if ($this->postgresqlActive) {
+            $this->output->write('- <comment>Dumping PostgreSQL database...</comment>');
+
+            $database = $this->getContainer()->get('dizda.cloudbackup.database.postgresql');
             $database->dump();
 
             $this->output->writeln('<info>OK</info>');
