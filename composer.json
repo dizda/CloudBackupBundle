@@ -1,5 +1,5 @@
 {
-    "name": "imanzuk/cloud-backup-bundle",
+    "name": "dizda/cloud-backup-bundle",
     "type": "symfony-bundle",
     "description": "Be able to backup your database(s) and upload it to the cloud (Dropbox, CloudApp, GoogleDrive, etc.)",
     "keywords": ["symfony", "dropbox", "database", "mongodb", "mysql", "dump", "cloudapp", "GoogleDrive", "GDrive"],
