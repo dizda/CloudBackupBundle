@@ -22,7 +22,7 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": ">=2.1",
-        "knplabs/gaufrette": "v0.1.7",
+        "knplabs/gaufrette": "~0.1.7",
         "knplabs/knp-gaufrette-bundle": "0.2.*@dev"
     },
 
@@ -41,7 +41,7 @@
     },
 
     "target-dir": "Dizda/CloudBackupBundle",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
 
     "extra": {
         "branch-alias": {
