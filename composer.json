@@ -40,7 +40,6 @@
     },
 
     "target-dir": "Dizda/CloudBackupBundle",
-    "minimum-stability": "dev",
 
     "extra": {
         "branch-alias": {
