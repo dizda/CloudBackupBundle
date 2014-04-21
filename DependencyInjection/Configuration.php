@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
         ->children()
             ->scalarNode('output_file_prefix')->defaultValue(gethostname())->end()
+            ->arrayNode('folders')->prototype('scalar')->end()->end()
             ->arrayNode('cloud_storages')
                 ->children()
                     ->arrayNode('dropbox')
