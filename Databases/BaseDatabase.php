@@ -95,8 +95,8 @@ abstract class BaseDatabase
      */
     final public function cleanUp()
     {
-        $this->filesystem->remove($this->basePath);
         $this->filesystem->remove($this->compressedArchivePath);
+        $this->filesystem->remove($this->basePath);
     }
 
 
