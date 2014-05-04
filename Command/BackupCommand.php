@@ -19,6 +19,7 @@ class BackupCommand extends ContainerAwareCommand
 {
     private $mongoActive;
     private $mysqlActive;
+    private $postgresqlActive;
     private $dropboxActive;
     private $cloudappActive;
     private $gaufretteActive;
