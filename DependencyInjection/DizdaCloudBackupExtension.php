@@ -27,7 +27,8 @@ class DizdaCloudBackupExtension extends Extension
 
         /* Config output file */
         $container->setParameter('dizda_cloud_backup.output_file_prefix', $config['output_file_prefix']);
-
+        $container->setParameter('dizda_cloud_backup.folders', $config['folders']);
+        
         /* Config dropbox */
         if (isset($config['cloud_storages']['dropbox'])) {
             $container->setParameter('dizda_cloud_backup.cloud_storages.dropbox.active',      true);

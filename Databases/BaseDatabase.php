@@ -21,16 +21,18 @@ abstract class BaseDatabase
     protected $dataPath;
     protected $archivePath;
     protected $compressedArchivePath;
-
+    protected $folders;
 
     /**
      * Get SF2 Filesystem
      *
      * @param string $filePrefix
+     * @param string $folders
      */
-    public function __construct($filePrefix)
+    public function __construct($filePrefix, $folders)
     {
         $this->filePrefix = $filePrefix;
+        $this->folders=$folders;
         $this->filesystem = new Filesystem();
     }
 
@@ -53,6 +55,15 @@ abstract class BaseDatabase
         $this->filesystem->mkdir($this->dataPath);
     }
 
+    /**
+    * Make a copy of all folders in specified in config
+    */
+    final public function copyFolders(){
+        // Copy folder for compresion file
+        foreach($this->folders as $folder){
+            $this->filesystem->mirror($this->basePath.'../../../../'.$folder, $this->basePath.$folder);     
+        }            
+    }
 
     /**
      * Compress with format name like : hostname_2013_01_12-00_06_40.tar

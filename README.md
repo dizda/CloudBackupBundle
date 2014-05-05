@@ -71,6 +71,7 @@ dizda_cloud_backup:
     # By default backup files will have your servers hostname as prefix
     # such as: hostname_2014_01_01-21_08_39.tar
     output_file_prefix: hostname 
+    folders: [ web/uploads , other/folder ]
     cloud_storages:
         # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
         dropbox:
@@ -174,6 +175,8 @@ $ php app/console dizda:backup:start
 ```
 
 ![](https://github.com/dizda/CloudBackupBundle/raw/master/Resources/doc/dizda-Cloud-Backup-Bundle-symfony2.png)
+
+In addition, using -F or --folder option the folders also will be added to the backup.
 
 Capifony integration
 --------------------

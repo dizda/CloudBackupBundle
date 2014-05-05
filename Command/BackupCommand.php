@@ -27,8 +27,15 @@ class BackupCommand extends ContainerAwareCommand
 
     protected function configure()
     {
-        $this->setName('dizda:backup:start')
-             ->setDescription('Upload a backup of your database to cloud service\'s');
+        $this
+            ->addOption(
+                'folders',
+                'F',
+                 InputOption::VALUE_NONE,
+                'Do you want to export also folders?'
+                )
+            ->setName('dizda:backup:start')
+            ->setDescription('Upload a backup of your database to cloud services (use -F option for backup folders)');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -73,6 +80,11 @@ class BackupCommand extends ContainerAwareCommand
             $this->output->writeln('<info>OK</info>');
         }
 
+        if($input->getOption('folders')){
+            $this->output->write('- <comment>Copying folders...</comment>');
+            $database->copyFolders();
+            $this->output->writeln('<info>OK</info>');
+        }
         $database->compression();
         $this->output->writeln('- <info>Archive created</info> ' . $database->getArchivePath());
 

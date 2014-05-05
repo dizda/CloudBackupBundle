@@ -26,9 +26,9 @@ class MongoDB extends BaseDatabase
      * @param string $password
      * @param string $filePrefix
      */
-    public function __construct($allDatabases, $host, $port = 27017, $database, $user, $password, $filePrefix)
+    public function __construct($allDatabases, $host, $port = 27017, $database, $user, $password, $filePrefix, $folders)
     {
-        parent::__construct($filePrefix);
+        parent::__construct($filePrefix, $folders);
 
         $this->allDatabases = $allDatabases;
         $this->database     = $database;

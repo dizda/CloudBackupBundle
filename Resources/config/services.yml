@@ -25,6 +25,7 @@ services:
             - %dizda_cloud_backup.databases.mongodb.db_user%
             - %dizda_cloud_backup.databases.mongodb.db_password%
             - %dizda_cloud_backup.output_file_prefix%
+            - %dizda_cloud_backup.folders%            
         calls:
             - [setKernelCacheDir, ["%kernel.cache_dir%"]]
 
@@ -38,6 +39,7 @@ services:
             - %dizda_cloud_backup.databases.mysql.db_user%
             - %dizda_cloud_backup.databases.mysql.db_password%
             - %dizda_cloud_backup.output_file_prefix%
+            - %dizda_cloud_backup.folders%            
         calls:
             - [setKernelCacheDir, ["%kernel.cache_dir%"]]
 
@@ -50,5 +52,6 @@ services:
             - %dizda_cloud_backup.databases.postgresql.db_user%
             - %dizda_cloud_backup.databases.postgresql.db_password%
             - %dizda_cloud_backup.output_file_prefix%
+            - %dizda_cloud_backup.folders%            
         calls:
             - [setKernelCacheDir, ["%kernel.cache_dir%"]]
