@@ -1,6 +1,6 @@
 <?php
 
-// https://github.com/hakre/DropboxUploader
+// https://github.com/jakajancar/DropboxUploader
 
 namespace Dizda\CloudBackupBundle\Clients;
 use \Exception;
@@ -29,119 +29,203 @@ use \Exception;
  * THE SOFTWARE.
  *
  * @author Jaka Jancar [jaka@kubje.org] [http://jaka.kubje.org/]
- * @version 1.1.7
+ * @version 1.1.14
  */
 class DropboxUploader {
+    /**
+     * Certificate Authority Certificate source types
+     */
+    const CACERT_SOURCE_SYSTEM = 0;
+    const CACERT_SOURCE_FILE   = 1;
+    const CACERT_SOURCE_DIR    = 2;
+    /**
+     * Dropbox configuration
+     */
+    const DROPBOX_UPLOAD_LIMIT_IN_BYTES = 314572800;
+    const HTTPS_DROPBOX_COM_HOME        = 'https://www.dropbox.com/home';
+    const HTTPS_DROPBOX_COM_LOGIN       = 'https://www.dropbox.com/login';
+    const HTTPS_DROPBOX_COM_UPLOAD      = 'https://dl-web.dropbox.com/upload';
+    /**
+     * DropboxUploader Error Flags and Codes
+     */
+    const FLAG_DROPBOX_GENERIC        = 0x10000000;
+    const FLAG_LOCAL_FILE_IO          = 0x10010000;
+    const CODE_FILE_READ_ERROR        = 0x10010101;
+    const CODE_TEMP_FILE_CREATE_ERROR = 0x10010102;
+    const CODE_TEMP_FILE_WRITE_ERROR  = 0x10010103;
+    const FLAG_PARAMETER_INVALID      = 0x10020000;
+    const CODE_PARAMETER_TYPE_ERROR   = 0x10020101;
+    const CODE_FILESIZE_TOO_LARGE     = 0x10020201;
+    const FLAG_REMOTE                 = 0x10040000;
+    const CODE_CURL_ERROR             = 0x10040101;
+    const CODE_LOGIN_ERROR            = 0x10040201;
+    const CODE_UPLOAD_ERROR           = 0x10040401;
+    const CODE_SCRAPING_FORM          = 0x10040801;
+    const CODE_SCRAPING_LOGIN         = 0x10040802;
+    const CODE_CURL_EXTENSION_MISSING = 0x10080101;
     protected $email;
     protected $password;
     protected $caCertSourceType = self::CACERT_SOURCE_SYSTEM;
-    const CACERT_SOURCE_SYSTEM = 0;
-    const CACERT_SOURCE_FILE = 1;
-    const CACERT_SOURCE_DIR = 2;
     protected $caCertSource;
-    protected $loggedIn = false;
+    protected $loggedIn = FALSE;
     protected $cookies = array();
 
     /**
      * Constructor
      *
      * @param string $email
-     * @param string|null $password
+     * @param string $password
      * @throws Exception
      */
     public function __construct($email, $password) {
         // Check requirements
         if (!extension_loaded('curl'))
-            throw new Exception('DropboxUploader requires the cURL extension.');
+            throw new Exception('DropboxUploader requires the cURL extension.', self::CODE_CURL_EXTENSION_MISSING);
 
-        $this->email = $email;
+        if (empty($email) || empty($password)) {
+            throw new Exception((empty($email) ? 'Email' : 'Password') . ' must not be empty.', self::CODE_PARAMETER_TYPE_ERROR);
+        }
+
+        $this->email    = $email;
         $this->password = $password;
     }
 
-    public function setCaCertificateFile($file)
-    {
-        $this->caCertSourceType = self::CACERT_SOURCE_FILE;
-        $this->caCertSource = $file;
-    }
-
-    public function setCaCertificateDir($dir)
-    {
+    public function setCaCertificateDir($dir) {
         $this->caCertSourceType = self::CACERT_SOURCE_DIR;
-        $this->caCertSource = $dir;
+        $this->caCertSource     = $dir;
     }
 
-    public function upload($source, $remoteDir='/', $remoteName=null) {
+    public function setCaCertificateFile($file) {
+        $this->caCertSourceType = self::CACERT_SOURCE_FILE;
+        $this->caCertSource     = $file;
+    }
+
+    public function upload($source, $remoteDir = '/', $remoteName = NULL) {
         if (!is_file($source) or !is_readable($source))
-            throw new Exception("File '$source' does not exist or is not readable.");
+            throw new Exception("File '$source' does not exist or is not readable.", self::CODE_FILE_READ_ERROR);
+
+        $filesize = filesize($source);
+        if ($filesize < 0 or $filesize > self::DROPBOX_UPLOAD_LIMIT_IN_BYTES) {
+            throw new Exception("File '$source' too large ($filesize bytes).", self::CODE_FILESIZE_TOO_LARGE);
+        }
 
         if (!is_string($remoteDir))
-            throw new Exception("Remote directory must be a string, is ".gettype($remoteDir)." instead.");
+            throw new Exception("Remote directory must be a string, is " . gettype($remoteDir) . " instead.", self::CODE_PARAMETER_TYPE_ERROR);
 
         if (is_null($remoteName)) {
             # intentionally left blank
         } else if (!is_string($remoteName)) {
-            throw new Exception("Remote filename must be a string, is ".gettype($remoteDir)." instead.");
-        } else {
-            $source .= ';filename='.$remoteName;
+            throw new Exception("Remote filename must be a string, is " . gettype($remoteDir) . " instead.", self::CODE_PARAMETER_TYPE_ERROR);
         }
 
         if (!$this->loggedIn)
             $this->login();
 
-        $data = $this->request('https://www.dropbox.com/home');
-        $token = $this->extractToken($data, 'https://dl-web.dropbox.com/upload');
+        $data       = $this->request(self::HTTPS_DROPBOX_COM_HOME);
+        $file       = $this->curlFileCreate($source, $remoteName);
+        $token      = $this->extractFormValue($data, 't');
+        $subjectUid = $this->extractFormValue($data, '_subject_uid');
 
+        $postData = array(
+            'plain'        => 'yes',
+            'file'         => $file,
+            'dest'         => $remoteDir,
+            't'            => $token,
+            '_subject_uid' => $subjectUid,
+        );
 
-        $postData = array('plain'=>'yes', 'file'=>'@'.$source, 'dest'=>$remoteDir, 't'=>$token);
-        $data = $this->request('https://dl-web.dropbox.com/upload', true, $postData);
-        if (strpos($data, 'HTTP/1.1 302 FOUND') === false)
-            throw new Exception('Upload failed!');
+        $data     = $this->request(self::HTTPS_DROPBOX_COM_UPLOAD, $postData);
+        if (strpos($data, 'HTTP/1.1 302 FOUND') === FALSE)
+            throw new Exception('Upload failed!', self::CODE_UPLOAD_ERROR);
+    }
+
+    private function curlFileCreate($source, $remoteName) {
+        if (function_exists('curl_file_create')) {
+            return curl_file_create($source, NULL, $remoteName);
+        }
+
+        if ($remoteName !== NULL) {
+            $source .= ';filename=' . $remoteName;
+        }
+
+        return '@' . $source;
+    }
+
+    public function uploadString($string, $remoteName, $remoteDir = '/') {
+        $exception = NULL;
+
+        $file = tempnam(sys_get_temp_dir(), 'DBUploadString');
+        if (!is_file($file))
+            throw new Exception("Can not create temporary file.", self::CODE_TEMP_FILE_CREATE_ERROR);
+
+        $bytes = file_put_contents($file, $string);
+        if ($bytes === FALSE) {
+            unlink($file);
+            throw new Exception("Can not write to temporary file '$file'.", self::CODE_TEMP_FILE_WRITE_ERROR);
+        }
+
+        try {
+            $this->upload($file, $remoteDir, $remoteName);
+        } catch (Exception $exception) {
+            # intentionally left blank
+        }
+
+        unlink($file);
+
+        if ($exception)
+            throw $exception;
     }
 
     protected function login() {
-        $data = $this->request('https://www.dropbox.com/login');
+        $data  = $this->request(self::HTTPS_DROPBOX_COM_LOGIN);
         $token = $this->extractTokenFromLoginForm($data);
 
-        $postData = array('login_email'=>$this->email, 'login_password'=>$this->password, 't'=>$token);
-        $data = $this->request('https://www.dropbox.com/login', true, $postData);
+        $postData = array(
+            'login_email'    => (string) $this->email,
+            'login_password' => (string) $this->password,
+            't'              => $token
+        );
+        $data     = $this->request(self::HTTPS_DROPBOX_COM_LOGIN, http_build_query($postData));
 
-        if (stripos($data, 'location: /home') === false)
-            throw new Exception('Login unsuccessful.');
+        if (stripos($data, 'location: /home') === FALSE)
+            throw new Exception('Login unsuccessful.', self::CODE_LOGIN_ERROR);
 
-        $this->loggedIn = true;
+        $this->loggedIn = TRUE;
     }
 
-    protected function request($url, $post=false, $postData=array()) {
+    protected function request($url, $postData = NULL) {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_URL, (string) $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
         switch ($this->caCertSourceType) {
             case self::CACERT_SOURCE_FILE:
-                curl_setopt($ch, CURLOPT_CAINFO, $this->caCertSource);
+                curl_setopt($ch, CURLOPT_CAINFO, (string) $this->caCertSource);
                 break;
             case self::CACERT_SOURCE_DIR:
-                curl_setopt($ch, CURLOPT_CAPATH, $this->caCertSource);
+                curl_setopt($ch, CURLOPT_CAPATH, (string) $this->caCertSource);
                 break;
         }
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        if ($post) {
-            curl_setopt($ch, CURLOPT_POST, $post);
+        curl_setopt($ch, CURLOPT_HEADER, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        if (NULL !== $postData) {
+            curl_setopt($ch, CURLOPT_POST, TRUE);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         }
 
         // Send cookies
         $rawCookies = array();
-        foreach ($this->cookies as $k=>$v)
+        foreach ($this->cookies as $k => $v)
             $rawCookies[] = "$k=$v";
         $rawCookies = implode(';', $rawCookies);
         curl_setopt($ch, CURLOPT_COOKIE, $rawCookies);
 
-        $data = curl_exec($ch);
+        $data  = curl_exec($ch);
+        $error = sprintf('Curl error: (#%d) %s', curl_errno($ch), curl_error($ch));
+        curl_close($ch);
 
-        if ($data === false) {
-            throw new Exception(sprintf('Curl error: (#%d) %s', curl_errno($ch), curl_error($ch)));
+        if ($data === FALSE) {
+            throw new Exception($error, self::CODE_CURL_ERROR);
         }
 
         // Store received cookies
@@ -149,22 +233,26 @@ class DropboxUploader {
         foreach ($matches as $match)
             $this->cookies[$match[1]] = $match[2];
 
-        curl_close($ch);
-
         return $data;
+    }
+
+    protected function extractFormValue($html, $name) {
+        $action  = self::HTTPS_DROPBOX_COM_UPLOAD;
+        $pattern = sprintf(
+            '/<form [^>]*%s[^>]*>.*?(?:<input [^>]*name="%s" [^>]*value="(.*?)"[^>]*>).*?<\/form>/is'
+            , preg_quote($action, '/')
+            , preg_quote($name, '/')
+        );
+        if (!preg_match($pattern, $html, $matches))
+            throw new Exception(sprintf("Cannot extract '%s'! (form action is '%s')", $name, $action), self::CODE_SCRAPING_FORM);
+        return $matches[1];
     }
 
     protected function extractTokenFromLoginForm($html) {
         // <input type="hidden" name="t" value="UJygzfv9DLLCS-is7cLwgG7z" />
         if (!preg_match('#<input type="hidden" name="t" value="([A-Za-z0-9_-]+)" />#', $html, $matches))
-            throw new Exception('Cannot extract login CSRF token.');
+            throw new Exception('Cannot extract login CSRF token.', self::CODE_SCRAPING_LOGIN);
         return $matches[1];
-    }
-
-    protected function extractToken($html, $formAction) {
-        if (!preg_match('/<form [^>]*'.preg_quote($formAction, '/').'[^>]*>.*?(<input [^>]*name="t" [^>]*value="(.*?)"[^>]*>).*?<\/form>/is', $html, $matches) || !isset($matches[2]))
-            throw new Exception("Cannot extract token! (form action=$formAction)");
-        return $matches[2];
     }
 
 }
