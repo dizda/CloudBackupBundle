@@ -29,9 +29,9 @@ use \Exception;
  * THE SOFTWARE.
  *
  * @author Jaka Jancar [jaka@kubje.org] [http://jaka.kubje.org/]
- * @version 1.1.14
+ * @version 1.1.16
  */
-class DropboxUploader {
+final class DropboxUploader {
     /**
      * Certificate Authority Certificate source types
      */
@@ -63,12 +63,12 @@ class DropboxUploader {
     const CODE_SCRAPING_FORM          = 0x10040801;
     const CODE_SCRAPING_LOGIN         = 0x10040802;
     const CODE_CURL_EXTENSION_MISSING = 0x10080101;
-    protected $email;
-    protected $password;
-    protected $caCertSourceType = self::CACERT_SOURCE_SYSTEM;
-    protected $caCertSource;
-    protected $loggedIn = FALSE;
-    protected $cookies = array();
+    private $email;
+    private $password;
+    private $caCertSourceType = self::CACERT_SOURCE_SYSTEM;
+    private $caCertSource;
+    private $loggedIn = FALSE;
+    private $cookies = array();
 
     /**
      * Constructor
@@ -176,7 +176,7 @@ class DropboxUploader {
             throw $exception;
     }
 
-    protected function login() {
+    private function login() {
         $data  = $this->request(self::HTTPS_DROPBOX_COM_LOGIN);
         $token = $this->extractTokenFromLoginForm($data);
 
@@ -193,7 +193,7 @@ class DropboxUploader {
         $this->loggedIn = TRUE;
     }
 
-    protected function request($url, $postData = NULL) {
+    private function request($url, $postData = NULL) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, (string) $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
@@ -236,7 +236,7 @@ class DropboxUploader {
         return $data;
     }
 
-    protected function extractFormValue($html, $name) {
+    private function extractFormValue($html, $name) {
         $action  = self::HTTPS_DROPBOX_COM_UPLOAD;
         $pattern = sprintf(
             '/<form [^>]*%s[^>]*>.*?(?:<input [^>]*name="%s" [^>]*value="(.*?)"[^>]*>).*?<\/form>/is'
@@ -248,9 +248,9 @@ class DropboxUploader {
         return $matches[1];
     }
 
-    protected function extractTokenFromLoginForm($html) {
-        // <input type="hidden" name="t" value="UJygzfv9DLLCS-is7cLwgG7z" />
-        if (!preg_match('#<input type="hidden" name="t" value="([A-Za-z0-9_-]+)" />#', $html, $matches))
+    private function extractTokenFromLoginForm($html) {
+        // , "TOKEN": "gCvxU6JVukrW0CUndRPruFvY",
+        if (!preg_match('#, "TOKEN": "([A-Za-z0-9_-]+)", #', $html, $matches))
             throw new Exception('Cannot extract login CSRF token.', self::CODE_SCRAPING_LOGIN);
         return $matches[1];
     }
