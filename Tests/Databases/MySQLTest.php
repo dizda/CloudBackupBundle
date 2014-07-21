@@ -20,15 +20,15 @@ class MySQLTest extends AbstractTesting
         $mysql->__construct(true, 'localhost', 3306, 'dizbdd', 'root', 'test', 'localhost', array());
 
         // dump all databases
-        $this->assertEquals($mysql->getCommand(), 'mysqldump --host=localhost --port=3306 --user=root --password=test --all-databases > all-databases.sql');
+        $this->assertEquals($mysql->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' --all-databases > all-databases.sql");
 
         // dump specified database
         $mysql->__construct(false, 'localhost', 3306, 'dizbdd', 'root', 'test', 'localhost', array());
-        $this->assertEquals($mysql->getCommand(), 'mysqldump --host=localhost --port=3306 --user=root --password=test dizbdd > dizbdd.sql');
+        $this->assertEquals($mysql->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' dizbdd > dizbdd.sql");
 
         // dump specified database
         $mysql->__construct(false, 'somehost', 2222, 'somebdd', 'mysql', 'somepwd', 'localhost', array());
-        $this->assertEquals($mysql->getCommand(), 'mysqldump --host=somehost --port=2222 --user=mysql --password=somepwd somebdd > somebdd.sql');
+        $this->assertEquals($mysql->getCommand(), "mysqldump --host='somehost' --port='2222' --user='mysql' --password='somepwd' somebdd > somebdd.sql");
 
         // dump specified database with no auth
         $mysql->__construct(false, 'somehost', 2222, 'somebdd', null, null, 'localhost', array());
