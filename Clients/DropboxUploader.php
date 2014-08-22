@@ -5,6 +5,7 @@
 namespace Dizda\CloudBackupBundle\Clients;
 use \Exception;
 
+
 /**
  * Dropbox Uploader
  *
@@ -28,8 +29,9 @@ use \Exception;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author Jaka Jancar [jaka@kubje.org] [http://jaka.kubje.org/]
- * @version 1.1.16
+ * @author Jaka Jancar <jaka@kubje.org> <http://jaka.kubje.org/>
+ * @version 1.1.17
+ * @license MIT <http://spdx.org/licenses/MIT>
  */
 final class DropboxUploader {
     /**
@@ -44,6 +46,7 @@ final class DropboxUploader {
     const DROPBOX_UPLOAD_LIMIT_IN_BYTES = 314572800;
     const HTTPS_DROPBOX_COM_HOME        = 'https://www.dropbox.com/home';
     const HTTPS_DROPBOX_COM_LOGIN       = 'https://www.dropbox.com/login';
+    const HTTPS_DROPBOX_COM_AJAX_LOGIN  = 'https://www.dropbox.com/ajax_login';
     const HTTPS_DROPBOX_COM_UPLOAD      = 'https://dl-web.dropbox.com/upload';
     /**
      * DropboxUploader Error Flags and Codes
@@ -185,10 +188,10 @@ final class DropboxUploader {
             'login_password' => (string) $this->password,
             't'              => $token
         );
-        $data     = $this->request(self::HTTPS_DROPBOX_COM_LOGIN, http_build_query($postData));
+        $data     = $this->request(self::HTTPS_DROPBOX_COM_AJAX_LOGIN, http_build_query($postData));
 
-        if (stripos($data, 'location: /home') === FALSE)
-            throw new Exception('Login unsuccessful.', self::CODE_LOGIN_ERROR);
+        //if (stripos($data, 'location: /home') === FALSE)
+        //    throw new Exception('Login unsuccessful.', self::CODE_LOGIN_ERROR);
 
         $this->loggedIn = TRUE;
     }
