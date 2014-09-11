@@ -25,9 +25,7 @@ abstract class BaseDatabase
     public function __construct($basePath)
     {
         $this->dataPath = $basePath . static::DB_PATH . '/';
-        
         $this->filesystem = new Filesystem();
-        $this->filesystem->mkdir($this->dataPath);
     }
 
     /**
@@ -45,6 +43,14 @@ abstract class BaseDatabase
         if (!$process->isSuccessful()) {
             throw new \RuntimeException($process->getErrorOutput());
         }
+    }
+    
+    /**
+     * Prepare path for dump file
+     */
+    protected function preparePath()
+    {
+        $this->filesystem->mkdir($this->dataPath);
     }
 
     /**
