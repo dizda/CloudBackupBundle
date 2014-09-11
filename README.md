@@ -30,6 +30,10 @@ But also :
 
 are supported :-)
 
+Compressors supported :
+* Tar - fast and medium effective, don't support password
+* Zip - fast and medium effective, support password
+* 7zip - very slow and very effective, support password
 
 
 Installation (>=Symfony 2.1)
@@ -69,8 +73,13 @@ Here is the default configuration for the bundle:
 ```yml
 dizda_cloud_backup:
     # By default backup files will have your servers hostname as prefix
-    # such as: hostname_2014_01_01-21_08_39.tar
+    # such as: hostname_2014-01-01_21-08-39.tar
     output_file_prefix: hostname 
+    processor:
+        type: tar # Required: tar|zip|7z
+        options:
+            compression_ratio: 6
+            password: qwerty
     folders: [ web/uploads , other/folder ]
     cloud_storages:
         # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
@@ -114,12 +123,16 @@ It is recommended to keep real values for logins and passwords in your parameter
 ```yml
 # app/config/config.yml
 dizda_cloud_backup:
+    processor:
+        type: tar
+        options:
+            password: %dizda_cloud_archive_password%
+
     cloud_storages:
         dropbox:
             user:        %dizda_cloud_dropbox_user%
             password:    %dizda_cloud_dropbox_password%
             remote_path: %dizda_cloud_dropbox_remote_path%
-
 
     databases:
         mongodb:
@@ -149,7 +162,8 @@ dizda_cloud_backup:
     dizda_cloud_dropbox_password: MyDropboxPassword
     dizda_cloud_mongodb_user:     mongodbUser
     dizda_cloud_mongodb_password: mongodbPass
-	# ...
+    dizda_cloud_archive_password: ArchivePassword
+    # ...
 ```
 
 
@@ -174,9 +188,49 @@ or simply
 $ php app/console dizda:backup:start
 ```
 
+You may point concrete archiver in command line:
+
+```bash
+$ php app/console dizda:backup:start zip
+```
+
 ![](https://github.com/dizda/CloudBackupBundle/raw/master/Resources/doc/dizda-Cloud-Backup-Bundle-symfony2.png)
 
 In addition, using -F or --folder option the folders also will be added to the backup.
+
+
+Which archiver do I use?
+------------------------
+
+`tar` and `zip` archivers are produce the same size of compressed file, but `tar` compresses faster.
+`7z` archiver is very slow, but has double effectiveness.
+`tar` archiver do not support encryption, other archivers support.
+
+> **Note** Your system may not have the `zip` and `7z` archivers installed. But `tar` is installed in common case.
+
+Guide to choice:
+* If you don't need password protection and you have enough disk space, the best choice is `tar`.
+* If you need password protection and you have enough disk space, the best choice is `zip`.
+* If you haven't enough disk space (or you will do backup often) and you backup only text data (e.g. database dumps), the best choice is `7z`.
+
+> **Note** Any archiver good compress text files (and better compress structured texts e.g. sql, css, html/xml).
+> But binary files (images, audio, video) will not be well compressed. If you have small database dump and big binary data, the best choice will be `tar` or `zip`.
+
+**Comparison of archivers**
+
+Uncompressed archive contents sql dump of 42.2M size. This table represents effectiveness of archivers.
+Third column contents compressed archive file and percent of compression *(low is better)*.
+Fourth column contents compression time and its ratio (to first line) *(low is better)*.
+
+archiver | compression | archive size  | execution time
+:--------|-------------|--------------:|---------------:
+tar      | default (6) | 8.78M (20.8%) |  4.44s (1.00x)
+tar      | best (9)    | 8.45M (20.0%) |  9.89s (2.23x)
+zip      | default (6) | 8.78M (20.8%) |  5.39s (1.21x)
+zip      | best (9)    | 8.45M (20.0%) | 11.03s (2.48x)
+7z       | default (5) | 4.42M (10.5%) | 31.06s (7.00x)
+7z       | best (9)    | 4.24M (10.0%) | 38.88s (8.76x)
+
 
 Capifony integration
 --------------------

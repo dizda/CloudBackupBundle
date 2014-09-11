@@ -25,15 +25,23 @@ class BackupCommand extends ContainerAwareCommand
     private $gaufretteActive;
     private $output;
 
+    private $processors = array('tar', 'zip', '7z');
+
+
     protected function configure()
     {
         $this
+            ->addArgument(
+                'processor',
+                InputArgument::OPTIONAL,
+                'Which processor use? (' . implode(', ', $this->processors) .')'
+            )
             ->addOption(
                 'folders',
                 'F',
                  InputOption::VALUE_NONE,
                 'Do you want to export also folders?'
-                )
+            )
             ->setName('dizda:backup:start')
             ->setDescription('Upload a backup of your database to cloud services (use -F option for backup folders)');
     }
@@ -53,8 +61,21 @@ class BackupCommand extends ContainerAwareCommand
     {
         $this->output = $output;
 
+        if ($input->getArgument('processor')) {
+            $processorArgument = $input->getArgument('processor');
+            if (!in_array($processorArgument, $this->processors)) {
+                $this->output->writeln("<error>Incorrect processor $processorArgument</error>");
+                $this->output->writeln("<comment>Need one of ". implode(', ', $this->processors) ."</comment>");
+                return;
+            }
+            $this->getContainer()->setParameter('dizda_cloud_backup.processor.service', 'dizda.cloudbackup.processor.' . $processorArgument);
+        }
+        
+        $processorType = $this->getContainer()->getParameter('dizda_cloud_backup.processor.service');
+        $processor = $this->getContainer()->get($processorType);
+        
         if ($this->mongoActive) {
-            $this->output ->write('- <comment>Dumping MongoDB database...</comment>');
+            $this->output->write('- <comment>Dumping MongoDB database... </comment>');
 
             $database = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
             $database->dump();
@@ -63,7 +84,7 @@ class BackupCommand extends ContainerAwareCommand
         }
 
         if ($this->mysqlActive) {
-            $this->output->write('- <comment>Dumping MySQL database...</comment>');
+            $this->output->write('- <comment>Dumping MySQL database... </comment>');
 
             $database = $this->getContainer()->get('dizda.cloudbackup.database.mysql');
             $database->dump();
@@ -72,7 +93,7 @@ class BackupCommand extends ContainerAwareCommand
         }
 
         if ($this->postgresqlActive) {
-            $this->output->write('- <comment>Dumping PostgreSQL database...</comment>');
+            $this->output->write('- <comment>Dumping PostgreSQL database... </comment> ');
 
             $database = $this->getContainer()->get('dizda.cloudbackup.database.postgresql');
             $database->dump();
@@ -80,21 +101,22 @@ class BackupCommand extends ContainerAwareCommand
             $this->output->writeln('<info>OK</info>');
         }
 
-        if($input->getOption('folders')){
-            $this->output->write('- <comment>Copying folders...</comment>');
-            $database->copyFolders();
+        if ($input->getOption('folders')){
+            $this->output->write('- <comment>Copying folders... </comment> ');
+            $processor->copyFolders();
             $this->output->writeln('<info>OK</info>');
         }
-        $database->compression();
-        $this->output->writeln('- <info>Archive created</info> ' . $database->getArchivePath());
-
+        
+        $this->output->write('- <comment>Compressing archive... </comment> ');
+        $processor->compress();
+        $this->output->writeln('<info>OK</info>');
 
         if ($this->dropboxActive) {
-            $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($database->getArchivePath());
+            $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($processor->getArchivePath());
         }
 
         if ($this->cloudappActive) {
-            $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($database->getArchivePath());
+            $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($processor->getArchivePath());
         }
 
         if ($this->gaufretteActive) {
@@ -102,12 +124,11 @@ class BackupCommand extends ContainerAwareCommand
 
             $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
             $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
-            $gaufrette->upload($database->getArchivePath());
+            $gaufrette->upload($processor->getArchivePath());
         }
 
-
-        $database->cleanUp();
-        $this->output->writeln('- <info>Temporary files have been cleared</info>.');
+        $processor->cleanUp();
+        $this->output->writeln('- <comment>Temporary files have been cleared</comment>.');
     }
 
 

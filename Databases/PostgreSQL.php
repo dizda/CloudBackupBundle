@@ -25,11 +25,11 @@ class PostgreSQL extends BaseDatabase
      * @param string $database
      * @param string $user
      * @param string $password
-     * @param string $filePrefix
+     * @param string $basePath
      */
-    public function __construct($host = 'localhost', $port = 5432, $database, $user, $password, $filePrefix, $folders)
+    public function __construct($host, $port, $database, $user, $password, $basePath)
     {
-        parent::__construct($filePrefix, $folders);
+        parent::__construct($basePath);
 
         $this->database   = $database;
         $this->auth       = '';
@@ -52,8 +52,6 @@ class PostgreSQL extends BaseDatabase
      */
     public function dump()
     {
-        parent::prepare();
-
         $this->execute($this->getCommand());
     }
 
