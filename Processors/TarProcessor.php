@@ -12,13 +12,14 @@ class TarProcessor extends BaseProcessor
     {
         $tarParams = array();
         $zipParams = array();
-        if (isset($options['password']) && $options['password']) {
-            $tarParams[] = '-P ' . $options['password'];
-        }
-        if (isset($options['compression_ratio']) && $options['compression_ratio']) {
-            $compression_ratio = max(min($options['compression_ratio'], 9), 0);
+        if (isset($this->options['compression_ratio']) && $this->options['compression_ratio']) {
+            $compression_ratio = max(min($this->options['compression_ratio'], 9), 0);
             $zipParams[] = '-' . $compression_ratio;
         }
-        return sprintf('tar %s cv %s | gzip %s > %s', implode(' ', $tarParams), $basePath, implode(' ', $zipParams), $archivePath);
+        return sprintf('tar %s c -C %s . | gzip %s > %s', 
+            implode(' ', $tarParams), 
+            $basePath, 
+            implode(' ', $zipParams), 
+            $archivePath);
     }
 }

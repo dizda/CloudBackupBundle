@@ -12,11 +12,11 @@ class ZipProcessor extends BaseProcessor
     public function getCompressionCommand($archivePath, $basePath)
     {
         $params = array('-r');
-        if (isset($options['password']) && $options['password']) {
-            $params[] = '-P ' . $options['password'];
+        if (isset($this->options['password']) && $this->options['password']) {
+            $params[] = '-P ' . $this->options['password'];
         }
-        if (isset($options['compression_ratio']) && $options['compression_ratio']) {
-            $compression_ratio = max(min($options['compression_ratio'], 9), 0);
+        if (isset($this->options['compression_ratio']) && $this->options['compression_ratio']) {
+            $compression_ratio = max(min($this->options['compression_ratio'], 9), 0);
             $params[] = '-' . $compression_ratio;
         }
         return sprintf('cd %s && zip %s %s .', $basePath, implode(' ', $params), $archivePath);

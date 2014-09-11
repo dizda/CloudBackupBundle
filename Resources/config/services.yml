@@ -50,7 +50,7 @@ services:
     dizda.cloudbackup.processor.tar:
         class: Dizda\CloudBackupBundle\Processors\TarProcessor
         arguments: 
-            - %kernel.cache_dir%
+            - %dizda_cloud_backup.output_folder%
             - %dizda_cloud_backup.output_file_prefix%
             - %dizda_cloud_backup.folders%
             - %dizda_cloud_backup.processor.dateformat%
@@ -59,7 +59,7 @@ services:
     dizda.cloudbackup.processor.zip:
         class: Dizda\CloudBackupBundle\Processors\ZipProcessor
         arguments: 
-            - %kernel.cache_dir%
+            - %dizda_cloud_backup.output_folder%
             - %dizda_cloud_backup.output_file_prefix%
             - %dizda_cloud_backup.folders%            
             - %dizda_cloud_backup.processor.dateformat%
@@ -68,7 +68,7 @@ services:
     dizda.cloudbackup.processor.7z:
         class: Dizda\CloudBackupBundle\Processors\SevenZipProcessor
         arguments: 
-            - %kernel.cache_dir%
+            - %dizda_cloud_backup.output_folder%
             - %dizda_cloud_backup.output_file_prefix%
             - %dizda_cloud_backup.folders%            
             - %dizda_cloud_backup.processor.dateformat%

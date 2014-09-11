@@ -31,6 +31,23 @@ abstract class BaseDatabase
     }
 
     /**
+     * Handle process error on fails
+     *
+     * @param string $command
+     *
+     * @throws \RuntimeException
+     */
+    protected function execute($command)
+    {
+        $process = new Process($command);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException($process->getErrorOutput());
+        }
+    }
+
+    /**
      * Migration procedure for each databases type
      *
      * @return mixed

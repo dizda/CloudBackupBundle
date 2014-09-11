@@ -11,11 +11,11 @@ class SevenZipProcessor extends BaseProcessor
     public function getCompressionCommand($archivePath, $basePath)
     {
         $params = array();
-        if (isset($options['password']) && $options['password']) {
-            $params[] = '-p' . $options['password'];
+        if (isset($this->options['password']) && $this->options['password']) {
+            $params[] = '-p' . $this->options['password'];
         }
-        if (isset($options['compression_ratio']) && $options['compression_ratio']) {
-            $compression_ratio = max(min($options['compression_ratio'], 9), 0);
+        if (isset($this->options['compression_ratio']) && $this->options['compression_ratio'] >= 0) {
+            $compression_ratio = max(min($this->options['compression_ratio'], 9), 0);
             if ($compression_ratio > 1 && ($compression_ratio % 2 == 0)) {
                 $compression_ratio--;
             }
