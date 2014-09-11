@@ -25,11 +25,11 @@ class MySQL extends BaseDatabase
      * @param string $database
      * @param string $user
      * @param string $password
-     * @param string $filePrefix
+     * @param string $basePath
      */
-    public function __construct($allDatabases, $host, $port = 3306, $database, $user, $password, $filePrefix, $folders)
+    public function __construct($allDatabases, $host, $port, $database, $user, $password, $basePath)
     {
-        parent::__construct($filePrefix, $folders);
+        parent::__construct($basePath);
 
         $this->allDatabases = $allDatabases;
         $this->database     = $database;
@@ -50,7 +50,6 @@ class MySQL extends BaseDatabase
                 $this->auth = sprintf("--host='%s' --port='%d' --user='%s' --password='%s'", $host, $port, $user, $password);
             }
         }
-
     }
 
     /**
@@ -58,8 +57,6 @@ class MySQL extends BaseDatabase
      */
     public function dump()
     {
-        parent::prepare();
-
         $this->execute($this->getCommand());
     }
 

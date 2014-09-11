@@ -24,10 +24,7 @@ services:
             - %dizda_cloud_backup.databases.mongodb.database%
             - %dizda_cloud_backup.databases.mongodb.db_user%
             - %dizda_cloud_backup.databases.mongodb.db_password%
-            - %dizda_cloud_backup.output_file_prefix%
-            - %dizda_cloud_backup.folders%            
-        calls:
-            - [setKernelCacheDir, ["%kernel.cache_dir%"]]
+            - %dizda_cloud_backup.output_folder%
 
     dizda.cloudbackup.database.mysql:
         class: Dizda\CloudBackupBundle\Databases\MySQL
@@ -38,10 +35,7 @@ services:
             - %dizda_cloud_backup.databases.mysql.database%
             - %dizda_cloud_backup.databases.mysql.db_user%
             - %dizda_cloud_backup.databases.mysql.db_password%
-            - %dizda_cloud_backup.output_file_prefix%
-            - %dizda_cloud_backup.folders%            
-        calls:
-            - [setKernelCacheDir, ["%kernel.cache_dir%"]]
+            - %dizda_cloud_backup.output_folder%
 
     dizda.cloudbackup.database.postgresql:
         class: Dizda\CloudBackupBundle\Databases\PostgreSQL
@@ -51,7 +45,31 @@ services:
             - %dizda_cloud_backup.databases.postgresql.database%
             - %dizda_cloud_backup.databases.postgresql.db_user%
             - %dizda_cloud_backup.databases.postgresql.db_password%
+            - %dizda_cloud_backup.output_folder%
+
+    dizda.cloudbackup.processor.tar:
+        class: Dizda\CloudBackupBundle\Processors\TarProcessor
+        arguments: 
+            - %kernel.cache_dir%
+            - %dizda_cloud_backup.output_file_prefix%
+            - %dizda_cloud_backup.folders%
+            - %dizda_cloud_backup.processor.dateformat%
+            - %dizda_cloud_backup.processor.options%
+
+    dizda.cloudbackup.processor.zip:
+        class: Dizda\CloudBackupBundle\Processors\ZipProcessor
+        arguments: 
+            - %kernel.cache_dir%
             - %dizda_cloud_backup.output_file_prefix%
             - %dizda_cloud_backup.folders%            
-        calls:
-            - [setKernelCacheDir, ["%kernel.cache_dir%"]]
+            - %dizda_cloud_backup.processor.dateformat%
+            - %dizda_cloud_backup.processor.options%
+
+    dizda.cloudbackup.processor.7z:
+        class: Dizda\CloudBackupBundle\Processors\SevenZipProcessor
+        arguments: 
+            - %kernel.cache_dir%
+            - %dizda_cloud_backup.output_file_prefix%
+            - %dizda_cloud_backup.folders%            
+            - %dizda_cloud_backup.processor.dateformat%
+            - %dizda_cloud_backup.processor.options%
