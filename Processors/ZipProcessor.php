@@ -15,7 +15,7 @@ class ZipProcessor extends BaseProcessor
         if (isset($this->options['password']) && $this->options['password']) {
             $params[] = '-P ' . $this->options['password'];
         }
-        if (isset($this->options['compression_ratio']) && $this->options['compression_ratio']) {
+        if (isset($this->options['compression_ratio']) && $this->options['compression_ratio'] >= 0) {
             $compression_ratio = max(min($this->options['compression_ratio'], 9), 0);
             $params[] = '-' . $compression_ratio;
         }

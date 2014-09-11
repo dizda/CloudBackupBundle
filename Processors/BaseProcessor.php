@@ -56,14 +56,12 @@ abstract class BaseProcessor
      */
     public function compress()
     {
-        $fileName                    = $this->filePrefix . '_' . date($this->dateformat) . $this->getExtension();
         $this->compressedArchivePath = $this->basePath .'../backup_compressed/';
-
+        $this->archivePath = $this->compressedArchivePath . $this->buildArchiveFilename();
         $this->filesystem->mkdir($this->compressedArchivePath);
-        $this->archivePath = $this->compressedArchivePath . $fileName;
 
         $archive = $this->getCompressionCommand($this->archivePath, $this->basePath);
-
+        
         $this->execute($archive);
     }
     
@@ -92,6 +90,16 @@ abstract class BaseProcessor
     {
         $this->filesystem->remove($this->compressedArchivePath);
         $this->filesystem->remove($this->basePath);
+    }
+
+    /**
+     * Return archive file name
+     *
+     * @return string
+     */
+    public function buildArchiveFilename()
+    {
+        return $this->filePrefix . '_' . date($this->dateformat) . $this->getExtension();
     }
 
     /**
