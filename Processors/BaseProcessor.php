@@ -37,7 +37,6 @@ abstract class BaseProcessor
         $this->dateformat = $dateformat;
         
         $this->filesystem = new Filesystem();
-        $this->filesystem->mkdir($this->basePath);
     }
 
     /**
@@ -62,6 +61,7 @@ abstract class BaseProcessor
 
         $archive = $this->getCompressionCommand($this->archivePath, $this->basePath);
         
+        $this->filesystem->mkdir($this->basePath);
         $this->execute($archive);
     }
     
