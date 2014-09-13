@@ -24,11 +24,11 @@ class MongoDB extends BaseDatabase
      * @param string $database
      * @param string $user
      * @param string $password
-     * @param string $filePrefix
+     * @param string $basePath
      */
-    public function __construct($allDatabases, $host, $port = 27017, $database, $user, $password, $filePrefix, $folders)
+    public function __construct($allDatabases, $host, $port, $database, $user, $password, $basePath)
     {
-        parent::__construct($filePrefix, $folders);
+        parent::__construct($basePath);
 
         $this->allDatabases = $allDatabases;
         $this->database     = $database;
@@ -51,7 +51,6 @@ class MongoDB extends BaseDatabase
                 $this->auth = sprintf('-h %s --port %d -u %s -p %s', $host, $port, $user, $password);
             }
         }
-
     }
 
     /**
@@ -59,8 +58,7 @@ class MongoDB extends BaseDatabase
      */
     public function dump()
     {
-        parent::prepare();
-
+        $this->preparePath();
         $this->execute($this->getCommand());
     }
 

@@ -14,73 +14,19 @@ abstract class BaseDatabase
 {
     const DB_PATH = '';
 
-    protected $filePrefix;
-    protected $kernelCacheDir;
-    protected $filesystem;
-    protected $basePath;
     protected $dataPath;
-    protected $archivePath;
-    protected $compressedArchivePath;
-    protected $folders;
+    protected $filesystem;
 
     /**
      * Get SF2 Filesystem
      *
-     * @param string $filePrefix
-     * @param string $folders
+     * @param string $basePath
      */
-    public function __construct($filePrefix, $folders)
+    public function __construct($basePath)
     {
-        $this->filePrefix = $filePrefix;
-        $this->folders=$folders;
+        $this->dataPath = $basePath . static::DB_PATH . '/';
         $this->filesystem = new Filesystem();
     }
-
-
-    /**
-     * Preparation of directory
-     *
-     * $this->basePath      /Users/high/Sites/dizdabundles/app/cache/dev/db/
-     * $this->dataPath      /Users/high/Sites/dizdabundles/app/cache/dev/db/mongo/
-     * $this->archivePath   /Users/high/Sites/dizdabundles/app/cache/dev/db/bambou_2013_01_12-01_36_33.tar
-     *
-     * TODO: Add a config prefix to archive (with default value : '')
-     * TODO: Many compression mode
-     */
-    final public function prepare()
-    {
-        $this->basePath     = $this->kernelCacheDir . '/db/';
-        $this->dataPath     = $this->basePath . static::DB_PATH . '/';
-
-        $this->filesystem->mkdir($this->dataPath);
-    }
-
-    /**
-    * Make a copy of all folders in specified in config
-    */
-    final public function copyFolders(){
-        // Copy folder for compresion file
-        foreach($this->folders as $folder){
-            $this->filesystem->mirror($this->basePath.'../../../../'.$folder, $this->basePath.$folder);     
-        }            
-    }
-
-    /**
-     * Compress with format name like : hostname_2013_01_12-00_06_40.tar
-     */
-    final public function compression()
-    {
-        $fileName                       = $this->filePrefix . '_' . date('Y_m_d-H_i_s') . '.tar';
-        $this->compressedArchivePath    = $this->basePath .'../dbcompressed/';
-
-        $this->filesystem->mkdir($this->compressedArchivePath);
-        $this->archivePath = $this->compressedArchivePath . $fileName;
-
-        $archive = sprintf('tar -czf %s -C %s .', $this->archivePath, $this->basePath);
-
-        $this->execute($archive);
-    }
-
 
     /**
      * Handle process error on fails
@@ -98,18 +44,14 @@ abstract class BaseDatabase
             throw new \RuntimeException($process->getErrorOutput());
         }
     }
-
-
+    
     /**
-     * Remove all dirs with files
-     *
+     * Prepare path for dump file
      */
-    final public function cleanUp()
+    protected function preparePath()
     {
-        $this->filesystem->remove($this->compressedArchivePath);
-        $this->filesystem->remove($this->basePath);
+        $this->filesystem->mkdir($this->dataPath);
     }
-
 
     /**
      * Migration procedure for each databases type
@@ -124,26 +66,5 @@ abstract class BaseDatabase
      * @return string
      */
     abstract public function getCommand();
-
-    /**
-     * Return path of the archive
-     *
-     * @return mixed
-     */
-    public function getArchivePath()
-    {
-        return $this->archivePath;
-    }
-
-
-    /**
-     * @param string $kernelCacheDir
-     *
-     * Setting Kernel cache directory
-     */
-    public function setKernelCacheDir($kernelCacheDir)
-    {
-        $this->kernelCacheDir = $kernelCacheDir;
-    }
 
 }

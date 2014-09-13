@@ -19,16 +19,16 @@ class MongoDBTest extends AbstractTesting
         $mongodb = self::$kernel->getContainer()->get('dizda.cloudbackup.database.mongodb');
 
         // dump all dbs
-        $mongodb->__construct(true, 'localhost', 27017, 'dizbdd', null, null, 'localhost', array());
-        $this->assertEquals($mongodb->getCommand(), 'mongodump -h localhost --port 27017  --out ');
+        $mongodb->__construct(true, 'localhost', 27017, 'dizbdd', null, null, '/var/backup/');
+        $this->assertEquals($mongodb->getCommand(), 'mongodump -h localhost --port 27017  --out /var/backup/mongo/');
 
         // dump one db with not auth
-        $mongodb->__construct(false, 'localhost', 27017, 'dizbdd', null, null, 'localhost', array());
-        $this->assertEquals($mongodb->getCommand(), 'mongodump -h localhost --port 27017 --db dizbdd --out ');
+        $mongodb->__construct(false, 'localhost', 27017, 'dizbdd', null, null, '/var/backup/');
+        $this->assertEquals($mongodb->getCommand(), 'mongodump -h localhost --port 27017 --db dizbdd --out /var/backup/mongo/');
 
         // dump one db with auth
-        $mongodb->__construct(false, 'localhost', 27017, 'dizbdd', 'dizda', 'imRootBro', 'localhost', array());
-        $this->assertEquals($mongodb->getCommand(), 'mongodump -h localhost --port 27017 -u dizda -p imRootBro --db dizbdd --out ');
+        $mongodb->__construct(false, 'localhost', 27017, 'dizbdd', 'dizda', 'imRootBro', '/var/backup/');
+        $this->assertEquals($mongodb->getCommand(), 'mongodump -h localhost --port 27017 -u dizda -p imRootBro --db dizbdd --out /var/backup/mongo/');
     }
 
 }

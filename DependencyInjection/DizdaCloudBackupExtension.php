@@ -26,8 +26,14 @@ class DizdaCloudBackupExtension extends Extension
         $loader->load('services.yml');
 
         /* Config output file */
+        $container->setParameter('dizda_cloud_backup.output_folder', $container->getParameter('kernel.cache_dir') . '/backup/');
         $container->setParameter('dizda_cloud_backup.output_file_prefix', $config['output_file_prefix']);
         $container->setParameter('dizda_cloud_backup.folders', $config['folders']);
+        
+        /* Config processor */
+        $container->setParameter('dizda_cloud_backup.processor.service', 'dizda.cloudbackup.processor.' . $config['processor']['type']);
+        $container->setParameter('dizda_cloud_backup.processor.dateformat', $config['processor']['date_format']);
+        $container->setParameter('dizda_cloud_backup.processor.options', $config['processor']['options']);
         
         /* Config dropbox */
         if (isset($config['cloud_storages']['dropbox'])) {
