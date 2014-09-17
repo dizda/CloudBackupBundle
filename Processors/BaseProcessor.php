@@ -46,8 +46,8 @@ abstract class BaseProcessor
         // Copy folder for compression file
         $path = realpath($this->basePath.'../../../../');
         foreach($this->folders as $folder){
-            $this->filesystem->mirror($path.$folder, $this->basePath.$folder);     
-        }            
+            $this->filesystem->mirror($this->basePath, $path.$folder);
+        }
     }
 
     /**
