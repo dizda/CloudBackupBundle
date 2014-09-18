@@ -95,12 +95,12 @@ class DizdaCloudBackupExtension extends Extension
 
         if(isset($config['databases']['mysql']))
         {
-            $container->setParameter('dizda_cloud_backup.databases.mysql.active',         true);
-            $container->setParameter('dizda_cloud_backup.databases.mysql.all_databases',  $config['databases']['mysql']['all_databases']);
-
+            $container->setParameter('dizda_cloud_backup.databases.mysql.active',        true);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.all_databases', $config['databases']['mysql']['all_databases']);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.database',      $config['databases']['mysql']['database'] ?: $container->getParameter('database_name'));
+            
             if($config['databases']['mysql']['db_host'] !== null && $config['databases']['mysql']['db_user'] !== null)
             {
-                $container->setParameter('dizda_cloud_backup.databases.mysql.database',    $config['databases']['mysql']['database']);
                 $container->setParameter('dizda_cloud_backup.databases.mysql.host',        $config['databases']['mysql']['db_host']);
                 $container->setParameter('dizda_cloud_backup.databases.mysql.port',        $config['databases']['mysql']['db_port']);
                 $container->setParameter('dizda_cloud_backup.databases.mysql.db_user',     $config['databases']['mysql']['db_user']);
@@ -111,7 +111,6 @@ class DizdaCloudBackupExtension extends Extension
                     $container->setParameter('dizda_cloud_backup.databases.mysql.port', 3306);
                 }
             }else{ /* if mysql config is not set, we taking from the parameters.yml values */
-                $container->setParameter('dizda_cloud_backup.databases.mysql.database',    $container->getParameter('database_name'));
                 $container->setParameter('dizda_cloud_backup.databases.mysql.host',        $container->getParameter('database_host'));
 
                 if($container->getParameter('database_port') === null)
