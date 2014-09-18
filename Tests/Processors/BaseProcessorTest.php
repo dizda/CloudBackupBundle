@@ -13,12 +13,13 @@ class BaseProcessorTest extends AbstractTesting
 {
     public function testBuildArchiveFilename()
     {
-        $basePath = '/var/backup/';
+        $rootPath = '/';
+        $outputPath = '/var/backup/';
         $dateformat = 'Y-m-d_H-i-s';
 
         // use tar processor, but call only BaseProcessor methods
         $processor = self::$kernel->getContainer()->get('dizda.cloudbackup.processor.tar');
-        $processor->__construct($basePath, 'database', array(), $dateformat, array());
+        $processor->__construct($rootPath, $outputPath, 'database', array(), $dateformat, array());
         
         $this->assertEquals(
             $processor->buildArchiveFilename(), 
