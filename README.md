@@ -98,7 +98,7 @@ dizda_cloud_backup:
     databases:
         mongodb:
             all_databases: false # Only required when no database is set
-            database:     ~ # Required if all_databases is false
+            database:    ~ # Required if all_databases is false
             db_user:     ~ # Not required, leave empty if no auth is required
             db_password: ~ # Not required
 
@@ -124,7 +124,7 @@ It is recommended to keep real values for logins and passwords in your parameter
 # app/config/config.yml
 dizda_cloud_backup:
     processor:
-        type: tar
+        type: zip
         options:
             password: %dizda_cloud_archive_password%
 
@@ -150,7 +150,7 @@ dizda_cloud_backup:
 
 ```yml
 # app/config/parameters.yml
-	# ...
+    # ...
     database_driver: pdo_mysql
     database_host: localhost
     database_port: null
@@ -164,6 +164,17 @@ dizda_cloud_backup:
     dizda_cloud_mongodb_password: mongodbPass
     dizda_cloud_archive_password: ArchivePassword
     # ...
+```
+
+You may backup several databases:
+
+```yml
+# app/config/config.yml
+dizda_cloud_backup:
+    # ...
+    databases:
+        mysql:
+            databases: [workingbase, mysuperbase, statbase]
 ```
 
 
