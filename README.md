@@ -177,6 +177,8 @@ dizda_cloud_backup:
             databases: [workingbase, mysuperbase, statbase]
 ```
 
+> **Note** Your user needs to have privilegies to access to all of these databases. It will better to create separate user for this task.
+
 
 Usage
 -----
