@@ -76,7 +76,9 @@ class DizdaCloudBackupExtension extends Extension
         {
             $container->setParameter('dizda_cloud_backup.databases.mongodb.active',         true);
             $container->setParameter('dizda_cloud_backup.databases.mongodb.all_databases',  $config['databases']['mongodb']['all_databases']);
-            $container->setParameter('dizda_cloud_backup.databases.mongodb.database',       $config['databases']['mongodb']['database']);
+            $container->setParameter('dizda_cloud_backup.databases.mongodb.database',       $this->getDatabases(
+                $config['databases']['mongodb']['database'],
+                $config['databases']['mongodb']['databases']));
             $container->setParameter('dizda_cloud_backup.databases.mongodb.host',           $config['databases']['mongodb']['db_host']);
             $container->setParameter('dizda_cloud_backup.databases.mongodb.port',           $config['databases']['mongodb']['db_port']);
             $container->setParameter('dizda_cloud_backup.databases.mongodb.db_user',        $config['databases']['mongodb']['db_user']);
@@ -97,7 +99,10 @@ class DizdaCloudBackupExtension extends Extension
         {
             $container->setParameter('dizda_cloud_backup.databases.mysql.active',        true);
             $container->setParameter('dizda_cloud_backup.databases.mysql.all_databases', $config['databases']['mysql']['all_databases']);
-            $container->setParameter('dizda_cloud_backup.databases.mysql.database',      $config['databases']['mysql']['database'] ?: $container->getParameter('database_name'));
+            $container->setParameter('dizda_cloud_backup.databases.mysql.database',      $this->getDatabases(
+                $config['databases']['mysql']['database'],
+                $config['databases']['mysql']['databases'],
+                $container->getParameter('database_name')));
             
             if($config['databases']['mysql']['db_host'] !== null && $config['databases']['mysql']['db_user'] !== null)
             {
@@ -140,7 +145,10 @@ class DizdaCloudBackupExtension extends Extension
         if (isset($config['databases']['postgresql'])) {
             $container->setParameter('dizda_cloud_backup.databases.postgresql.active', true);
             $container->setParameter('dizda_cloud_backup.databases.postgresql.all_databases', false); //'all databases' option not implemented
-            $container->setParameter('dizda_cloud_backup.databases.postgresql.database', $config['databases']['postgresql']['database'] ?: $container->getParameter('database_name'));
+            $container->setParameter('dizda_cloud_backup.databases.postgresql.database', $this->getDatabases(
+                $config['databases']['postgresql']['database'],
+                $config['databases']['postgresql']['databases'],
+                $container->getParameter('database_name')));
 
             if ($config['databases']['postgresql']['db_host'] !== null && $config['databases']['postgresql']['db_user'] !== null) {
                 $container->setParameter('dizda_cloud_backup.databases.postgresql.host',        $config['databases']['postgresql']['db_host']);
@@ -192,5 +200,20 @@ class DizdaCloudBackupExtension extends Extension
         {
             $container->setParameter($parameter, false);
         }
+    }
+    
+    /**
+     * Get from config appropriate database name
+     *
+     * @param string $one
+     * @param array  $many
+     * @param string $default (optional, default '')
+     * @return array
+     */
+    private function getDatabases($one, $many, $default = '')
+    {
+        if ($one)  return array($one);
+        if ($many) return $many;
+        return array($default);
     }
 }

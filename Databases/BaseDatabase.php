@@ -15,16 +15,20 @@ abstract class BaseDatabase
     const DB_PATH = '';
 
     protected $dataPath;
+    protected $database;
     protected $filesystem;
 
     /**
      * Get SF2 Filesystem
      *
      * @param string $basePath
+     * @param string $databases
      */
-    public function __construct($basePath)
+    public function __construct($basePath, $databases)
     {
         $this->dataPath = $basePath . static::DB_PATH . '/';
+        $this->database = $databases;
+        
         $this->filesystem = new Filesystem();
     }
 
@@ -58,8 +62,28 @@ abstract class BaseDatabase
      *
      * @return mixed
      */
-    abstract public function dump();
+    public function dump()
+    {
+        $this->preparePath();
+        
+        $databases = $this->database;
+        
+        foreach ($databases as $database) {
+            $this->database = $database;
+            $this->execute($this->getCommand());
+        }
+    }
 
+    /**
+     * Get file extension
+     * 
+     * @return string
+     */
+    public function getExtension()
+    {
+        return '.sql';
+    }
+    
     /**
      * Get command to execute dump
      *

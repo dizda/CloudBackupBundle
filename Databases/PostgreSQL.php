@@ -12,7 +12,6 @@ class PostgreSQL extends BaseDatabase
     const DB_PATH = 'postgresql';
 
     private $allDatabases;
-    private $database;
     private $auth = '';
     private $authPrefix = '';
     private $fileName;
@@ -22,19 +21,17 @@ class PostgreSQL extends BaseDatabase
      *
      * @param string $host
      * @param int    $port
-     * @param string $database
+     * @param string $databases
      * @param string $user
      * @param string $password
      * @param string $basePath
      */
-    public function __construct($host, $port, $database, $user, $password, $basePath)
+    public function __construct($host, $port, $databases, $user, $password, $basePath)
     {
-        parent::__construct($basePath);
+        parent::__construct($basePath, $databases);
 
-        $this->database   = $database;
         $this->auth       = '';
         $this->authPrefix = '';
-        $this->fileName   = $this->database . '.sql';
 
         if ($password) {
             $this->authPrefix = sprintf('export PGPASSWORD="%s" && ', $password);
@@ -50,15 +47,6 @@ class PostgreSQL extends BaseDatabase
     /**
      * {@inheritdoc}
      */
-    public function dump()
-    {
-        $this->preparePath();
-        $this->execute($this->getCommand());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCommand()
     {
         //TODO: pg_dumpall support
@@ -66,7 +54,7 @@ class PostgreSQL extends BaseDatabase
             $this->authPrefix,
             $this->auth,
             $this->database,
-            $this->dataPath . $this->fileName);
+            $this->dataPath . $this->database . $this->getExtension());
     }
 
 }

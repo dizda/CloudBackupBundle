@@ -12,7 +12,6 @@ class MongoDB extends BaseDatabase
     const DB_PATH = 'mongo';
 
     private $allDatabases;
-    private $database;
     private $auth = '';
 
     /**
@@ -21,24 +20,25 @@ class MongoDB extends BaseDatabase
      * @param bool   $allDatabases
      * @param string $host
      * @param int    $port
-     * @param string $database
+     * @param array  $databases
      * @param string $user
      * @param string $password
      * @param string $basePath
      */
-    public function __construct($allDatabases, $host, $port, $database, $user, $password, $basePath)
+    public function __construct($allDatabases, $host, $port, $databases, $user, $password, $basePath)
     {
-        parent::__construct($basePath);
+        if ($this->allDatabases) {
+            $databases = array('');
+        } else {
+            foreach ($databases as &$database) {
+                $database = sprintf('--db %s', $this->database);
+            }
+        }
+
+        parent::__construct($basePath, $databases);
 
         $this->allDatabases = $allDatabases;
-        $this->database     = $database;
         $this->auth         = '';
-
-        if ($this->allDatabases) {
-            $this->database = '';
-        } else {
-            $this->database = sprintf('--db %s', $this->database);
-        }
 
         /* Setting hostname & port */
         $this->auth = sprintf('-h %s --port %d', $host, $port);
@@ -51,15 +51,6 @@ class MongoDB extends BaseDatabase
                 $this->auth = sprintf('-h %s --port %d -u %s -p %s', $host, $port, $user, $password);
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dump()
-    {
-        $this->preparePath();
-        $this->execute($this->getCommand());
     }
 
     /**
