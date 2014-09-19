@@ -7,31 +7,34 @@ use Symfony\Component\Process\Process;
 
 abstract class BaseProcessor
 {
-    protected $kernelCacheDir;
     protected $filePrefix;
     protected $folders;
     protected $format;
     protected $options;
     
-    protected $filesystem;
-    protected $basePath;
+    protected $rootPath;
+    protected $outputPath;
     protected $dataPath;
     protected $archivePath;
     protected $compressedArchivePath;
     
+    protected $filesystem;
+    
     /**
      * 
-     * @param string $basePath Path to folder with archived files
+     * @param string $rootPath Path to root folder
+     * @param string $outputPath Path to folder with archived files
      * @param string $filePrefix Prefix for archive file (e.g. sitename)
-     * @param array  $folders Array of folders to archive (relative to site root folder)
+     * @param array  $folders Array of folders to archive (relative to $rootPath)
      * @param string $dateformat Format for date function
      * @param array  $options Options from config
      */
-    public function __construct($basePath, $filePrefix, $folders, $dateformat, $options)
+    public function __construct($rootPath, $outputPath, $filePrefix, $folders, $dateformat, $options)
     {
         $this->options = $options;
         
-        $this->basePath   = $basePath;
+        $this->rootPath   = $rootPath;
+        $this->outputPath = $outputPath;
         $this->filePrefix = $filePrefix;
         $this->folders    = $folders;
         $this->dateformat = $dateformat;
@@ -44,10 +47,9 @@ abstract class BaseProcessor
      */
     public function copyFolders(){
         // Copy folder for compression file
-        $path = realpath($this->basePath.'../../../../');
         foreach($this->folders as $folder){
-            $this->filesystem->mirror($path.$folder, $this->basePath.$folder);     
-        }            
+            $this->filesystem->mirror($this->rootPath.'/'.$folder, $this->outputPath.$folder);
+        }
     }
 
     /**
@@ -55,13 +57,13 @@ abstract class BaseProcessor
      */
     public function compress()
     {
-        $this->compressedArchivePath = $this->basePath .'../backup_compressed/';
+        $this->compressedArchivePath = $this->outputPath .'../backup_compressed/';
         $this->archivePath = $this->compressedArchivePath . $this->buildArchiveFilename();
-        $this->filesystem->mkdir($this->compressedArchivePath);
 
-        $archive = $this->getCompressionCommand($this->archivePath, $this->basePath);
+        $archive = $this->getCompressionCommand($this->archivePath, $this->outputPath);
         
-        $this->filesystem->mkdir($this->basePath);
+        $this->filesystem->mkdir($this->compressedArchivePath);
+        $this->filesystem->mkdir($this->outputPath);
         $this->execute($archive);
     }
     
@@ -89,7 +91,7 @@ abstract class BaseProcessor
     public function cleanUp()
     {
         $this->filesystem->remove($this->compressedArchivePath);
-        $this->filesystem->remove($this->basePath);
+        $this->filesystem->remove($this->outputPath);
     }
 
     /**

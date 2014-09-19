@@ -26,6 +26,7 @@ class DizdaCloudBackupExtension extends Extension
         $loader->load('services.yml');
 
         /* Config output file */
+        $container->setParameter('dizda_cloud_backup.root_folder', $container->getParameter('kernel.root_dir') . '/../');
         $container->setParameter('dizda_cloud_backup.output_folder', $container->getParameter('kernel.cache_dir') . '/backup/');
         $container->setParameter('dizda_cloud_backup.output_file_prefix', $config['output_file_prefix']);
         $container->setParameter('dizda_cloud_backup.folders', $config['folders']);
@@ -94,12 +95,12 @@ class DizdaCloudBackupExtension extends Extension
 
         if(isset($config['databases']['mysql']))
         {
-            $container->setParameter('dizda_cloud_backup.databases.mysql.active',         true);
-            $container->setParameter('dizda_cloud_backup.databases.mysql.all_databases',  $config['databases']['mysql']['all_databases']);
-
+            $container->setParameter('dizda_cloud_backup.databases.mysql.active',        true);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.all_databases', $config['databases']['mysql']['all_databases']);
+            $container->setParameter('dizda_cloud_backup.databases.mysql.database',      $config['databases']['mysql']['database'] ?: $container->getParameter('database_name'));
+            
             if($config['databases']['mysql']['db_host'] !== null && $config['databases']['mysql']['db_user'] !== null)
             {
-                $container->setParameter('dizda_cloud_backup.databases.mysql.database',    $config['databases']['mysql']['database']);
                 $container->setParameter('dizda_cloud_backup.databases.mysql.host',        $config['databases']['mysql']['db_host']);
                 $container->setParameter('dizda_cloud_backup.databases.mysql.port',        $config['databases']['mysql']['db_port']);
                 $container->setParameter('dizda_cloud_backup.databases.mysql.db_user',     $config['databases']['mysql']['db_user']);
@@ -110,7 +111,6 @@ class DizdaCloudBackupExtension extends Extension
                     $container->setParameter('dizda_cloud_backup.databases.mysql.port', 3306);
                 }
             }else{ /* if mysql config is not set, we taking from the parameters.yml values */
-                $container->setParameter('dizda_cloud_backup.databases.mysql.database',    $container->getParameter('database_name'));
                 $container->setParameter('dizda_cloud_backup.databases.mysql.host',        $container->getParameter('database_host'));
 
                 if($container->getParameter('database_port') === null)
@@ -140,9 +140,9 @@ class DizdaCloudBackupExtension extends Extension
         if (isset($config['databases']['postgresql'])) {
             $container->setParameter('dizda_cloud_backup.databases.postgresql.active', true);
             $container->setParameter('dizda_cloud_backup.databases.postgresql.all_databases', false); //'all databases' option not implemented
+            $container->setParameter('dizda_cloud_backup.databases.postgresql.database', $config['databases']['postgresql']['database'] ?: $container->getParameter('database_name'));
 
             if ($config['databases']['postgresql']['db_host'] !== null && $config['databases']['postgresql']['db_user'] !== null) {
-                $container->setParameter('dizda_cloud_backup.databases.postgresql.database',    $config['databases']['postgresql']['database']);
                 $container->setParameter('dizda_cloud_backup.databases.postgresql.host',        $config['databases']['postgresql']['db_host']);
                 $container->setParameter('dizda_cloud_backup.databases.postgresql.port',        $config['databases']['postgresql']['db_port']);
                 $container->setParameter('dizda_cloud_backup.databases.postgresql.db_user',     $config['databases']['postgresql']['db_user']);
@@ -153,7 +153,6 @@ class DizdaCloudBackupExtension extends Extension
                     $container->setParameter('dizda_cloud_backup.databases.postgresql.port', 5421);
                 }
             } else { /* if postgresql config is not set, we taking from the parameters.yml values */
-                $container->setParameter('dizda_cloud_backup.databases.postgresql.database', $container->getParameter('database_name'));
                 $container->setParameter('dizda_cloud_backup.databases.postgresql.host',     $container->getParameter('database_host'));
 
                 if($container->getParameter('database_port') === null) {
