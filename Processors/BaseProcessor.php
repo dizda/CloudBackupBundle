@@ -77,6 +77,7 @@ abstract class BaseProcessor
     protected function execute($command)
     {
         $process = new Process($command);
+        $process->setTimeout(null);
         $process->run();
 
         if (!$process->isSuccessful()) {
