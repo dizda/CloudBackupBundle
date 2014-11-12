@@ -11,7 +11,7 @@ use CloudApp\API as CloudApp;
  * @package Dizda\CloudBackupBundle\Clients
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
-class CloudAppClient
+class CloudAppClient implements ClientInterface
 {
     private $output;
     private $user;

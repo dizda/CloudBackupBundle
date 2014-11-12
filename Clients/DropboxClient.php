@@ -12,7 +12,7 @@ use Dizda\CloudBackupBundle\Clients\DropboxUploader;
  * @package Dizda\CloudBackupBundle\Clients
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
-class DropboxClient
+class DropboxClient implements ClientInterface
 {
     private $output;
     private $user;
