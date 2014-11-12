@@ -30,16 +30,42 @@ class GoogleDriveClient implements ClientInterface
     private $apiClientId;
 
     /**
+     * @var string redirectUrl
+     */
+    private $redirectUrl;
+
+    private $accessToken;
+
+    /**
      * @param string $apiClientId
      * @param string $apiSecret
+     * @param string $redirectUrl
      */
-    public function __construct($apiClientId, $apiSecret)
+    public function __construct($apiClientId, $apiSecret, $redirectUrl)
     {
         $this->output = new ConsoleOutput();
         $this->apiClientId = $apiClientId;
         $this->apiSecret = $apiSecret;
+        $this->redirectUrl = $redirectUrl;
     }
 
+    /**
+     * @param mixed $accessToken
+     *
+     * @return $this
+     */
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+
+        return $this;
+    }
+
+    /**
+     * Do the actual upload
+     *
+     * @param $archive
+     */
     public function upload($archive)
     {
         $this->output->write('- <comment>Uploading to Google Drive...</comment>');
@@ -49,7 +75,7 @@ class GoogleDriveClient implements ClientInterface
             return;
         }
 
-        $client = $this->getClient();
+        $client = $this->getClient($this->accessToken);
 
         $service = new \Google_Service_Drive($client);
         $mime = $this->getMimeType($archive);
@@ -79,28 +105,26 @@ class GoogleDriveClient implements ClientInterface
     }
 
     /**
+     * @param string|null $accessToken
      *
      * @return \Google_Client
      */
-    private function getClient()
+    public function getClient($accessToken = null)
     {
         $client = new \Google_Client();
+
+        if ($accessToken) {
+            //TODO refresh token
+
+            $client->setAccessToken($accessToken);
+            return $client;
+        }
+
         $client->setApplicationName(self::APPLICATION_NAME);
         $client->setClientId($this->apiClientId);
         $client->setClientSecret($this->apiSecret);
-        $client->setRedirectUri(self::REDIRECT_URI);
+        $client->setRedirectUri($this->redirectUrl);
         $client->setScopes(array('https://www.googleapis.com/auth/drive'));
-
-        $authUrl = $client->createAuthUrl();
-
-        //Request authorization
-        print "Please visit:\n$authUrl\n\n";
-        print "Please enter the auth code:\n";
-        $authCode = trim(fgets(STDIN));
-
-        // Exchange authorization code for access token
-        $accessToken = $client->authenticate($authCode);
-        $client->setAccessToken($accessToken);
 
         return $client;
     }

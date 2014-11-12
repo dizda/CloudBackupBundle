@@ -1,0 +1,4 @@
+
+dizda.cloud_backup.google_drive:
+  path: '/authenticate-google'
+  defaults: { _controller: DizdaCloudBackupBundle:GoogleDrive:accessToken }

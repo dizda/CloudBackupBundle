@@ -56,8 +56,10 @@ class DizdaCloudBackupExtension extends Extension
             $dev->setPublic(true)
                 ->setArguments(array(
                     $config['cloud_storages']['google_drive']['client_id'],
-                    $config['cloud_storages']['google_drive']['client_secret']
-                ));
+                    $config['cloud_storages']['google_drive']['client_secret'],
+                    $config['cloud_storages']['google_drive']['redirect_url']
+                ))
+                ->addMethodCall('setAccessToken', array($config['cloud_storages']['google_drive']['access_token']));
         }
 
         /* Config CloudApp */

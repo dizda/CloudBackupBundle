@@ -53,6 +53,8 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('client_id')->isRequired()->end()
                             ->scalarNode('client_secret')->isRequired()->end()
+                            ->scalarNode('redirect_url')->isRequired()->end()
+                            ->scalarNode('access_token')->defaultNull()->end()
                         ->end()
                     ->end()
                     ->arrayNode('cloudapp')
