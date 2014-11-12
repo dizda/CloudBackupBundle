@@ -49,6 +49,17 @@ class DizdaCloudBackupExtension extends Extension
                                                             'dizda_cloud_backup.cloud_storages.dropbox.remote_path'));
         }
 
+        /* Config google drive */
+        if (isset($config['cloud_storages']['google_drive'])) {
+            $container->setParameter('dizda_cloud_backup.cloud_storages.google_drive.active', true);
+            $dev=$container->getDefinition('dizda.cloudbackup.client.google_drive');
+            $dev->setPublic(true)
+                ->setArguments(array(
+                    $config['cloud_storages']['google_drive']['client_id'],
+                    $config['cloud_storages']['google_drive']['client_secret']
+                ));
+        }
+
         /* Config CloudApp */
         if (isset($config['cloud_storages']['cloudapp'])) {
             $container->setParameter('dizda_cloud_backup.cloud_storages.cloudapp.active',      true);

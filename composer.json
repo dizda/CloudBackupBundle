@@ -30,7 +30,8 @@
     },
 
     "suggest": {
-        "matthiasplappert/cloudapp-api": "dev-master"
+        "matthiasplappert/cloudapp-api": "dev-master",
+        "google/apiclient": "To enable upload dumps on google drive."
     },
 
     "autoload": {
