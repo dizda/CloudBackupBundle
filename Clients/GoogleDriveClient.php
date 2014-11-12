@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  */
 class GoogleDriveClient implements ClientInterface
 {
-    const APPLICATION_NAME = 'DizdaCloundBackup';
+    const APPLICATION_NAME = 'DizdaCloudBackup';
     const REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob';
 
     /**

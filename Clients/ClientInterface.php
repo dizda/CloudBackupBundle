@@ -2,10 +2,10 @@
 namespace Dizda\CloudBackupBundle\Clients;
 
 /**
- * Class CloudAppClient
+ * Class ClientInterface
  *
  * @package Dizda\CloudBackupBundle\Clients
- * @author  Jonathan Dizdarevic <dizda@dizda.fr>
+ * @author  Tobias Nyholm <tobias.nyholm@gmail.com>
  */
 interface ClientInterface
 {
