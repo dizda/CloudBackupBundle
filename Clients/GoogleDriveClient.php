@@ -1,6 +1,7 @@
 <?php
 namespace Dizda\CloudBackupBundle\Clients;
 
+use Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
@@ -11,55 +12,33 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  */
 class GoogleDriveClient implements ClientInterface
 {
-    const APPLICATION_NAME = 'DizdaCloudBackup';
-    const REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob';
-
     /**
      * @var ConsoleOutput output
      */
     private $output;
 
     /**
-     * @var string apiSecret
+     * @var \Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider clientProvider
      */
-    private $apiSecret;
+    private $clientProvider;
 
     /**
-     * @var string apiClientId
+     * @var string tokenName
      */
-    private $apiClientId;
+    private $tokenName;
 
     /**
-     * @var string redirectUrl
+     * @param ClientProvider $clientProvider
+     * @param string $tokenName
      */
-    private $redirectUrl;
-
-    private $accessToken;
-
-    /**
-     * @param string $apiClientId
-     * @param string $apiSecret
-     * @param string $redirectUrl
-     */
-    public function __construct($apiClientId, $apiSecret, $redirectUrl)
+    public function __construct(ClientProvider $clientProvider, $tokenName)
     {
         $this->output = new ConsoleOutput();
-        $this->apiClientId = $apiClientId;
-        $this->apiSecret = $apiSecret;
-        $this->redirectUrl = $redirectUrl;
+        $this->clientProvider = $clientProvider;
+        $this->tokenName = $tokenName;
     }
 
-    /**
-     * @param mixed $accessToken
-     *
-     * @return $this
-     */
-    public function setAccessToken($accessToken)
-    {
-        $this->accessToken = $accessToken;
 
-        return $this;
-    }
 
     /**
      * Do the actual upload
@@ -75,7 +54,7 @@ class GoogleDriveClient implements ClientInterface
             return;
         }
 
-        $client = $this->getClient($this->accessToken);
+        $client = $this->clientProvider->getClient($this->tokenName);
 
         $service = new \Google_Service_Drive($client);
         $mime = $this->getMimeType($archive);
@@ -102,30 +81,5 @@ class GoogleDriveClient implements ClientInterface
         finfo_close($info);
 
         return $mime;
-    }
-
-    /**
-     * @param string|null $accessToken
-     *
-     * @return \Google_Client
-     */
-    public function getClient($accessToken = null)
-    {
-        $client = new \Google_Client();
-
-        if ($accessToken) {
-            //TODO refresh token
-
-            $client->setAccessToken($accessToken);
-            return $client;
-        }
-
-        $client->setApplicationName(self::APPLICATION_NAME);
-        $client->setClientId($this->apiClientId);
-        $client->setClientSecret($this->apiSecret);
-        $client->setRedirectUri($this->redirectUrl);
-        $client->setScopes(array('https://www.googleapis.com/auth/drive'));
-
-        return $client;
     }
 }
