@@ -19,7 +19,7 @@ Cloud services supported :
 * __Dropbox__       (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
 * __CloudApp__      (thanks to [CloudAPP-API-PHP-wrapper](https://github.com/matthiasplappert/CloudApp-API-PHP-wrapper))
 * __Amazon S3__     (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
-* Google Drive      (soon..)
+* __Google Drive__      (thank to [HappyrGoogleSiteAuthenticatorBundle](https://github.com/Happyr/GoogleSiteAuthenticatorBundle)
 
 But also :
 * __Local__         (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
@@ -94,6 +94,8 @@ dizda_cloud_backup:
         # or you can use Gaufrette as well (optional)
         gaufrette:
             service_name: ~  # Gaufrette filesystem service name
+        google_drive:
+          token_name: ~ # Required
 
     databases:
         mongodb:
