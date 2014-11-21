@@ -15,17 +15,17 @@ class GoogleDriveClient implements ClientInterface
     /**
      * @var ConsoleOutput output
      */
-    private $output;
+    protected $output;
 
     /**
      * @var \Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider clientProvider
      */
-    private $clientProvider;
+    protected $clientProvider;
 
     /**
      * @var string remotePath
      */
-    private $remotePath;
+    protected $remotePath;
 
     /**
      * @param ClientProvider $clientProvider
@@ -47,21 +47,12 @@ class GoogleDriveClient implements ClientInterface
      */
     public function upload($archive)
     {
-        $this->output->write('- <comment>Uploading to Google Drive...</comment>');
+        $this->output('- <comment>Uploading to Google Drive...</comment>', false);
 
-        if (!class_exists('Google_Client')) {
-            $this->output->write('- <error>You need to add google/apiclient to your composer.json.</error>');
-            return;
-        }
+        $service = $this->getDriveService();
+        $file = $this->getDriveFile($archive);
 
-        $client = $this->clientProvider->getClient($this->tokenName);
-
-        $service = new \Google_Service_Drive($client);
         $mime = $this->getMimeType($archive);
-        $filename= basename($archive);
-
-        $file = new \Google_Service_Drive_DriveFile();
-        $file->setTitle($filename);
         $file->setMimeType($mime);
 
         if ($this->remotePath !== '/') {
@@ -73,12 +64,12 @@ class GoogleDriveClient implements ClientInterface
         }
 
         $result = $service->files->insert($file, array(
-            'data' => file_get_contents($archive),
+            'data' => $this->getFileContents($archive),
             'mimeType' => $mime,
             'uploadType' => 'media',
         ));
 
-        $this->output->writeln('<info>OK</info>');
+        $this->output('<info>OK</info>');
     }
 
     /**
@@ -86,7 +77,7 @@ class GoogleDriveClient implements ClientInterface
      *
      * @return string
      */
-    private function getMimeType($file)
+    protected function getMimeType($file)
     {
         $info = finfo_open(FILEINFO_MIME_TYPE);
         $mime = finfo_file($info, $file);
@@ -101,7 +92,7 @@ class GoogleDriveClient implements ClientInterface
      * @return \Google_Service_Drive_ParentReference|null
      * @throws \Symfony\Component\Security\Core\Exception\LockedException
      */
-    private function getParentFolder(\Google_Service_Drive $service)
+    protected function getParentFolder(\Google_Service_Drive $service)
     {
         $parts = explode('/', ltrim($this->remotePath,'/'));
         $folderId=null;
@@ -130,5 +121,62 @@ class GoogleDriveClient implements ClientInterface
         $parent->setId($folderId);
 
         return $parent;
+    }
+
+    /**
+     *
+     * @return \Google_Service_Drive
+     */
+    protected function getDriveService()
+    {
+        $client = $this->clientProvider->getClient($this->tokenName);
+        $service = new \Google_Service_Drive($client);
+
+        return $service;
+    }
+
+    /**
+     * @param $archive
+     *
+     * @return \Google_Service_Drive_DriveFile
+     */
+    protected function getDriveFile($archive)
+    {
+        $filename = basename($archive);
+
+        $file = new \Google_Service_Drive_DriveFile();
+        $file->setTitle($filename);
+
+        return $file;
+    }
+
+    /**
+     * @param $message
+     * @param bool $newLine
+     */
+    protected function output($message, $newLine=true)
+    {
+        if ($newLine) {
+            $this->output->writeln($message);
+        } else {
+            $this->output->write($message);
+        }
+
+    }
+
+    /**
+     * @param $archive
+     *
+     * @return string
+     */
+    protected function getFileContents($archive)
+    {
+        $data = @file_get_contents($archive);
+
+        if ($data === false) {
+            throw new \Exception(sprintf('Could not read file: %s', $archive));
+        }
+
+        return $data;
     }
 }

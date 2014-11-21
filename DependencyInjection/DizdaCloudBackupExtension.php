@@ -4,6 +4,7 @@ namespace Dizda\CloudBackupBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -54,6 +55,7 @@ class DizdaCloudBackupExtension extends Extension
             $container->setParameter('dizda_cloud_backup.cloud_storages.google_drive.active', true);
             $dev=$container->getDefinition('dizda.cloudbackup.client.google_drive');
             $dev->setPublic(true)
+                ->replaceArgument(0, new Reference('happyr.google_site_authenticator.client_provider'))
                 ->replaceArgument(1, $config['cloud_storages']['google_drive']['token_name'])
                 ->replaceArgument(2, $config['cloud_storages']['google_drive']['remote_path']);
         }
