@@ -21,6 +21,7 @@ class BackupCommand extends ContainerAwareCommand
     private $mysqlActive;
     private $postgresqlActive;
     private $dropboxActive;
+    private $googleDriveActive;
     private $cloudappActive;
     private $gaufretteActive;
     private $output;
@@ -53,6 +54,7 @@ class BackupCommand extends ContainerAwareCommand
         $this->postgresqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.postgresql.active');
 
         $this->dropboxActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.active');
+        $this->googleDriveActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.google_drive.active');
         $this->cloudappActive  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.active');
         $this->gaufretteActive = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.active');
     }
@@ -113,6 +115,10 @@ class BackupCommand extends ContainerAwareCommand
 
         if ($this->dropboxActive) {
             $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($processor->getArchivePath());
+        }
+
+        if ($this->googleDriveActive) {
+            $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($processor->getArchivePath());
         }
 
         if ($this->cloudappActive) {

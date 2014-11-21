@@ -12,7 +12,7 @@ use Gaufrette\Filesystem;
  * @package Dizda\CloudBackupBundle\Clients
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
-class GaufretteClient
+class GaufretteClient implements ClientInterface
 {
     private $output;
     private $filesystem;

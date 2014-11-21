@@ -12,6 +12,11 @@ services:
             - %dizda_cloud_backup.cloud_storages.dropbox.password%
             - %dizda_cloud_backup.cloud_storages.dropbox.remote_path%
 
+    dizda.cloudbackup.client.google_drive:
+        class: Dizda\CloudBackupBundle\Clients\GoogleDriveClient
+        public: false
+        arguments: [~, ~, ~]
+
     dizda.cloudbackup.client.gaufrette:
         class: Dizda\CloudBackupBundle\Clients\GaufretteClient
 

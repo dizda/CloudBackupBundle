@@ -26,11 +26,13 @@
     },
 
     "require-dev": {
+        "google/apiclient": "@dev",
         "symfony/symfony": "v2.3.1"
     },
 
     "suggest": {
-        "matthiasplappert/cloudapp-api": "dev-master"
+        "matthiasplappert/cloudapp-api": "dev-master",
+        "happyr/google-site-authenticator-bundle": "To enable upload dumps on google drive."
     },
 
     "autoload": {
