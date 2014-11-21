@@ -31,7 +31,7 @@
 
     "suggest": {
         "matthiasplappert/cloudapp-api": "dev-master",
-        "google/apiclient": "To enable upload dumps on google drive."
+        "happyr/google-site-authenticator-bundle": "To enable upload dumps on google drive."
     },
 
     "autoload": {
