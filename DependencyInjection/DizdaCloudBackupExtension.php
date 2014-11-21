@@ -52,11 +52,12 @@ class DizdaCloudBackupExtension extends Extension
 
         /* Config google drive */
         if (isset($config['cloud_storages']['google_drive'])) {
-            $container->setParameter('dizda_cloud_backup.cloud_storages.google_drive.active', true);
-            $dev=$container->getDefinition('dizda.cloudbackup.client.google_drive');
-            if (!$container->hasDefinition('happyr.google_site_authenticator.client_provider')) {
+            if (!class_exists('Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider')) {
                 throw new \LogicException('DizdaCloudBundle: You need to install and configure Happyr/GoogleSiteAuthenticatorBundle to be able to use Google Drive as remote storage.');
             }
+
+            $container->setParameter('dizda_cloud_backup.cloud_storages.google_drive.active', true);
+            $dev=$container->getDefinition('dizda.cloudbackup.client.google_drive');
             $dev->setPublic(true)
                 ->replaceArgument(0, new Reference('happyr.google_site_authenticator.client_provider'))
                 ->replaceArgument(1, $config['cloud_storages']['google_drive']['token_name'])
