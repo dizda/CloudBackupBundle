@@ -15,7 +15,7 @@ services:
     dizda.cloudbackup.client.google_drive:
         class: Dizda\CloudBackupBundle\Clients\GoogleDriveClient
         public: false
-        arguments: [@happyr.google_site_authenticator.client_provider, ~]
+        arguments: [@happyr.google_site_authenticator.client_provider, ~, ~]
 
     dizda.cloudbackup.client.gaufrette:
         class: Dizda\CloudBackupBundle\Clients\GaufretteClient

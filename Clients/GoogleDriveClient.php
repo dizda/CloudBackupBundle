@@ -23,22 +23,22 @@ class GoogleDriveClient implements ClientInterface
     private $clientProvider;
 
     /**
-     * @var string tokenName
+     * @var string remotePath
      */
-    private $tokenName;
+    private $remotePath;
 
     /**
      * @param ClientProvider $clientProvider
      * @param string $tokenName
+     * @param string $remotePath
      */
-    public function __construct(ClientProvider $clientProvider, $tokenName)
+    public function __construct(ClientProvider $clientProvider, $tokenName, $remotePath)
     {
         $this->output = new ConsoleOutput();
         $this->clientProvider = $clientProvider;
         $this->tokenName = $tokenName;
+        $this->remotePath = $remotePath;
     }
-
-
 
     /**
      * Do the actual upload
@@ -58,12 +58,24 @@ class GoogleDriveClient implements ClientInterface
 
         $service = new \Google_Service_Drive($client);
         $mime = $this->getMimeType($archive);
+        $filename= basename($archive);
 
         $file = new \Google_Service_Drive_DriveFile();
+        $file->setTitle($filename);
+        $file->setMimeType($mime);
+
+        if ($this->remotePath !== '/') {
+            $parent=$this->getParentFolder($service);
+
+            if ($parent) {
+                $file->setParents(array($parent));
+            }
+        }
+
         $result = $service->files->insert($file, array(
             'data' => file_get_contents($archive),
             'mimeType' => $mime,
-            'uploadType' => 'media'
+            'uploadType' => 'media',
         ));
 
         $this->output->writeln('<info>OK</info>');
@@ -81,5 +93,42 @@ class GoogleDriveClient implements ClientInterface
         finfo_close($info);
 
         return $mime;
+    }
+
+    /**
+     * @param \Google_Service_Drive $service
+     *
+     * @return \Google_Service_Drive_ParentReference|null
+     * @throws \Symfony\Component\Security\Core\Exception\LockedException
+     */
+    private function getParentFolder(\Google_Service_Drive $service)
+    {
+        $parts = explode('/', ltrim($this->remotePath,'/'));
+        $folderId=null;
+        foreach ($parts as $name) {
+            $q = 'mimeType="application/vnd.google-apps.folder" and title contains "' . $name . '"';
+            if ($folderId) {
+                $q.=sprintf(' and "%s" in parents', $folderId);
+            }
+            $folders = $service->files->listFiles(array(
+                    'q'=> $q,
+                ))->getItems();
+            if (count($folders)==0) {
+                //TODO create the missing folder.
+                throw new \LogicException('Remote path does not exist.');
+            } else {
+                /** @var \Google_Service_Drive_DriveFile $folders[0] */
+                $folderId=$folders[0]->id;
+            }
+        }
+
+        if (!$folderId) {
+            return null;
+        }
+
+        $parent = new \Google_Service_Drive_ParentReference();
+        $parent->setId($folderId);
+
+        return $parent;
     }
 }

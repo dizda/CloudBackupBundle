@@ -96,6 +96,7 @@ dizda_cloud_backup:
             service_name: ~  # Gaufrette filesystem service name
         google_drive:
           token_name: ~ # Required
+          remote_path: ~ # Not required, default "/", but you can use path like "/Accounts/backups/"
 
     databases:
         mongodb:

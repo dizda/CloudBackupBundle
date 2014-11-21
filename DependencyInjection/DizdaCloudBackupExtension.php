@@ -54,7 +54,8 @@ class DizdaCloudBackupExtension extends Extension
             $container->setParameter('dizda_cloud_backup.cloud_storages.google_drive.active', true);
             $dev=$container->getDefinition('dizda.cloudbackup.client.google_drive');
             $dev->setPublic(true)
-                ->replaceArgument(1, $config['cloud_storages']['google_drive']['token_name']);
+                ->replaceArgument(1, $config['cloud_storages']['google_drive']['token_name'])
+                ->replaceArgument(2, $config['cloud_storages']['google_drive']['remote_path']);
         }
 
         /* Config CloudApp */

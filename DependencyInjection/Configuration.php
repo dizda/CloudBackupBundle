@@ -52,6 +52,7 @@ class Configuration implements ConfigurationInterface
                     ->info('Google Drive token name as specified in the Happyr Google Site Authenticator Bundle')
                         ->children()
                             ->scalarNode('token_name')->isRequired()->end()
+                            ->scalarNode('remote_path')->defaultValue('/')->end()
                         ->end()
                     ->end()
                     ->arrayNode('cloudapp')
