@@ -265,6 +265,6 @@ End
 ---
 This bundle was inspired from [KachkaevDropboxBackupBundle](https://github.com/kachkaev/KachkaevDropboxBackupBundle).
 
-It is Symfony2.1, 2.2 and 2.3 compatible, I'll make some tests as soon as time permits.
+It is Symfony2.1, 2.2 and 2.3+ compatible.
 
 Enjoy, PR are welcome !
