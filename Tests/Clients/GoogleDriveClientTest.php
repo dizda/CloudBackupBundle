@@ -111,6 +111,6 @@ class Dummy extends GoogleDriveClient {
     public function getParentFolder(\Google_Service_Drive $a) { return parent::getParentFolder($a); }
     public function getDriveService() { return parent::getDriveService(); }
     public function getDriveFile($a) { return parent::getDriveFile($a); }
-    public function output($a, $b=true) { return parent::output($a, $b); }
+    public function output($a, $b=true) { parent::output($a, $b); }
     public function getFileContents($a) { return parent::getFileContents($a); }
 }
