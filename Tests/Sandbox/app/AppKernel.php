@@ -1,4 +1,7 @@
 <?php
+
+namespace Dizda\CloudBackupBundle\Tests\Sandbox\app;
+
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -40,5 +43,15 @@ class AppKernel extends Kernel
     public function getLogDir()
     {
         return sys_get_temp_dir().'/DizdaCloudBackupBundle/logs';
+    }
+
+    /**
+     * Gets a new ContainerBuilder instance used to build the service container.
+     *
+     * @return ContainerBuilder
+     */
+    public function getContainerBuilder()
+    {
+        return parent::getContainerBuilder();
     }
 }

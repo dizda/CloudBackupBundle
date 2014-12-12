@@ -62,6 +62,8 @@ class DizdaCloudBackupExtension extends Extension
                 ->replaceArgument(0, new Reference('happyr.google_site_authenticator.client_provider'))
                 ->replaceArgument(1, $config['cloud_storages']['google_drive']['token_name'])
                 ->replaceArgument(2, $config['cloud_storages']['google_drive']['remote_path']);
+        } else {
+            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.cloud_storages.google_drive.active'));
         }
 
         /* Config CloudApp */

@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class AbstractTesting extends WebTestCase
 {
+    protected static $kernel;
 
     /**
      * Setup the kernel.
@@ -19,7 +20,7 @@ class AbstractTesting extends WebTestCase
      */
     public function setUp()
     {
-        $kernel = self::getKernelClass();
+        $kernel = '\\Dizda\\CloudBackupBundle\\Tests\\Sandbox\\app\\AppKernel';
 
         self::$kernel = new $kernel('test', true);
         self::$kernel->boot();
