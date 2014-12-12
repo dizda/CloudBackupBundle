@@ -13,19 +13,11 @@ class DizdaCloudBackupExtensionTest extends AbstractTesting
      */
     public function testGoogleDriveDefaultConfiguration()
     {
-//        $containerMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
-//
-//        $containerMock->expects($this->any())->method('setParameter');
-//
-//        $containerMock->expects($this->once())
-//            ->method('setParameter')
-//            ->with($this->equalTo('dizda_cloud_backup.cloud_storages.google_drive.active'), $this->equalTo(false));
-
         $container = self::$kernel->getContainerBuilder();
         $extension = new DizdaCloudBackupExtension();
 
-        $extension->load([], $container);
+        $extension->load(array(), $container);
 
         $this->assertFalse($container->getParameter('dizda_cloud_backup.cloud_storages.google_drive.active'));
     }
-} 
+}
