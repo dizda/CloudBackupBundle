@@ -3,6 +3,7 @@ namespace Dizda\CloudBackupBundle\Clients;
 
 use Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class GoogleDriveClient
@@ -47,29 +48,20 @@ class GoogleDriveClient implements ClientInterface
      */
     public function upload($archive)
     {
-        $this->output('- <comment>Uploading to Google Drive...</comment>', false);
-
+        $this->output('- <comment>Uploading to Google Drive... </comment>', false);
         $service = $this->getDriveService();
-        $file = $this->getDriveFile($archive);
-
-        $mime = $this->getMimeType($archive);
-        $file->setMimeType($mime);
-
-        if ($this->remotePath !== '/') {
-            $parent=$this->getParentFolder($service);
-
-            if ($parent) {
-                $file->setParents(array($parent));
+        if(is_array($archive)){
+            $this->output->writeln("");
+            foreach($archive as $file /* @var $file SplFileInfo*/){
+                $this->output->write(sprintf('----- <comment>Uploading file: %s... </comment>', $file->getFilename()));
+                $this->handleUpload($service, $file);
+                $this->output->writeln('<info>OK</info>');
             }
         }
-
-        $result = $service->files->insert($file, array(
-            'data' => $this->getFileContents($archive),
-            'mimeType' => $mime,
-            'uploadType' => 'media',
-        ));
-
-        $this->output('<info>OK</info>');
+        else{
+            $this->handleUpload($service, $archive);
+            $this->output->writeln('<info>OK</info>');
+        }
     }
 
     /**
@@ -178,5 +170,34 @@ class GoogleDriveClient implements ClientInterface
         }
 
         return $data;
+    }
+
+    /**
+     * @param $service
+     * @param $archive
+     * @return mixed
+     * @throws \Exception
+     */
+    private function handleUpload($service, $archive)
+    {
+
+        $file = $this->getDriveFile($archive);
+
+        $mime = $this->getMimeType($archive);
+        $file->setMimeType($mime);
+
+        if ($this->remotePath !== '/') {
+            $parent=$this->getParentFolder($service);
+
+            if ($parent) {
+                $file->setParents(array($parent));
+            }
+        }
+
+        return $service->files->insert($file, array(
+            'data' => $this->getFileContents($archive),
+            'mimeType' => $mime,
+            'uploadType' => 'media',
+        ));
     }
 }

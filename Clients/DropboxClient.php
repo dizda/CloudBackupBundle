@@ -4,6 +4,7 @@ namespace Dizda\CloudBackupBundle\Clients;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 use Dizda\CloudBackupBundle\Clients\DropboxUploader;
+use Symfony\Component\Finder\SplFileInfo;
 
 
 /**
@@ -34,12 +35,20 @@ class DropboxClient implements ClientInterface
 
     public function upload($archive)
     {
-        $this->output->write('- <comment>Uploading to Dropbox...</comment>');
-
+        $this->output->write('- <comment>Uploading to Dropbox... </comment>');
         $dropbox = new DropboxUploader($this->user, $this->password);
-        $dropbox->upload($archive, $this->remotePath);
-
-        $this->output->writeln('<info>OK</info>');
+        if(is_array($archive)){
+            $this->output->writeln("");
+            foreach($archive as $file /* @var $file SplFileInfo*/){
+                $this->output->write(sprintf('----- <comment>Uploading file: %s... </comment>', $file->getFilename()));
+                $dropbox->upload($file, $this->remotePath);
+                $this->output->writeln('<info>OK</info>');
+            }
+        }
+        else{
+            $dropbox->upload($archive, $this->remotePath);
+            $this->output->writeln('<info>OK</info>');
+        }
     }
 
 }

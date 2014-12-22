@@ -31,11 +31,24 @@ class DizdaCloudBackupExtension extends Extension
         $container->setParameter('dizda_cloud_backup.output_folder', $container->getParameter('kernel.cache_dir') . '/backup/');
         $container->setParameter('dizda_cloud_backup.output_file_prefix', $config['output_file_prefix']);
         $container->setParameter('dizda_cloud_backup.folders', $config['folders']);
+
         
         /* Config processor */
         $container->setParameter('dizda_cloud_backup.processor.service', 'dizda.cloudbackup.processor.' . $config['processor']['type']);
         $container->setParameter('dizda_cloud_backup.processor.dateformat', $config['processor']['date_format']);
         $container->setParameter('dizda_cloud_backup.processor.options', $config['processor']['options']);
+
+
+        /* Split Options*/
+        if(isset($config['processor']['options']['split'])){
+            $container->setParameter('dizda_cloud_backup.processor.options.split.enable', $config['processor']['options']['split']['enable']);
+            $container->setParameter('dizda_cloud_backup.processor.options.split.split_size', $config['processor']['options']['split']['split_size']);
+            $container->setParameter('dizda_cloud_backup.processor.options.split.storages', $config['processor']['options']['split']['storages']);
+        }
+        else
+        {
+            $container->setParameter('dizda_cloud_backup.processor.options.split.enable', false);
+        }
         
         /* Config dropbox */
         if (isset($config['cloud_storages']['dropbox'])) {
