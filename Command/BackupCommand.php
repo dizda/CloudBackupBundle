@@ -27,7 +27,7 @@ class BackupCommand extends ContainerAwareCommand
     private $storages  = [];
 
     private $processors = array('tar', 'zip', '7z');
-    private $clients = array('Dropbox', 'CloudApp', 'GoogleDrive');
+    private $clients = array('Dropbox', 'CloudApp', 'GoogleDrive', 'Gaufrette');
 
     protected function configure()
     {
@@ -161,12 +161,12 @@ class BackupCommand extends ContainerAwareCommand
             }
         }
 
-        if (isset($this->storages['gaufrette'])) {
+        if ($this->gaufretteActive) {
             $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
 
             $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
             $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
-            if(in_array('Dropbox', $this->splitStorages)){
+            if(in_array('Gaufrette', $this->split_storages)){
                 $gaufrette->upload($splitFiles);
             }
             else{
