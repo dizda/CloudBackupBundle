@@ -7,24 +7,13 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Process\Process;
 
 /**
+ * Class ZipSplitSplitter
+ *
+ * @package Dizda\CloudBackupBundle\Splitters
  * @author Nick Doulgeridis
  */
-class ZipSplitSplitter
+class ZipSplitSplitter extends BaseSplitter
 {
-    private $archivePath;
-    private $split_size;
-    private static $already_split = false;
-
-    /**
-     * @param $archive_path
-     * @param $split_size
-     */
-    public function __construct($archive_path, $split_size)
-    {
-        $this->archivePath = $archive_path;
-        $this->split_size = $split_size;
-    }
-
     /**
      * Runs the zipsplit command
      */
@@ -43,17 +32,6 @@ class ZipSplitSplitter
     }
 
     /**
-     * @return array
-     */
-    public function getSplitFiles()
-    {
-        $file = new File($this->archivePath);
-        $finder = new Finder();
-        $finder->files()->in(dirname($this->archivePath))->notName($file->getFilename())->sortByModifiedTime();
-        return iterator_to_array($finder);
-    }
-
-    /**
      * Get the zipsplit command
      */
     public function getCommand()
@@ -65,21 +43,8 @@ class ZipSplitSplitter
     }
 
     /**
-     * @return boolean
+     * Rename files we split using the naming convention in config
      */
-    public static function getAlreadySplit()
-    {
-        return self::$already_split;
-    }
-
-    /**
-     * @param boolean $already_split
-     */
-    public static function setAlreadySplit($already_split)
-    {
-        self::$already_split = $already_split;
-    }
-
     private function renameSplitFiles()
     {
         $c = 1;
