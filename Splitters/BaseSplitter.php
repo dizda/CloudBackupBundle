@@ -14,8 +14,6 @@ abstract class BaseSplitter
 {
     protected $archivePath;
     protected $split_size;
-    protected static $already_split = false;
-
     /**
      * @param $archive_path
      * @param $split_size
@@ -38,25 +36,9 @@ abstract class BaseSplitter
     }
 
     /**
-     * @return boolean
-     */
-    public static function getAlreadySplit()
-    {
-        return self::$already_split;
-    }
-
-    /**
-     * @param boolean $already_split
-     */
-    public static function setAlreadySplit($already_split)
-    {
-        self::$already_split = $already_split;
-    }
-
-    /**
      * @void
      */
-    public abstract function split();
+    public abstract function executeSplit();
 
     /**
      * @return string

@@ -128,7 +128,7 @@ class BackupCommand extends ContainerAwareCommand
             $this->checkSplitStorages();
             $this->output->write('- <comment>Splitting archive... </comment> ');
             $split = new ZipSplitSplitter($processor->getArchivePath(), $this->split_size);
-            $split->split();
+            $split->executeSplit();
             $splitFiles = $split->getSplitFiles();
             $this->output->writeln('<info>OK</info>');
         }
