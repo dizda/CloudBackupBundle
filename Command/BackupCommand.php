@@ -1,12 +1,13 @@
 <?php
 namespace Dizda\CloudBackupBundle\Command;
 
+use Dizda\CloudBackupBundle\Splitters\ZipSplitSplitter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+use Symfony\Component\Finder\SplFileInfo;
 
 
 /**
@@ -18,12 +19,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class BackupCommand extends ContainerAwareCommand
 {
     private $output;
+    private $split;
+    private $splitSize;
+    private $splitStorages;
 
     private $databases = [];
     private $storages  = [];
 
     private $processors = array('tar', 'zip', '7z');
-
+    private $clients = array('Dropbox', 'CloudApp', 'GoogleDrive');
 
     protected function configure()
     {
@@ -45,8 +49,23 @@ class BackupCommand extends ContainerAwareCommand
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
+
         $this->databases = $this->getContainer()->getParameter('dizda_cloud_backup.databases');
         $this->storages  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages');
+
+        $this->mongoActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mongodb.active');
+        $this->mysqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mysql.active');
+        $this->postgresqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.postgresql.active');
+
+        $this->dropboxActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.active');
+        $this->googleDriveActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.google_drive.active');
+        $this->cloudappActive  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.active');
+        $this->gaufretteActive = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.active');
+
+        $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.enable');
+        $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.split_size');
+        $this->splitStorages = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.storages');
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -98,21 +117,48 @@ class BackupCommand extends ContainerAwareCommand
             $processor->copyFolders();
             $this->output->writeln('<info>OK</info>');
         }
-        
+
         $this->output->write('- <comment>Compressing archive... </comment> ');
         $processor->compress();
         $this->output->writeln('<info>OK</info>');
 
-        if (isset($this->storages['dropbox'])) {
-            $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($processor->getArchivePath());
+        $wholeFile = $processor->getArchivePath();
+        $splitFiles = array();
+        if($this->split)
+        {
+            $this->checkSplitStorages();
+            $this->output->write('- <comment>Splitting archive... </comment> ');
+            $split = new ZipSplitSplitter($processor->getArchivePath(), $this->splitSize);
+            $split->split();
+            $splitFiles = $split->getSplitFiles();
+            $this->output->writeln('<info>OK</info>');
         }
 
-        if (isset($this->storages['google_drive'])) {
-            $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($processor->getArchivePath());
+        if ($this->dropboxActive) {
+            if(in_array('Dropbox', $this->splitStorages)){
+                $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($splitFiles);
+            }
+            else{
+                $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($wholeFile);
+            }
         }
 
-        if (isset($this->storages['cloudapp'])) {
-            $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($processor->getArchivePath());
+        if ($this->googleDriveActive) {
+            if(in_array('GoogleDrive', $this->splitStorages)){
+                $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($splitFiles);
+            }
+            else{
+                $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($wholeFile);
+            }
+        }
+
+        if ($this->cloudappActive) {
+            if(in_array('CloudApp', $this->splitStorages)){
+                $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($splitFiles);
+            }
+            else{
+                $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($wholeFile);
+            }
         }
 
         if (isset($this->storages['gaufrette'])) {
@@ -120,11 +166,27 @@ class BackupCommand extends ContainerAwareCommand
 
             $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
             $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
-            $gaufrette->upload($processor->getArchivePath());
+            if(in_array('Dropbox', $this->splitStorages)){
+                $gaufrette->upload($splitFiles);
+            }
+            else{
+                $gaufrette->upload($wholeFile);
+            }
         }
 
         $processor->cleanUp();
         $this->output->writeln('- <comment>Temporary files have been cleared</comment>.');
+    }
+
+    private function checkSplitStorages()
+    {
+        foreach($this->splitStorages as $storage)
+        {
+            if(!in_array($storage,$this->clients))
+            {
+                throw new \Exception("The storage type '$storage'' in split storages option does not exist.\nPossible options are: ".join(', ', $this->clients));
+            }
+        }
     }
 
 

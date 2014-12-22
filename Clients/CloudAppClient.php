@@ -4,6 +4,7 @@ namespace Dizda\CloudBackupBundle\Clients;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 use CloudApp\API as CloudApp;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class CloudAppClient
@@ -30,11 +31,20 @@ class CloudAppClient implements ClientInterface
 
     public function upload($archive)
     {
-        $this->output->write('- <comment>Uploading to CloudApp...</comment>');
-
+        $this->output->write('- <comment>Uploading to CloudApp... </comment>');
         $cloudapp = new CloudApp($this->user, $this->password);
-        $cloudapp->addFile($archive);
+        if(is_array($archive)){
+            $this->output->writeln("");
+            foreach($archive as $file /* @var $file SplFileInfo*/){
+                $this->output->write(sprintf('----- <comment>Uploading file: %s... </comment>', $file->getFilename()));
+                $cloudapp->addFile($file);
+                $this->output->writeln('<info>OK</info>');
+            }
+        }
+        else{
+            $cloudapp->addFile($archive);
+            $this->output->writeln('<info>OK</info>');
+        }
 
-        $this->output->writeln('<info>OK</info>');
     }
 }
