@@ -87,7 +87,7 @@ dizda_cloud_backup:
             password: qwerty
             split:
                 enable: true # Default true
-                split_size: 1000 # Make zip files no larger than "size"
+                split_size: 1000 # Make each zip files no larger than "split_size" in bytes
                 storages: [ Dropbox, CloudApp, GoogleDrive ] # Which cloud storages will upload split files
     folders: [ web/uploads , other/folder ]
     cloud_storages:
