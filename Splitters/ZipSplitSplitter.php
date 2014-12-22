@@ -17,18 +17,13 @@ class ZipSplitSplitter extends BaseSplitter
     /**
      * Runs the zipsplit command
      */
-    public function split()
+    public function executeSplit()
     {
-        if(!self::$already_split)
-        {
-            $command = $this->getCommand();
-            $process = new Process($command);
-            $process->setTimeout(null);
-            $process->run();
-
-            $this->renameSplitFiles();
-            self::setAlreadySplit(true);
-        }
+        $command = $this->getCommand();
+        $process = new Process($command);
+        $process->setTimeout(null);
+        $process->run();
+        $this->renameSplitFiles();
     }
 
     /**
