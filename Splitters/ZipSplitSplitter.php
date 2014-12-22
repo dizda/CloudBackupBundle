@@ -32,9 +32,9 @@ class ZipSplitSplitter extends BaseSplitter
     public function getCommand()
     {
         return sprintf("zipsplit -n %s -b %s %s",
-            $this->split_size,
-            dirname($this->archivePath),
-            $this->archivePath);
+            $this->getSplitSize(),
+            $this->getOutputFolder(),
+            $this->getArchivePath());
     }
 
     /**
@@ -43,7 +43,7 @@ class ZipSplitSplitter extends BaseSplitter
     private function renameSplitFiles()
     {
         $c = 1;
-        $wholeFile = new File($this->archivePath);
+        $wholeFile = new File($this->getArchivePath());
         foreach ($this->getSplitFiles() as $file/* @var $file SplFileInfo */)
         {
             $new_filename = sprintf("%s/%spart%s.%s",

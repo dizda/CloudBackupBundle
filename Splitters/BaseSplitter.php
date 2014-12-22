@@ -12,8 +12,8 @@ use Symfony\Component\Finder\Finder;
  */
 abstract class BaseSplitter
 {
-    protected $archivePath;
-    protected $split_size;
+    private $archivePath;
+    private $splitSize;
     /**
      * @param $archive_path
      * @param $split_size
@@ -21,7 +21,7 @@ abstract class BaseSplitter
     public function __construct($archive_path, $split_size)
     {
         $this->archivePath = $archive_path;
-        $this->split_size = $split_size;
+        $this->splitSize = $split_size;
     }
 
     /**
@@ -33,6 +33,30 @@ abstract class BaseSplitter
         $finder = new Finder();
         $finder->files()->in(dirname($this->archivePath))->notName($file->getFilename())->sortByModifiedTime();
         return iterator_to_array($finder);
+    }
+
+    /**
+     * @return int
+     */
+    public function getSplitSize()
+    {
+        return $this->splitSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOutputFolder()
+    {
+        return dirname($this->archivePath);
+    }
+
+    /**
+     * @return string
+     */
+    public function getArchivePath()
+    {
+        return $this->archivePath;
     }
 
     /**
