@@ -88,7 +88,7 @@ dizda_cloud_backup:
             split:
                 enable: true # Default true
                 split_size: 1000 # Make each zip files no larger than "split_size" in bytes
-                storages: [ Dropbox, CloudApp, GoogleDrive ] # Which cloud storages will upload split files
+                storages: [ Dropbox, CloudApp, GoogleDrive, Gaufrette ] # Which cloud storages will upload split files
     folders: [ web/uploads , other/folder ]
     cloud_storages:
         # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
