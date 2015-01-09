@@ -44,7 +44,7 @@ Installation (>=Symfony 2.1)
 Download CloudBackupBundle and its dependencies to the vendor directory. You can use Composer for the automated process:
 
 ```bash
-$ php composer.phar require dizda/cloud-backup-bundle dev-master
+$ php composer.phar require dizda/cloud-backup-bundle "~1.6"
 ```
 
 Composer will install the bundle to `vendor/dizda` directory.
