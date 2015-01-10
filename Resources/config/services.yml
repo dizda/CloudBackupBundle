@@ -2,15 +2,12 @@ services:
     dizda.cloudbackup.client.cloudapp:
         class: Dizda\CloudBackupBundle\Clients\CloudAppClient
         arguments:
-            - %dizda_cloud_backup.cloud_storages.cloudapp.user%
-            - %dizda_cloud_backup.cloud_storages.cloudapp.password%
+            - %dizda_cloud_backup.cloud_storages%
 
     dizda.cloudbackup.client.dropbox:
         class: Dizda\CloudBackupBundle\Clients\DropboxClient
         arguments:
-            - %dizda_cloud_backup.cloud_storages.dropbox.user%
-            - %dizda_cloud_backup.cloud_storages.dropbox.password%
-            - %dizda_cloud_backup.cloud_storages.dropbox.remote_path%
+            - %dizda_cloud_backup.cloud_storages%
 
     dizda.cloudbackup.client.google_drive:
         class: Dizda\CloudBackupBundle\Clients\GoogleDriveClient
@@ -23,33 +20,19 @@ services:
     dizda.cloudbackup.database.mongodb:
         class: Dizda\CloudBackupBundle\Databases\MongoDB
         arguments:
-            - %dizda_cloud_backup.databases.mongodb.all_databases%
-            - %dizda_cloud_backup.databases.mongodb.host%
-            - %dizda_cloud_backup.databases.mongodb.port%
-            - %dizda_cloud_backup.databases.mongodb.database%
-            - %dizda_cloud_backup.databases.mongodb.db_user%
-            - %dizda_cloud_backup.databases.mongodb.db_password%
+            - %dizda_cloud_backup.databases%
             - %dizda_cloud_backup.output_folder%
 
     dizda.cloudbackup.database.mysql:
         class: Dizda\CloudBackupBundle\Databases\MySQL
         arguments:
-            - %dizda_cloud_backup.databases.mysql.all_databases%
-            - %dizda_cloud_backup.databases.mysql.host%
-            - %dizda_cloud_backup.databases.mysql.port%
-            - %dizda_cloud_backup.databases.mysql.database%
-            - %dizda_cloud_backup.databases.mysql.db_user%
-            - %dizda_cloud_backup.databases.mysql.db_password%
+            - %dizda_cloud_backup.databases%
             - %dizda_cloud_backup.output_folder%
 
     dizda.cloudbackup.database.postgresql:
         class: Dizda\CloudBackupBundle\Databases\PostgreSQL
         arguments:
-            - %dizda_cloud_backup.databases.postgresql.host%
-            - %dizda_cloud_backup.databases.postgresql.port%
-            - %dizda_cloud_backup.databases.postgresql.database%
-            - %dizda_cloud_backup.databases.postgresql.db_user%
-            - %dizda_cloud_backup.databases.postgresql.db_password%
+            - %dizda_cloud_backup.databases%
             - %dizda_cloud_backup.output_folder%
 
     dizda.cloudbackup.processor.tar:
@@ -59,8 +42,7 @@ services:
             - %dizda_cloud_backup.output_folder%
             - %dizda_cloud_backup.output_file_prefix%
             - %dizda_cloud_backup.folders%
-            - %dizda_cloud_backup.processor.dateformat%
-            - %dizda_cloud_backup.processor.options%
+            - %dizda_cloud_backup.processor%
 
     dizda.cloudbackup.processor.zip:
         class: Dizda\CloudBackupBundle\Processors\ZipProcessor
@@ -69,8 +51,7 @@ services:
             - %dizda_cloud_backup.output_folder%
             - %dizda_cloud_backup.output_file_prefix%
             - %dizda_cloud_backup.folders%            
-            - %dizda_cloud_backup.processor.dateformat%
-            - %dizda_cloud_backup.processor.options%
+            - %dizda_cloud_backup.processor%
 
     dizda.cloudbackup.processor.7z:
         class: Dizda\CloudBackupBundle\Processors\SevenZipProcessor
@@ -79,5 +60,4 @@ services:
             - %dizda_cloud_backup.output_folder%
             - %dizda_cloud_backup.output_file_prefix%
             - %dizda_cloud_backup.folders%            
-            - %dizda_cloud_backup.processor.dateformat%
-            - %dizda_cloud_backup.processor.options%
+            - %dizda_cloud_backup.processor%

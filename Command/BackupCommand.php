@@ -17,14 +17,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class BackupCommand extends ContainerAwareCommand
 {
-    private $mongoActive;
-    private $mysqlActive;
-    private $postgresqlActive;
-    private $dropboxActive;
-    private $googleDriveActive;
-    private $cloudappActive;
-    private $gaufretteActive;
     private $output;
+
+    private $databases = [];
+    private $storages  = [];
 
     private $processors = array('tar', 'zip', '7z');
 
@@ -49,14 +45,8 @@ class BackupCommand extends ContainerAwareCommand
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $this->mongoActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mongodb.active');
-        $this->mysqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mysql.active');
-        $this->postgresqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.postgresql.active');
-
-        $this->dropboxActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.active');
-        $this->googleDriveActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.google_drive.active');
-        $this->cloudappActive  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.active');
-        $this->gaufretteActive = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.active');
+        $this->databases = $this->getContainer()->getParameter('dizda_cloud_backup.databases');
+        $this->storages  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -73,10 +63,10 @@ class BackupCommand extends ContainerAwareCommand
             $this->getContainer()->setParameter('dizda_cloud_backup.processor.service', 'dizda.cloudbackup.processor.' . $processorArgument);
         }
         
-        $processorType = $this->getContainer()->getParameter('dizda_cloud_backup.processor.service');
-        $processor = $this->getContainer()->get($processorType);
-        
-        if ($this->mongoActive) {
+        $processorType = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['type'];
+        $processor = $this->getContainer()->get(sprintf('dizda.cloudbackup.processor.%s', $processorType));
+
+        if (isset($this->databases['mongodb'])) {
             $this->output->write('- <comment>Dumping MongoDB database... </comment>');
 
             $database = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
@@ -85,7 +75,7 @@ class BackupCommand extends ContainerAwareCommand
             $this->output->writeln('<info>OK</info>');
         }
 
-        if ($this->mysqlActive) {
+        if (isset($this->databases['mysql'])) {
             $this->output->write('- <comment>Dumping MySQL database... </comment>');
 
             $database = $this->getContainer()->get('dizda.cloudbackup.database.mysql');
@@ -94,7 +84,7 @@ class BackupCommand extends ContainerAwareCommand
             $this->output->writeln('<info>OK</info>');
         }
 
-        if ($this->postgresqlActive) {
+        if (isset($this->databases['postgresql'])) {
             $this->output->write('- <comment>Dumping PostgreSQL database... </comment> ');
 
             $database = $this->getContainer()->get('dizda.cloudbackup.database.postgresql');
@@ -113,20 +103,20 @@ class BackupCommand extends ContainerAwareCommand
         $processor->compress();
         $this->output->writeln('<info>OK</info>');
 
-        if ($this->dropboxActive) {
+        if (isset($this->storages['dropbox'])) {
             $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($processor->getArchivePath());
         }
 
-        if ($this->googleDriveActive) {
+        if (isset($this->storages['google_drive'])) {
             $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($processor->getArchivePath());
         }
 
-        if ($this->cloudappActive) {
+        if (isset($this->storages['cloudapp'])) {
             $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($processor->getArchivePath());
         }
 
-        if ($this->gaufretteActive) {
-            $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.service_name');
+        if (isset($this->storages['gaufrette'])) {
+            $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
 
             $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
             $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));

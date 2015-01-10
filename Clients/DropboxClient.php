@@ -20,16 +20,15 @@ class DropboxClient implements ClientInterface
     private $remotePath;
 
     /**
-     * @param string $user       user
-     * @param string $password   password
-     * @param string $remotePath On Dropbox storage
+     * @param array  $params user
      */
-    public function __construct($user, $password, $remotePath)
+    public function __construct($params)
     {
         $this->output     = new ConsoleOutput();
-        $this->user       = $user;
-        $this->password   = $password;
-        $this->remotePath = $remotePath;
+        $params           = $params['dropbox'];
+        $this->user       = $params['user'];
+        $this->password   = $params['password'];
+        $this->remotePath = $params['remote_path'];
     }
 
     public function upload($archive)

@@ -20,31 +20,28 @@ class PostgreSQL extends BaseDatabase
     /**
      * DB Auth
      *
-     * @param string $host
-     * @param int    $port
-     * @param string $database
-     * @param string $user
-     * @param string $password
+     * @param array  $params
      * @param string $basePath
      */
-    public function __construct($host, $port, $database, $user, $password, $basePath)
+    public function __construct($params, $basePath)
     {
         parent::__construct($basePath);
 
-        $this->database   = $database;
+        $params           = $params['postgresql'];
+        $this->database   = $params['database'];
         $this->auth       = '';
         $this->authPrefix = '';
         $this->fileName   = $this->database . '.sql';
 
-        if ($password) {
-            $this->authPrefix = sprintf('export PGPASSWORD="%s" && ', $password);
+        if ($params['db_password']) {
+            $this->authPrefix = sprintf('export PGPASSWORD="%s" && ', $params['db_password']);
         }
-        if ($user) {
-            $this->auth = sprintf('--username "%s" ', $user);
+        if ($params['db_user']) {
+            $this->auth = sprintf('--username "%s" ', $params['db_user']);
         }
-        //TODO: pg_dump options support
-        $this->auth .= sprintf('--host %s --port %d --format plain --encoding UTF8', $host, $port);
 
+        //TODO: pg_dump options support
+        $this->auth .= sprintf('--host %s --port %d --format plain --encoding UTF8', $params['db_host'], $params['db_port']);
     }
 
     /**

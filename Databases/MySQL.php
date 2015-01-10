@@ -19,20 +19,16 @@ class MySQL extends BaseDatabase
     /**
      * DB Auth
      *
-     * @param bool   $allDatabases
-     * @param string $host
-     * @param int    $port
-     * @param string $database
-     * @param string $user
-     * @param string $password
+     * @param array  $params
      * @param string $basePath
      */
-    public function __construct($allDatabases, $host, $port, $database, $user, $password, $basePath)
+    public function __construct($params, $basePath)
     {
         parent::__construct($basePath);
 
-        $this->allDatabases = $allDatabases;
-        $this->database     = $database;
+        $params = $params['mysql'];
+        $this->allDatabases = $params['all_databases'];
+        $this->database     = $params['database'];
         $this->auth         = '';
 
         if ($this->allDatabases) {
@@ -43,11 +39,11 @@ class MySQL extends BaseDatabase
         }
 
         /* if user is set, we add authentification */
-        if ($user) {
-            $this->auth = sprintf('-u%s', $user);
+        if ($params['db_user']) {
+            $this->auth = sprintf('-u%s', $params['db_user']);
 
-            if ($password) {
-                $this->auth = sprintf("--host='%s' --port='%d' --user='%s' --password='%s'", $host, $port, $user, $password);
+            if ($params['db_password']) {
+                $this->auth = sprintf("--host='%s' --port='%d' --user='%s' --password='%s'", $params['db_host'], $params['db_port'], $params['db_user'], $params['db_password']);
             }
         }
     }
