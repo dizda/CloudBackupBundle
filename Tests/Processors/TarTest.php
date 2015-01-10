@@ -2,6 +2,7 @@
 
 namespace Dizda\CloudBackupBundle\Tests\Processors;
 
+use Dizda\CloudBackupBundle\Processors\TarProcessor;
 use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 
 /**
@@ -16,35 +17,48 @@ class TarTest extends AbstractTesting
      */
     public function testGetCompressionCommand()
     {
-        $processor = self::$kernel->getContainer()->get('dizda.cloudbackup.processor.tar');
-
         // build necessary data
         $rootPath = '/';
         $outputPath = '/var/backup/';
         $dateformat = 'Y-m-d_H-i-s';
-        $processor->__construct($rootPath, $outputPath, 'database', array(), $dateformat, array());
+        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
+            'date_format' => $dateformat,
+            'options'     => array()
+        ));
         $archivePath = $outputPath . $processor->buildArchiveFilename();
 
         // compress with default params
-        $processor->__construct($rootPath, $outputPath, 'database', array(), $dateformat, array());
+        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
+            'date_format' => $dateformat,
+            'options'     => array()
+        ));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath), 
             "tar  c -C $outputPath . | gzip  > $archivePath");
 
         // compress with password - password not used in tar processor
-        $processor->__construct($rootPath, $outputPath, 'database', array(), $dateformat, array('password' => 'qwerty'));
+        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
+            'date_format' => $dateformat,
+            'options'     => array('password' => 'qwerty')
+        ));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath), 
             "tar  c -C $outputPath . | gzip  > $archivePath");
 
         // compress with compression rate = 0
-        $processor->__construct($rootPath, $outputPath, 'database', array(), $dateformat, array('compression_ratio' => 0));
+        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
+            'date_format' => $dateformat,
+            'options'     => array('compression_ratio' => 0)
+        ));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath), 
             "tar  c -C $outputPath . | gzip -0 > $archivePath");
 
         // compress with compression rate = 9
-        $processor->__construct($rootPath, $outputPath, 'database', array(), $dateformat, array('compression_ratio' => 9));
+        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
+            'date_format' => $dateformat,
+            'options'     => array('compression_ratio' => 9)
+        ));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath), 
             "tar  c -C $outputPath . | gzip -9 > $archivePath");

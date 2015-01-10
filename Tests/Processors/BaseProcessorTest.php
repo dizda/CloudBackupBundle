@@ -19,7 +19,12 @@ class BaseProcessorTest extends AbstractTesting
 
         // use tar processor, but call only BaseProcessor methods
         $processor = self::$kernel->getContainer()->get('dizda.cloudbackup.processor.tar');
-        $processor->__construct($rootPath, $outputPath, 'database', array(), $dateformat, array());
+        $processor->__construct($rootPath, $outputPath, 'database', array(),
+            array(
+                'date_format' => $dateformat,
+                'options'     => array()
+            )
+        );
         
         $this->assertEquals(
             $processor->buildArchiveFilename(), 

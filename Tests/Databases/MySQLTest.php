@@ -19,7 +19,7 @@ class MySQLTest extends AbstractTesting
     {
         // dump all databases
         $mysql = new MySQL([
-            'mongodb' => [
+            'mysql' => [
                 'all_databases' => true,
                 'db_host'     => 'localhost',
                 'db_port'     => 3306,
@@ -32,7 +32,7 @@ class MySQLTest extends AbstractTesting
 
         // dump specified database
         $mysql = new MySQL([
-            'mongodb' => [
+            'mysql' => [
                 'all_databases' => false,
                 'db_host'     => 'localhost',
                 'db_port'     => 3306,
@@ -45,7 +45,7 @@ class MySQLTest extends AbstractTesting
 
         // dump specified database
         $mysql = new MySQL([
-            'mongodb' => [
+            'mysql' => [
                 'all_databases' => false,
                 'db_host'     => 'somehost',
                 'db_port'     => 2222,
@@ -58,7 +58,7 @@ class MySQLTest extends AbstractTesting
 
         // dump specified database with no auth
         $mysql = new MySQL([
-            'mongodb' => [
+            'mysql' => [
                 'all_databases' => false,
                 'db_host'     => 'somehost',
                 'db_port'     => 2222,
@@ -71,7 +71,7 @@ class MySQLTest extends AbstractTesting
 
         // dump all databases with no auth
         $mysql = new MySQL([
-            'mongodb' => [
+            'mysql' => [
                 'all_databases' => true,
                 'db_host'     => 'somehost',
                 'db_port'     => 2222,

@@ -26,7 +26,7 @@ abstract class BaseProcessor
      * @param string $outputPath Path to folder with archived files
      * @param string $filePrefix Prefix for archive file (e.g. sitename)
      * @param array  $folders Array of folders to archive (relative to $rootPath)
-     * @param string $processor Format for date function
+     * @param array  $processor Date function format, and processor options
      */
     public function __construct($rootPath, $outputPath, $filePrefix, $folders, $processor)
     {
