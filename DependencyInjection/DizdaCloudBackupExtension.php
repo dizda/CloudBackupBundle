@@ -52,11 +52,11 @@ class DizdaCloudBackupExtension extends Extension
 
         // When we launch functional tests, there is no DB specified, so skip it if empty
         if (!$container->hasParameter('dizda_cloud_backup.databases')) {
-            $container->setParameter('dizda_cloud_backup.databases', []);
+            $container->setParameter('dizda_cloud_backup.databases', array());
         }
 
         if (!$container->hasParameter('dizda_cloud_backup.cloud_storages')) {
-            $container->setParameter('dizda_cloud_backup.cloud_storages', []);
+            $container->setParameter('dizda_cloud_backup.cloud_storages', array());
         }
 
         $databases = $container->getParameter('dizda_cloud_backup.databases');
