@@ -17,8 +17,6 @@ class MongoDBTest extends AbstractTesting
      */
     public function testGetCommand()
     {
-//        $mongodb = self::$kernel->getContainer()->get('dizda.cloudbackup.database.mongodb');
-
         // dump all dbs
         $mongodb = new MongoDB([
             'mongodb' => [
