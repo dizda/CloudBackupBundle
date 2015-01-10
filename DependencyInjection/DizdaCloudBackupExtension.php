@@ -50,6 +50,15 @@ class DizdaCloudBackupExtension extends Extension
 //            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.cloud_storages.google_drive.active'));
 //        }
 
+        // When we launch functional tests, there is no DB specified, so skip it if empty
+        if (!$container->hasParameter('dizda_cloud_backup.databases')) {
+            $container->setParameter('dizda_cloud_backup.databases', []);
+        }
+
+        if (!$container->hasParameter('dizda_cloud_backup.cloud_storages')) {
+            $container->setParameter('dizda_cloud_backup.cloud_storages', []);
+        }
+
         $databases = $container->getParameter('dizda_cloud_backup.databases');
 
         // Setting mysql values
