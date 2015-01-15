@@ -12,7 +12,6 @@ class MySQL extends BaseDatabase
     const DB_PATH = 'mysql';
 
     private $allDatabases;
-    private $database;
     private $auth = '';
     private $fileName;
 
@@ -22,24 +21,20 @@ class MySQL extends BaseDatabase
      * @param bool   $allDatabases
      * @param string $host
      * @param int    $port
-     * @param string $database
+     * @param string $databases
      * @param string $user
      * @param string $password
      * @param string $basePath
      */
-    public function __construct($allDatabases, $host, $port, $database, $user, $password, $basePath)
+    public function __construct($allDatabases, $host, $port, $databases, $user, $password, $basePath)
     {
-        parent::__construct($basePath);
+        parent::__construct($basePath, $databases);
 
         $this->allDatabases = $allDatabases;
-        $this->database     = $database;
         $this->auth         = '';
 
         if ($this->allDatabases) {
-            $this->database = '--all-databases';
-            $this->fileName = 'all-databases.sql';
-        } else {
-            $this->fileName = $this->database . '.sql';
+            $this->database = array('--all-databases');
         }
 
         /* if user is set, we add authentification */
@@ -55,21 +50,12 @@ class MySQL extends BaseDatabase
     /**
      * {@inheritdoc}
      */
-    public function dump()
-    {
-        $this->preparePath();
-        $this->execute($this->getCommand());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCommand()
     {
         return sprintf('mysqldump %s %s > %s',
             $this->auth,
             $this->database,
-            $this->dataPath . $this->fileName);
+            $this->dataPath . ltrim($this->database, '-') . $this->getExtension());
     }
 
 }
