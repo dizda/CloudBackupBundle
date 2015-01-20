@@ -18,14 +18,13 @@ class CloudAppClient implements ClientInterface
     private $password;
 
     /**
-     * @param string $user
-     * @param string $password
+     * @param array $params
      */
-    public function __construct($user, $password)
+    public function __construct($params)
     {
         $this->output     = new ConsoleOutput();
-        $this->user       = $user;
-        $this->password   = $password;
+        $this->user       = $params['user'];
+        $this->password   = $params['password'];
     }
 
 
@@ -38,5 +37,4 @@ class CloudAppClient implements ClientInterface
 
         $this->output->writeln('<info>OK</info>');
     }
-
 }

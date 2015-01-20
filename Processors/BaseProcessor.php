@@ -26,18 +26,17 @@ abstract class BaseProcessor
      * @param string $outputPath Path to folder with archived files
      * @param string $filePrefix Prefix for archive file (e.g. sitename)
      * @param array  $folders Array of folders to archive (relative to $rootPath)
-     * @param string $dateformat Format for date function
-     * @param array  $options Options from config
+     * @param array  $processor Date function format, and processor options
      */
-    public function __construct($rootPath, $outputPath, $filePrefix, $folders, $dateformat, $options)
+    public function __construct($rootPath, $outputPath, $filePrefix, $folders, $processor)
     {
-        $this->options = $options;
+        $this->options = $processor['options'];
         
         $this->rootPath   = $rootPath;
         $this->outputPath = $outputPath;
         $this->filePrefix = $filePrefix;
         $this->folders    = $folders;
-        $this->dateformat = $dateformat;
+        $this->dateformat = $processor['date_format'];
         
         $this->filesystem = new Filesystem();
     }

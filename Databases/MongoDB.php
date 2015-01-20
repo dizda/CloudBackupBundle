@@ -11,44 +11,38 @@ class MongoDB extends BaseDatabase
 {
     const DB_PATH = 'mongo';
 
-    private $allDatabases;
     private $database;
     private $auth = '';
 
     /**
      * DB Auth
      *
-     * @param bool   $allDatabases
-     * @param string $host
-     * @param int    $port
-     * @param string $database
-     * @param string $user
-     * @param string $password
+     * @param array  $params
      * @param string $basePath
      */
-    public function __construct($allDatabases, $host, $port, $database, $user, $password, $basePath)
+    public function __construct($params, $basePath)
     {
         parent::__construct($basePath);
 
-        $this->allDatabases = $allDatabases;
-        $this->database     = $database;
+        $params         = $params['mongodb'];
+        $this->database     = $params['database'];
         $this->auth         = '';
 
-        if ($this->allDatabases) {
+        if ($params['all_databases']) {
             $this->database = '';
         } else {
             $this->database = sprintf('--db %s', $this->database);
         }
 
         /* Setting hostname & port */
-        $this->auth = sprintf('-h %s --port %d', $host, $port);
+        $this->auth = sprintf('-h %s --port %d', $params['db_host'], $params['db_port']);
 
         /* if user is set, we add authentification */
-        if ($user) {
-            $this->auth = sprintf('-h %s --port %d -u %s', $host, $port, $user);
+        if ($params['db_user']) {
+            $this->auth = sprintf('-h %s --port %d -u %s', $params['db_host'], $params['db_port'], $params['db_user']);
 
-            if ($password) {
-                $this->auth = sprintf('-h %s --port %d -u %s -p %s', $host, $port, $user, $password);
+            if ($params['db_password']) {
+                $this->auth = sprintf('-h %s --port %d -u %s -p %s', $params['db_host'], $params['db_port'], $params['db_user'], $params['db_password']);
             }
         }
     }

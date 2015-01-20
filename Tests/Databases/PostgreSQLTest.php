@@ -2,6 +2,7 @@
 
 namespace Dizda\CloudBackupBundle\Tests\Databases;
 
+use Dizda\CloudBackupBundle\Databases\PostgreSQL;
 use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 
 /**
@@ -16,20 +17,45 @@ class PostgreSQLTest extends AbstractTesting
      */
     public function testGetCommand()
     {
-        $postgresql = self::$kernel->getContainer()->get('dizda.cloudbackup.database.postgresql');
-
         // dump specified database
-        $postgresql->__construct('localhost', 5678, 'dizbdd', 'admin', 'test', '/var/backup/');
+        $postgresql = new PostgreSQL(array(
+            'postgresql' => array(
+                'all_databases' => true,
+                'db_host'     => 'localhost',
+                'db_port'     => 5678,
+                'database'    => 'dizbdd',
+                'db_user'     => 'admin',
+                'db_password' => 'test'
+            )
+        ), '/var/backup/');
         $this->assertEquals($postgresql->getCommand(),
             'export PGPASSWORD="test" && pg_dump --username "admin" --host localhost --port 5678 --format plain --encoding UTF8 "dizbdd" > "/var/backup/postgresql/dizbdd.sql"');
 
         // dump specified database
-        $postgresql->__construct('somehost', 2222, 'somebdd', 'postgres', 'somepwd', '/var/backup/');
+        $postgresql = new PostgreSQL(array(
+            'postgresql' => array(
+                'all_databases' => true,
+                'db_host'     => 'somehost',
+                'db_port'     => 2222,
+                'database'    => 'somebdd',
+                'db_user'     => 'postgres',
+                'db_password' => 'somepwd'
+            )
+        ), '/var/backup/');
         $this->assertEquals($postgresql->getCommand(),
             'export PGPASSWORD="somepwd" && pg_dump --username "postgres" --host somehost --port 2222 --format plain --encoding UTF8 "somebdd" > "/var/backup/postgresql/somebdd.sql"');
 
         // dump specified database with no auth
-        $postgresql->__construct('somehost', 2222, 'somebdd', null, null, '/var/backup/');
+        $postgresql = new PostgreSQL(array(
+            'postgresql' => array(
+                'all_databases' => false,
+                'db_host'     => 'somehost',
+                'db_port'     => 2222,
+                'database'    => 'somebdd',
+                'db_user'     => null,
+                'db_password' => null
+            )
+        ), '/var/backup/');
         $this->assertEquals($postgresql->getCommand(),
             'pg_dump --host somehost --port 2222 --format plain --encoding UTF8 "somebdd" > "/var/backup/postgresql/somebdd.sql"');
 
