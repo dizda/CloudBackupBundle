@@ -31,8 +31,9 @@
     },
 
     "suggest": {
-        "matthiasplappert/cloudapp-api": "dev-master",
-        "happyr/google-site-authenticator-bundle": "To enable upload dumps on google drive."
+        "matthiasplappert/cloudapp-api": "To support upload to CloudApp",
+        "happyr/google-site-authenticator-bundle": "To enable upload dumps on google drive.",
+        "hakre/dropbox-uploader": "To support upload to Dropbox"
     },
 
     "autoload": {

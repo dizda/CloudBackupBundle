@@ -49,6 +49,11 @@ class DizdaCloudBackupExtension extends Extension
 //        else {
 //            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.cloud_storages.google_drive.active'));
 //        }
+        if (isset($config['cloud_storages']['dropbox'])) {
+            if (!class_exists('DropboxUploader')) {
+                throw new \LogicException('You need to add "hakre/dropbox-uploader" to your composer.json');
+            }
+        }
 
         // When we launch functional tests, there is no DB specified, so skip it if empty
         if (!$container->hasParameter('dizda_cloud_backup.databases')) {
