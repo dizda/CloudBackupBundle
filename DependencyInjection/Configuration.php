@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
         ->children()
             ->scalarNode('output_file_prefix')->defaultValue(gethostname())->end()
+            ->scalarNode('timeout')->defaultValue(300)->end()
             ->arrayNode('processor')
                 ->addDefaultsIfNotSet()
                 ->children()
