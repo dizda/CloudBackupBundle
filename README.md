@@ -74,7 +74,8 @@ Here is the default configuration for the bundle:
 dizda_cloud_backup:
     # By default backup files will have your servers hostname as prefix
     # such as: hostname_2014-01-01_21-08-39.tar
-    output_file_prefix: hostname 
+    output_file_prefix: hostname
+    timeout: 300
     processor:
         type: tar # Required: tar|zip|7z
         options:

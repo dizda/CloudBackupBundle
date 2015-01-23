@@ -16,6 +16,7 @@ abstract class BaseDatabase
 
     protected $dataPath;
     protected $filesystem;
+    protected $timeout;
 
     /**
      * Get SF2 Filesystem
@@ -26,6 +27,7 @@ abstract class BaseDatabase
     {
         $this->dataPath = $basePath . static::DB_PATH . '/';
         $this->filesystem = new Filesystem();
+        $this->timeout = 300;
     }
 
     /**
@@ -37,7 +39,7 @@ abstract class BaseDatabase
      */
     protected function execute($command)
     {
-        $process = new Process($command);
+        $process = new Process($command, null, null, null, $this->timeout);
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -51,6 +53,17 @@ abstract class BaseDatabase
     protected function preparePath()
     {
         $this->filesystem->mkdir($this->dataPath);
+    }
+
+    /**
+     * @param int $timeout
+     * @return $this
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+
+        return $this;
     }
 
     /**
