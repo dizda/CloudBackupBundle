@@ -63,8 +63,11 @@ class BackupCommand extends ContainerAwareCommand
         $this->gaufretteActive = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.active');
 
         $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.enable');
-        $this->split_size = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.split_size');
-        $this->split_storages = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.storages');
+        if($this->split)
+        {
+            $this->split_size = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.split_size');
+            $this->split_storages = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.storages');
+        }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
