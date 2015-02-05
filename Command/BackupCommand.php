@@ -27,8 +27,8 @@ class BackupCommand extends ContainerAwareCommand
     private $gaufretteActive;
     private $output;
     private $split;
-    private $split_size;
-    private $split_storages;
+    private $splitSize;
+    private $splitStorages;
 
     private $processors = array('tar', 'zip', '7z');
     private $clients = array('Dropbox', 'CloudApp', 'GoogleDrive', 'Gaufrette');
@@ -63,10 +63,11 @@ class BackupCommand extends ContainerAwareCommand
         $this->gaufretteActive = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.active');
 
         $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.enable');
+        $this->splitStorages = array();
         if($this->split)
         {
-            $this->split_size = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.split_size');
-            $this->split_storages = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.storages');
+            $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.split_size');
+            $this->splitStorages = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.storages');
         }
     }
 
@@ -130,14 +131,14 @@ class BackupCommand extends ContainerAwareCommand
         {
             $this->checkSplitStorages();
             $this->output->write('- <comment>Splitting archive... </comment> ');
-            $split = new ZipSplitSplitter($processor->getArchivePath(), $this->split_size);
+            $split = new ZipSplitSplitter($processor->getArchivePath(), $this->splitSize);
             $split->executeSplit();
             $splitFiles = $split->getSplitFiles();
             $this->output->writeln('<info>OK</info>');
         }
 
         if ($this->dropboxActive) {
-            if(in_array('Dropbox', $this->split_storages)){
+            if(in_array('Dropbox', $this->splitStorages)){
                 $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($splitFiles);
             }
             else{
@@ -146,7 +147,7 @@ class BackupCommand extends ContainerAwareCommand
         }
 
         if ($this->googleDriveActive) {
-            if(in_array('GoogleDrive', $this->split_storages)){
+            if(in_array('GoogleDrive', $this->splitStorages)){
                 $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($splitFiles);
             }
             else{
@@ -155,7 +156,7 @@ class BackupCommand extends ContainerAwareCommand
         }
 
         if ($this->cloudappActive) {
-            if(in_array('CloudApp', $this->split_storages)){
+            if(in_array('CloudApp', $this->splitStorages)){
                 $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($splitFiles);
             }
             else{
@@ -168,7 +169,7 @@ class BackupCommand extends ContainerAwareCommand
 
             $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
             $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
-            if(in_array('Gaufrette', $this->split_storages)){
+            if(in_array('Gaufrette', $this->splitStorages)){
                 $gaufrette->upload($splitFiles);
             }
             else{
@@ -182,7 +183,7 @@ class BackupCommand extends ContainerAwareCommand
 
     private function checkSplitStorages()
     {
-        foreach($this->split_storages as $storage)
+        foreach($this->splitStorages as $storage)
         {
             if(!in_array($storage,$this->clients))
             {
