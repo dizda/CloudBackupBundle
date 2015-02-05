@@ -22,9 +22,12 @@ class BackupCommand extends ContainerAwareCommand
     private $split;
     private $splitSize;
     private $splitStorages;
+<<<<<<< HEAD
 
     private $databases = [];
     private $storages  = [];
+=======
+>>>>>>> Fixed variables to be camel case
 
     private $processors = array('tar', 'zip', '7z');
     private $clients = array('Dropbox', 'CloudApp', 'GoogleDrive', 'Gaufrette');
@@ -63,8 +66,12 @@ class BackupCommand extends ContainerAwareCommand
         $this->gaufretteActive = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.active');
 
         $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.enable');
-        $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.split_size');
-        $this->splitStorages = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.storages');
+        $this->splitStorages = array();
+        if($this->split)
+        {
+            $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.split_size');
+            $this->splitStorages = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.storages');
+        }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -128,7 +135,11 @@ class BackupCommand extends ContainerAwareCommand
             $this->checkSplitStorages();
             $this->output->write('- <comment>Splitting archive... </comment> ');
             $split = new ZipSplitSplitter($processor->getArchivePath(), $this->splitSize);
+<<<<<<< HEAD
             $split->split();
+=======
+            $split->executeSplit();
+>>>>>>> Fixed variables to be camel case
             $splitFiles = $split->getSplitFiles();
             $this->output->writeln('<info>OK</info>');
         }
@@ -165,7 +176,7 @@ class BackupCommand extends ContainerAwareCommand
 
             $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
             $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
-            if(in_array('Gaufrette', $this->split_storages)){
+            if(in_array('Gaufrette', $this->splitStorages)){
                 $gaufrette->upload($splitFiles);
             }
             else{
