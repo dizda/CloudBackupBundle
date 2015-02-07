@@ -49,21 +49,21 @@ class BackupCommand extends ContainerAwareCommand
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-
         $this->databases = $this->getContainer()->getParameter('dizda_cloud_backup.databases');
         $this->storages  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages');
 
-        $this->mongoActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mongodb.active');
-        $this->mysqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.mysql.active');
-        $this->postgresqlActive = $this->getContainer()->getParameter('dizda_cloud_backup.databases.postgresql.active');
+        $this->mongoActive = $this->getContainer()->hasParameter('dizda_cloud_backup.databases.mongodb.active') ? $this->getContainer()->getParameter('dizda_cloud_backup.databases.mongodb.active') : false;
+        $this->mysqlActive = $this->getContainer()->hasParameter('dizda_cloud_backup.databases.mysql.active') ? $this->getContainer()->getParameter('dizda_cloud_backup.databases.mysql.active') : false;
+        $this->postgresqlActive = $this->getContainer()->hasParameter('dizda_cloud_backup.databases.postgresql.active') ? $this->getContainer()->getParameter('dizda_cloud_backup.databases.postgresql.active') : false;
 
-        $this->dropboxActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.active');
-        $this->googleDriveActive   = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.google_drive.active');
-        $this->cloudappActive  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.active');
-        $this->gaufretteActive = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.active');
+        $this->dropboxActive   = $this->getContainer()->hasParameter('dizda_cloud_backup.cloud_storages.dropbox.active') ? $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.dropbox.active') : false;
+        $this->googleDriveActive   = $this->getContainer()->hasParameter('dizda_cloud_backup.cloud_storages.google_drive.active') ? $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.google_drive.active') : false;
+        $this->cloudappActive   = $this->getContainer()->hasParameter('dizda_cloud_backup.cloud_storages.cloudapp.active') ? $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.cloudapp.active') : false;
+        $this->gaufretteActive   = $this->getContainer()->hasParameter('dizda_cloud_backup.cloud_storages.gaufrette.active') ? $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages.gaufrette.active') : false;
 
-        $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.enable');
-        $this->splitStorages = array();
+        $this->split   = $this->getContainer()->hasParameter('dizda_cloud_backup.processor.options.split.enable') ? $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.enable') : false;
+        $this->splitSize   = $this->getContainer()->hasParameter('dizda_cloud_backup.processor.options.split.split_size') ? $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.split_size') : false;
+        $this->splitStorages   = $this->getContainer()->hasParameter('dizda_cloud_backup.processor.options.split.storages') ? $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.storages') : array();
         if($this->split)
         {
             $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor.options.split.split_size');
