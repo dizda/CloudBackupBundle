@@ -22,12 +22,9 @@ class BackupCommand extends ContainerAwareCommand
     private $split;
     private $splitSize;
     private $splitStorages;
-<<<<<<< HEAD
-
     private $databases = [];
     private $storages  = [];
-=======
->>>>>>> Fixed variables to be camel case
+
 
     private $processors = array('tar', 'zip', '7z');
     private $clients = array('Dropbox', 'CloudApp', 'GoogleDrive', 'Gaufrette');
@@ -135,11 +132,7 @@ class BackupCommand extends ContainerAwareCommand
             $this->checkSplitStorages();
             $this->output->write('- <comment>Splitting archive... </comment> ');
             $split = new ZipSplitSplitter($processor->getArchivePath(), $this->splitSize);
-<<<<<<< HEAD
-            $split->split();
-=======
             $split->executeSplit();
->>>>>>> Fixed variables to be camel case
             $splitFiles = $split->getSplitFiles();
             $this->output->writeln('<info>OK</info>');
         }
