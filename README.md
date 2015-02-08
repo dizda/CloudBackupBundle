@@ -35,6 +35,10 @@ Compressors supported :
 * Zip - fast and medium effective, support password
 * 7zip - very slow and very effective, support password
 
+Splitters supported:
+
+* ZipSplit - split a zipfile into smaller zipfiles
+
 
 Installation (>=Symfony 2.1)
 ------------
@@ -81,6 +85,10 @@ dizda_cloud_backup:
         options:
             compression_ratio: 6
             password: qwerty
+            split:
+                enable: true # Default true
+                split_size: 1000 # Make each zip files no larger than "split_size" in bytes
+                storages: [ Dropbox, CloudApp, GoogleDrive, Gaufrette ] # Which cloud storages will upload split files
     folders: [ web/uploads , other/folder ]
     cloud_storages:
         # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
