@@ -51,11 +51,6 @@ class BackupCommand extends ContainerAwareCommand
     {
         $this->databases = $this->getContainer()->getParameter('dizda_cloud_backup.databases');
         $this->storages  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages');
-
-        $processor = $this->getContainer()->getParameter('dizda_cloud_backup.processor');
-        $this->split = isset($processor['options']['split']['enable']) ? $processor['options']['split']['enable'] : false ;
-        $this->splitSize = isset($processor['options']['split']['enable']) ? $processor['options']['split']['split_size'] : false ;
-        $this->splitStorages = isset($processor['options']['split']['enable']) ? $processor['options']['split']['storages'] : array() ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -114,8 +109,12 @@ class BackupCommand extends ContainerAwareCommand
 
         $wholeFile = $processor->getArchivePath();
         $splitFiles = array();
+        $this->splitStorages = array();
+        $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['enable'];
         if($this->split)
         {
+            $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['split_size'];
+            $this->splitStorages = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['storages'];
             $this->checkSplitStorages();
             $this->output->write('- <comment>Splitting archive... </comment> ');
             $split = new ZipSplitSplitter($processor->getArchivePath(), $this->splitSize);
