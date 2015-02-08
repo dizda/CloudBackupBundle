@@ -76,6 +76,11 @@ dizda_cloud_backup:
     # such as: hostname_2014-01-01_21-08-39.tar
     output_file_prefix: hostname
     timeout: 300
+    error_notification: 
+        from: dizda@backupbundle.com
+        to: your@email.com
+        subject: Backup error
+        body: There was a problem during backup process
     processor:
         type: tar # Required: tar|zip|7z
         options:
@@ -202,6 +207,7 @@ $ php app/console dizda:backup:start zip
 
 In addition, using -F or --folder option the folders also will be added to the backup.
 
+If some problems occurs during the backup process and error_notification.to parameter is set the bundle will send an email to that address.
 
 Which archiver do I use?
 ------------------------
