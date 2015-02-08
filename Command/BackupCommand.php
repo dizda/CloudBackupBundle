@@ -55,116 +55,136 @@ class BackupCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
+        try{
+            $this->output = $output;
 
-        if ($input->getArgument('processor')) {
-            $processorArgument = $input->getArgument('processor');
-            if (!in_array($processorArgument, $this->processors)) {
+            if ($input->getArgument('processor')) {
+                $processorArgument = $input->getArgument('processor');
+                if (!in_array($processorArgument, $this->processors)) {
                 $this->output->writeln("<error>Incorrect processor $processorArgument</error>");
-                $this->output->writeln("<comment>Need one of ". implode(', ', $this->processors) ."</comment>");
-                return;
+                    $this->output->writeln("<comment>Need one of ". implode(', ', $this->processors) ."</comment>");
+                    return;
+                }
+                $this->getContainer()->setParameter('dizda_cloud_backup.processor.service', 'dizda.cloudbackup.processor.' . $processorArgument);
             }
-            $this->getContainer()->setParameter('dizda_cloud_backup.processor.service', 'dizda.cloudbackup.processor.' . $processorArgument);
-        }
 
-        $processorType = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['type'];
-        $processor = $this->getContainer()->get(sprintf('dizda.cloudbackup.processor.%s', $processorType));
+            $processorType = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['type'];
+            $processor = $this->getContainer()->get(sprintf('dizda.cloudbackup.processor.%s', $processorType));
 
-        if (isset($this->databases['mongodb'])) {
-            $this->output->write('- <comment>Dumping MongoDB database... </comment>');
+            if (isset($this->databases['mongodb'])) {
+                $this->output->write('- <comment>Dumping MongoDB database... </comment>');
 
-            $database = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
-            $database->dump();
+                $database = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
+                $database->dump();
 
-            $this->output->writeln('<info>OK</info>');
-        }
-
-        if (isset($this->databases['mysql'])) {
-            $this->output->write('- <comment>Dumping MySQL database... </comment>');
-
-            $database = $this->getContainer()->get('dizda.cloudbackup.database.mysql');
-            $database->dump();
-
-            $this->output->writeln('<info>OK</info>');
-        }
-
-        if (isset($this->databases['postgresql'])) {
-            $this->output->write('- <comment>Dumping PostgreSQL database... </comment> ');
-
-            $database = $this->getContainer()->get('dizda.cloudbackup.database.postgresql');
-            $database->dump();
-
-            $this->output->writeln('<info>OK</info>');
-        }
-
-        if ($input->getOption('folders')){
-            $this->output->write('- <comment>Copying folders... </comment> ');
-            $processor->copyFolders();
-            $this->output->writeln('<info>OK</info>');
-        }
-
-        $this->output->write('- <comment>Compressing archive... </comment> ');
-        $processor->compress();
-        $this->output->writeln('<info>OK</info>');
-
-        $wholeFile = $processor->getArchivePath();
-        $splitFiles = array();
-        $this->splitStorages = array();
-        $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['enable'];
-        if($this->split)
-        {
-            $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['split_size'];
-            $this->splitStorages = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['storages'];
-            $this->checkSplitStorages();
-            $this->output->write('- <comment>Splitting archive... </comment> ');
-            $split = new ZipSplitSplitter($processor->getArchivePath(), $this->splitSize);
-            $split->executeSplit();
-            $splitFiles = $split->getSplitFiles();
-            $this->output->writeln('<info>OK</info>');
-        }
-
-        if (isset($this->storages['dropbox'])) {
-            if(in_array('dropbox', $this->splitStorages)){
-                $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($splitFiles);
+                $this->output->writeln('<info>OK</info>');
             }
-            else{
-                $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($wholeFile);
+
+            if (isset($this->databases['mysql'])) {
+                $this->output->write('- <comment>Dumping MySQL database... </comment>');
+
+                $database = $this->getContainer()->get('dizda.cloudbackup.database.mysql');
+                $database->dump();
+
+                $this->output->writeln('<info>OK</info>');
+            }
+
+            if (isset($this->databases['postgresql'])) {
+                $this->output->write('- <comment>Dumping PostgreSQL database... </comment> ');
+
+                $database = $this->getContainer()->get('dizda.cloudbackup.database.postgresql');
+                $database->dump();
+
+                $this->output->writeln('<info>OK</info>');
+            }
+
+            if ($input->getOption('folders')){
+                $this->output->write('- <comment>Copying folders... </comment> ');
+                $processor->copyFolders();
+                $this->output->writeln('<info>OK</info>');
+            }
+
+            $this->output->write('- <comment>Compressing archive... </comment> ');
+            $processor->compress();
+            $this->output->writeln('<info>OK</info>');        
+
+            $wholeFile = $processor->getArchivePath();
+            $splitFiles = array();
+            $this->splitStorages = array();
+            $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['enable'];
+            if($this->split)
+            {
+                $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['split_size'];
+                $this->splitStorages = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['storages'];
+                $this->checkSplitStorages();
+                $this->output->write('- <comment>Splitting archive... </comment> ');
+                $split = new ZipSplitSplitter($processor->getArchivePath(), $this->splitSize);
+                $split->executeSplit();
+                $splitFiles = $split->getSplitFiles();
+                $this->output->writeln('<info>OK</info>');
+            }
+
+            if (isset($this->storages['dropbox'])) {
+                if(in_array('dropbox', $this->splitStorages)){
+                    $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($splitFiles);
+                }
+                else{
+                    $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($wholeFile);
+                }
+            }
+
+            if (isset($this->storages['google_drive'])) {
+                if(in_array('google_drive', $this->splitStorages)){
+                    $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($splitFiles);
+                }
+                else{
+                    $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($wholeFile);
+                }
+            }
+
+            if (isset($this->storages['cloudapp'])) {
+                if(in_array('cloudapp', $this->splitStorages)){
+                    $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($splitFiles);
+                }
+                else{
+                    $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($wholeFile);
+                }
+            }
+
+            if (isset($this->storages['gaufrette'])) {
+                $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
+
+                $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
+                $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
+                if(in_array('gaufrette', $this->splitStorages)){
+                    $gaufrette->upload($splitFiles);
+                }
+                else{
+                    $gaufrette->upload($wholeFile);
+                }
+            }
+
+            $processor->cleanUp();
+            $this->output->writeln('- <comment>Temporary files have been cleared</comment>.');
+        }catch(\Exception $e){       
+            $this->output->writeln("");
+            $this->output->writeln("<error>[Exception]</error>");
+            $this->output->writeln("<error>".$e->getMessage()."( code: ".$e->getCode()."; file: ".$e->getFile()."; line: ".$e->getLine().")</error>");
+            
+            if($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')){
+                $container = $this->getContainer();
+                $mailer = $container->get('mailer');
+
+                $message = $mailer->createMessage()
+                      ->setFrom($this->getContainer()->getParameter('dizda_cloud_backup.error_notification.from'))
+                      ->setTo($this->getContainer()->getParameter('dizda_cloud_backup.error_notification.to'))
+                      ->setSubject($this->getContainer()->getParameter('dizda_cloud_backup.error_notification.subject'))
+                      ->setBody($this->getContainer()->getParameter('dizda_cloud_backup.error_notification.body'))
+                ;
+                
+                $mailer->send($message);
             }
         }
-
-        if (isset($this->storages['google_drive'])) {
-            if(in_array('google_drive', $this->splitStorages)){
-                $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($splitFiles);
-            }
-            else{
-                $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($wholeFile);
-            }
-        }
-
-        if (isset($this->storages['cloudapp'])) {
-            if(in_array('cloudapp', $this->splitStorages)){
-                $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($splitFiles);
-            }
-            else{
-                $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($wholeFile);
-            }
-        }
-
-        if (isset($this->storages['gaufrette'])) {
-            $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
-
-            $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
-            $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
-            if(in_array('gaufrette', $this->splitStorages)){
-                $gaufrette->upload($splitFiles);
-            }
-            else{
-                $gaufrette->upload($wholeFile);
-            }
-        }
-
-        $processor->cleanUp();
-        $this->output->writeln('- <comment>Temporary files have been cleared</comment>.');
     }
 
     private function checkSplitStorages()
