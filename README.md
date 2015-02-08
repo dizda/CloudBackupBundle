@@ -85,8 +85,9 @@ dizda_cloud_backup:
         options:
             compression_ratio: 6
             password: qwerty
+            # Split into many files of `split_size` bytes
             split:
-                enable: true # Default true
+                enable: false # Default false
                 split_size: 1000 # Make each zip files no larger than "split_size" in bytes
                 storages: [ Dropbox, CloudApp, GoogleDrive, Gaufrette ] # Which cloud storages will upload split files
     folders: [ web/uploads , other/folder ]
