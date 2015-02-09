@@ -127,12 +127,8 @@ class BackupCommand extends ContainerAwareCommand
             $processor->cleanUp();
             $this->output->writeln('- <comment>Temporary files have been cleared</comment>.');
         }catch(\Exception $e){       
-            $this->output->writeln("");
-            $this->output->writeln("<error>[Exception]</error>");
-            $this->output->writeln("<error>".$e->getMessage()."( code: ".$e->getCode()."; file: ".$e->getFile()."; line: ".$e->getLine().")</error>");
-            
             if($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['to']!=NULL){
-                $mailer = $container = $this->getContainer()->get('mailer');
+                $mailer = $this->getContainer()->get('mailer');
 
                 $message = $mailer->createMessage()
                       ->setFrom($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['from'])
@@ -143,6 +139,7 @@ class BackupCommand extends ContainerAwareCommand
                 
                 $mailer->send($message);
             }
+            throw $e;
         }
     }
 
