@@ -79,8 +79,6 @@ dizda_cloud_backup:
     error_notification: 
         from: dizda@backupbundle.com
         to: your@email.com
-        subject: Backup error
-        body: There was a problem during backup process
     processor:
         type: tar # Required: tar|zip|7z
         options:
