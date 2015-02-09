@@ -126,18 +126,16 @@ class BackupCommand extends ContainerAwareCommand
 
             $processor->cleanUp();
             $this->output->writeln('- <comment>Temporary files have been cleared</comment>.');
-        }catch(\Exception $e){       
-            if($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['to']!=NULL){
-                $mailer = $this->getContainer()->get('mailer');
-
-                $message = $mailer->createMessage()
+        }catch(\Exception $e){  
+            foreach($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['to'] as $to){
+                $message = $this->getContainer()->get('mailer')->createMessage()
                       ->setFrom($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['from'])
-                      ->setTo($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['to'])
+                      ->setTo($to)
                       ->setSubject("DizdaBackupBundle: Backup error")
                       ->setBody($e->getMessage()."( code: ".$e->getCode()."; file: ".$e->getFile()."; line: ".$e->getLine().")")
                 ;
-                
-                $mailer->send($message);
+
+                $this->getContainer()->get('mailer')->send($message);
             }
             throw $e;
         }
