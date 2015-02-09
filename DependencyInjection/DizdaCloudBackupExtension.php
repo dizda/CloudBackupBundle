@@ -27,15 +27,7 @@ class DizdaCloudBackupExtension extends Extension
         $loader->load('services.yml');
 
         /* Config output file */
-        if(isset($config['error_notification'])){
-            $container->setParameter('dizda_cloud_backup.error_notification', true);
-            $container->setParameter('dizda_cloud_backup.error_notification.from', $config['error_notification']['from']);
-            $container->setParameter('dizda_cloud_backup.error_notification.to', $config['error_notification']['to']);
-            $container->setParameter('dizda_cloud_backup.error_notification.subject', $config['error_notification']['subject']);
-            $container->setParameter('dizda_cloud_backup.error_notification.body', $config['error_notification']['body']);
-        }else{
-            $container->setParameter('dizda_cloud_backup.error_notification', false);
-        }
+        $container->setParameter('dizda_cloud_backup.error_notification', $config['error_notification']);       
         $container->setParameter('dizda_cloud_backup.root_folder', $container->getParameter('kernel.root_dir') . '/../');
         $container->setParameter('dizda_cloud_backup.output_folder', $container->getParameter('kernel.cache_dir') . '/backup/');
 

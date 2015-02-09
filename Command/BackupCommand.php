@@ -171,15 +171,14 @@ class BackupCommand extends ContainerAwareCommand
             $this->output->writeln("<error>[Exception]</error>");
             $this->output->writeln("<error>".$e->getMessage()."( code: ".$e->getCode()."; file: ".$e->getFile()."; line: ".$e->getLine().")</error>");
             
-            if($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')){
-                $container = $this->getContainer();
-                $mailer = $container->get('mailer');
+            if($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['to']!=NULL){
+                $mailer = $container = $this->getContainer()->get('mailer');
 
                 $message = $mailer->createMessage()
-                      ->setFrom($this->getContainer()->getParameter('dizda_cloud_backup.error_notification.from'))
-                      ->setTo($this->getContainer()->getParameter('dizda_cloud_backup.error_notification.to'))
-                      ->setSubject($this->getContainer()->getParameter('dizda_cloud_backup.error_notification.subject'))
-                      ->setBody($this->getContainer()->getParameter('dizda_cloud_backup.error_notification.body'))
+                      ->setFrom($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['from'])
+                      ->setTo($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['to'])
+                      ->setSubject("DizdaBackupBundle: Backup error")
+                      ->setBody($e->getMessage()."( code: ".$e->getCode()."; file: ".$e->getFile()."; line: ".$e->getLine().")")
                 ;
                 
                 $mailer->send($message);
