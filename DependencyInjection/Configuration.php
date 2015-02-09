@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('error_notification')
                 ->children()
                     ->scalarNode('from')->defaultValue('dizda@backupbundle.com')->end()
-                    ->scalarNode('to')->defaultNull()->end()
+                    ->arrayNode('to')->prototype('scalar')->end()->end()
                 ->end()
             ->end()
             ->scalarNode('timeout')->defaultValue(300)->end()
