@@ -23,6 +23,12 @@ class Configuration implements ConfigurationInterface
         $rootNode
         ->children()
             ->scalarNode('output_file_prefix')->defaultValue(gethostname())->end()
+            ->arrayNode('error_notification')
+                ->children()
+                    ->scalarNode('from')->defaultValue('dizda@backupbundle.com')->end()
+                    ->arrayNode('to')->prototype('scalar')->end()->end()
+                ->end()
+            ->end()
             ->scalarNode('timeout')->defaultValue(300)->end()
             ->arrayNode('processor')
                 ->addDefaultsIfNotSet()
