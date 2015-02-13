@@ -58,18 +58,18 @@ class BackupCommand extends ContainerAwareCommand
         try{
             $this->output = $output;
 
-            if ($input->getArgument('processor')) {
-                $processorArgument = $input->getArgument('processor');
-                if (!in_array($processorArgument, $this->processors)) {
-                $this->output->writeln("<error>Incorrect processor $processorArgument</error>");
-                    $this->output->writeln("<comment>Need one of ". implode(', ', $this->processors) ."</comment>");
-                    return;
-                }
-                $this->getContainer()->setParameter('dizda_cloud_backup.processor.service', 'dizda.cloudbackup.processor.' . $processorArgument);
-            }
+//            if ($input->getArgument('processor')) {
+//                $processorArgument = $input->getArgument('processor');
+//                if (!in_array($processorArgument, $this->processors)) {
+//                $this->output->writeln("<error>Incorrect processor $processorArgument</error>");
+//                    $this->output->writeln("<comment>Need one of ". implode(', ', $this->processors) ."</comment>");
+//                    return;
+//                }
+//                $this->getContainer()->setParameter('dizda_cloud_backup.processor.service', 'dizda.cloudbackup.processor.' . $processorArgument);
+//            }
 
-            $processorType = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['type'];
-            $processor = $this->getContainer()->get(sprintf('dizda.cloudbackup.processor.%s', $processorType));
+//            $processorType = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['type'];
+//            $processor = $this->getContainer()->get(sprintf('dizda.cloudbackup.processor.%s', $processorType));
 
             /*if (isset($this->databases['mongodb'])) {
                 $this->output->write('- <comment>Dumping MongoDB database... </comment>');

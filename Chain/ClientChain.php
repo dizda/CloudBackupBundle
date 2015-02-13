@@ -36,11 +36,13 @@ class ClientChain
 
     /**
      * Upload to all active clients
+     *
+     * @param string $filePath
      */
-    public function upload()
+    public function upload($filePath)
     {
         foreach ($this->clients as $client) {
-            $client->upload();
+            $client->upload($filePath);
         }
     }
 }

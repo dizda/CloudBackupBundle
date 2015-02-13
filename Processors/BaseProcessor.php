@@ -2,10 +2,11 @@
 
 namespace Dizda\CloudBackupBundle\Processors;
 
+use Dizda\CloudBackupBundle\Processors\ProcessorInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
-abstract class BaseProcessor
+abstract class BaseProcessor implements ProcessorInterface
 {
     protected $filePrefix;
     protected $folders;
@@ -113,19 +114,4 @@ abstract class BaseProcessor
     {
         return $this->archivePath;
     }
-    
-    /**
-     * Get compression command
-     * @param string $archivePath 
-     * @param string $basePath
-     * @return string
-     */
-    abstract public function getCompressionCommand($archivePath, $basePath);
-
-    /**
-     * Get file extention (with leading dot)
-     * @return string
-     */
-    abstract public function getExtension();
-
 }
