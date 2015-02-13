@@ -30,6 +30,7 @@ class DizdaCloudBackupExtension extends Extension
         $container->setParameter('dizda_cloud_backup.root_folder', $container->getParameter('kernel.root_dir') . '/../');
         $container->setParameter('dizda_cloud_backup.output_folder', $container->getParameter('kernel.cache_dir') . '/backup/');
 
+        /* Assign all config vars */
         foreach ($config as $k => $v) {
             $container->setParameter('dizda_cloud_backup.' . $k, $v);
         }
@@ -46,9 +47,8 @@ class DizdaCloudBackupExtension extends Extension
                 ->replaceArgument(1, $config['cloud_storages']['google_drive']['token_name'])
                 ->replaceArgument(2, $config['cloud_storages']['google_drive']['remote_path']);
         }
-//        else {
-//            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.cloud_storages.google_drive.active'));
-//        }
+
+        /* Verify that we have our Dropbox library */
         if (isset($config['cloud_storages']['dropbox'])) {
             if (!class_exists('DropboxUploader')) {
                 throw new \LogicException('You need to add "hakre/dropbox-uploader" to your composer.json');
@@ -64,6 +64,30 @@ class DizdaCloudBackupExtension extends Extension
             $container->setParameter('dizda_cloud_backup.cloud_storages', array());
         }
 
+
+        $this->setDatabases($config, $container);
+        $this->setProcessor($container);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function setProcessor(ContainerBuilder $container)
+    {
+        $backupManager = $container->getDefinition('dizda.cloudbackup.manager.backup');
+        $backupManager->addMethodCall('setProcessor', [
+            new Reference(
+                sprintf('dizda.cloudbackup.processor.%s', $container->getParameter('dizda_cloud_backup.processor')['type'])
+            )
+        ]);
+    }
+
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     */
+    private function setDatabases($config, ContainerBuilder $container)
+    {
         $databases = $container->getParameter('dizda_cloud_backup.databases');
 
         // Setting mysql values
@@ -117,17 +141,5 @@ class DizdaCloudBackupExtension extends Extension
         }
 
         $container->setParameter('dizda_cloud_backup.databases', $databases);
-
-        $this->setProcessor($container);
-    }
-
-    private function setProcessor(ContainerBuilder $container)
-    {
-        $backupManager = $container->getDefinition('dizda.cloudbackup.manager.backup');
-        $backupManager->addMethodCall('setProcessor', [
-            new Reference(
-                sprintf('dizda.cloudbackup.processor.%s', $container->getParameter('dizda_cloud_backup.processor')['type'])
-            )
-        ]);
     }
 }
