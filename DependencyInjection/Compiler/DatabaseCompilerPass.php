@@ -6,9 +6,17 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Class DatabaseCompilerPass
+ *
+ * @author Jonathan Dizdarevic <dizda@dizda.fr>
+ */
 class DatabaseCompilerPass implements CompilerPassInterface
 {
 
+    /**
+     * @param ContainerBuilder $container
+     */
     public function process(ContainerBuilder $container)
     {
         $databases = $container->findTaggedServiceIds('dizda.cloudbackup.database');

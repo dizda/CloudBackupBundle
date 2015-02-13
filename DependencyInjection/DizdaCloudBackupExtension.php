@@ -117,6 +117,5 @@ class DizdaCloudBackupExtension extends Extension
         }
 
         $container->setParameter('dizda_cloud_backup.databases', $databases);
-
     }
 }

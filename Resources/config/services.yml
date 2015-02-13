@@ -2,23 +2,34 @@ services:
     dizda.cloudbackup.chain.database:
         class: Dizda\CloudBackupBundle\Chain\DatabaseChain
 
+    dizda.cloudbackup.chain.client:
+        class: Dizda\CloudBackupBundle\Chain\ClientChain
+
     dizda.cloudbackup.client.cloudapp:
         class: Dizda\CloudBackupBundle\Clients\CloudAppClient
         arguments:
             - %dizda_cloud_backup.cloud_storages%
+        tags:
+            -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.dropbox:
         class: Dizda\CloudBackupBundle\Clients\DropboxClient
         arguments:
             - %dizda_cloud_backup.cloud_storages%
+        tags:
+            -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.google_drive:
         class: Dizda\CloudBackupBundle\Clients\GoogleDriveClient
         public: false
         arguments: [~, ~, ~]
+        tags:
+            -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.gaufrette:
         class: Dizda\CloudBackupBundle\Clients\GaufretteClient
+        tags:
+            -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.database.mongodb:
         class: Dizda\CloudBackupBundle\Databases\MongoDB
@@ -83,3 +94,4 @@ services:
         arguments:
             - @logger
             - @dizda.cloudbackup.chain.database
+            - @dizda.cloudbackup.chain.client

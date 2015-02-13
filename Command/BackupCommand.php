@@ -125,32 +125,32 @@ class BackupCommand extends ContainerAwareCommand
                 $this->output->writeln('<info>OK</info>');
             }
 
-            if (isset($this->storages['dropbox'])) {
-                if(in_array('dropbox', $this->splitStorages)){
-                    $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($splitFiles);
-                }
-                else{
-                    $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($wholeFile);
-                }
-            }
-
-            if (isset($this->storages['google_drive'])) {
-                if(in_array('google_drive', $this->splitStorages)){
-                    $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($splitFiles);
-                }
-                else{
-                    $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($wholeFile);
-                }
-            }
-
-            if (isset($this->storages['cloudapp'])) {
-                if(in_array('cloudapp', $this->splitStorages)){
-                    $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($splitFiles);
-                }
-                else{
-                    $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($wholeFile);
-                }
-            }
+//            if (isset($this->storages['dropbox'])) {
+//                if(in_array('dropbox', $this->splitStorages)){
+//                    $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($splitFiles);
+//                }
+//                else{
+//                    $this->getContainer()->get('dizda.cloudbackup.client.dropbox')->upload($wholeFile);
+//                }
+//            }
+//
+//            if (isset($this->storages['google_drive'])) {
+//                if(in_array('google_drive', $this->splitStorages)){
+//                    $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($splitFiles);
+//                }
+//                else{
+//                    $this->getContainer()->get('dizda.cloudbackup.client.google_drive')->upload($wholeFile);
+//                }
+//            }
+//
+//            if (isset($this->storages['cloudapp'])) {
+//                if(in_array('cloudapp', $this->splitStorages)){
+//                    $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($splitFiles);
+//                }
+//                else{
+//                    $this->getContainer()->get('dizda.cloudbackup.client.cloudapp')->upload($wholeFile);
+//                }
+//            }
 
             if (isset($this->storages['gaufrette'])) {
                 $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
