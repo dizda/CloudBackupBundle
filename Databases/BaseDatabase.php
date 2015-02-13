@@ -10,7 +10,7 @@ use Symfony\Component\Process\Process;
  * @package Dizda\CloudBackupBundle\Databases
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
-abstract class BaseDatabase
+abstract class BaseDatabase implements DatabaseInterface
 {
     const DB_PATH = '';
 
@@ -65,19 +65,4 @@ abstract class BaseDatabase
 
         return $this;
     }
-
-    /**
-     * Migration procedure for each databases type
-     *
-     * @return mixed
-     */
-    abstract public function dump();
-
-    /**
-     * Get command to execute dump
-     *
-     * @return string
-     */
-    abstract public function getCommand();
-
 }

@@ -1,4 +1,7 @@
 services:
+    dizda.cloudbackup.chain.database:
+        class: Dizda\CloudBackupBundle\Chain\DatabaseChain
+
     dizda.cloudbackup.client.cloudapp:
         class: Dizda\CloudBackupBundle\Clients\CloudAppClient
         arguments:
@@ -24,6 +27,8 @@ services:
             - %dizda_cloud_backup.output_folder%
         calls:
             - [ setTimeout, [ %dizda_cloud_backup.timeout% ] ]
+        tags:
+            -  { name: dizda.cloudbackup.database }
 
     dizda.cloudbackup.database.mysql:
         class: Dizda\CloudBackupBundle\Databases\MySQL
@@ -32,6 +37,8 @@ services:
             - %dizda_cloud_backup.output_folder%
         calls:
             - [ setTimeout, [ %dizda_cloud_backup.timeout% ] ]
+        tags:
+            -  { name: dizda.cloudbackup.database }
 
     dizda.cloudbackup.database.postgresql:
         class: Dizda\CloudBackupBundle\Databases\PostgreSQL
@@ -40,6 +47,8 @@ services:
             - %dizda_cloud_backup.output_folder%
         calls:
             - [ setTimeout, [ %dizda_cloud_backup.timeout% ] ]
+        tags:
+            -  { name: dizda.cloudbackup.database }
 
     dizda.cloudbackup.processor.tar:
         class: Dizda\CloudBackupBundle\Processors\TarProcessor
@@ -67,3 +76,10 @@ services:
             - %dizda_cloud_backup.output_file_prefix%
             - %dizda_cloud_backup.folders%            
             - %dizda_cloud_backup.processor%
+
+    # Managers
+    dizda.cloudbackup.manager.backup:
+        class: Dizda\CloudBackupBundle\Manager\BackupManager
+        arguments:
+            - @logger
+            - @dizda.cloudbackup.chain.database

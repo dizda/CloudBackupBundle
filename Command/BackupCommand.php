@@ -71,7 +71,7 @@ class BackupCommand extends ContainerAwareCommand
             $processorType = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['type'];
             $processor = $this->getContainer()->get(sprintf('dizda.cloudbackup.processor.%s', $processorType));
 
-            if (isset($this->databases['mongodb'])) {
+            /*if (isset($this->databases['mongodb'])) {
                 $this->output->write('- <comment>Dumping MongoDB database... </comment>');
 
                 $database = $this->getContainer()->get('dizda.cloudbackup.database.mongodb');
@@ -96,7 +96,8 @@ class BackupCommand extends ContainerAwareCommand
                 $database->dump();
 
                 $this->output->writeln('<info>OK</info>');
-            }
+            }*/
+            $this->getContainer()->get('dizda.cloudbackup.manager.backup')->execute();
 
             if ($input->getOption('folders')){
                 $this->output->write('- <comment>Copying folders... </comment> ');
