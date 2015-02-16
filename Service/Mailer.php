@@ -40,8 +40,8 @@ class Mailer
         }
 
         $message = $this->mailer->createMessage()
-            ->setFrom($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['from'])
-            ->setTo($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['to'])
+            ->setFrom($this->params['from'])
+            ->setTo($this->params['to'])
             ->setSubject('DizdaBackupBundle: Backup error')
             ->setBody(
                 $exception->getMessage() . '( code: ' .

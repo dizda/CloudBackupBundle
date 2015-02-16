@@ -172,16 +172,16 @@ class BackupCommand extends ContainerAwareCommand
 //        }
     }
 
-    private function checkSplitStorages()
-    {
-        foreach($this->splitStorages as $storage)
-        {
-            if(!in_array($storage,$this->clients))
-            {
-                throw new \Exception("The storage type '$storage'' in split storages option does not exist.\nPossible options are: ".join(', ', $this->clients));
-            }
-        }
-    }
+//    private function checkSplitStorages()
+//    {
+//        foreach($this->splitStorages as $storage)
+//        {
+//            if(!in_array($storage,$this->clients))
+//            {
+//                throw new \Exception("The storage type '$storage'' in split storages option does not exist.\nPossible options are: ".join(', ', $this->clients));
+//            }
+//        }
+//    }
 
 
 }

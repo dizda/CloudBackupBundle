@@ -43,6 +43,11 @@ class BackupManager
         $this->mailer        = $mailer;
     }
 
+    /**
+     *
+     *
+     * @throws \Exception
+     */
     public function execute()
     {
         try {
