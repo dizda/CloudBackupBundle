@@ -47,16 +47,10 @@ class BackupCommand extends ContainerAwareCommand
             ->setDescription('Upload a backup of your database to cloud services (use -F option for backup folders)');
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-        $this->databases = $this->getContainer()->getParameter('dizda_cloud_backup.databases');
-        $this->storages  = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages');
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        try{
-            $this->output = $output;
+//        try{
+//            $this->output = $output;
 
 //            if ($input->getArgument('processor')) {
 //                $processorArgument = $input->getArgument('processor');
@@ -99,31 +93,33 @@ class BackupCommand extends ContainerAwareCommand
             }*/
             $this->getContainer()->get('dizda.cloudbackup.manager.backup')->execute();
 
-            if ($input->getOption('folders')){
+            //TODO: WTF is this
+            /*if ($input->getOption('folders')){
                 $this->output->write('- <comment>Copying folders... </comment> ');
                 $processor->copyFolders();
                 $this->output->writeln('<info>OK</info>');
-            }
+            }*/
 
-            $this->output->write('- <comment>Compressing archive... </comment> ');
-            $processor->compress();
-            $this->output->writeln('<info>OK</info>');        
+//            $this->output->write('- <comment>Compressing archive... </comment> ');
+//            $processor->compress();
+//            $this->output->writeln('<info>OK</info>');
 
-            $wholeFile = $processor->getArchivePath();
-            $splitFiles = array();
-            $this->splitStorages = array();
-            $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['enable'];
-            if($this->split)
-            {
-                $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['split_size'];
-                $this->splitStorages = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['storages'];
-                $this->checkSplitStorages();
-                $this->output->write('- <comment>Splitting archive... </comment> ');
-                $split = new ZipSplitSplitter($processor->getArchivePath(), $this->splitSize);
-                $split->executeSplit();
-                $splitFiles = $split->getSplitFiles();
-                $this->output->writeln('<info>OK</info>');
-            }
+            //TODO: !!!
+//            $wholeFile = $processor->getArchivePath();
+//            $splitFiles = array();
+//            $this->splitStorages = array();
+//            $this->split = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['enable'];
+//            if($this->split)
+//            {
+//                $this->splitSize = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['split_size'];
+//                $this->splitStorages = $this->getContainer()->getParameter('dizda_cloud_backup.processor')['options']['split']['storages'];
+//                $this->checkSplitStorages();
+//                $this->output->write('- <comment>Splitting archive... </comment> ');
+//                $split = new ZipSplitSplitter($processor->getArchivePath(), $this->splitSize);
+//                $split->executeSplit();
+//                $splitFiles = $split->getSplitFiles();
+//                $this->output->writeln('<info>OK</info>');
+//            }
 
 //            if (isset($this->storages['dropbox'])) {
 //                if(in_array('dropbox', $this->splitStorages)){
@@ -152,34 +148,28 @@ class BackupCommand extends ContainerAwareCommand
 //                }
 //            }
 
-            if (isset($this->storages['gaufrette'])) {
-                $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
+            //TODO: Gaufrete
+//            if (isset($this->storages['gaufrette'])) {
+//                $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
+//
+//                $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
+//                $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
+//                if(in_array('gaufrette', $this->splitStorages)){
+//                    $gaufrette->upload($splitFiles);
+//                }
+//                else{
+//                    $gaufrette->upload($wholeFile);
+//                }
+//            }
 
-                $gaufrette = $this->getContainer()->get('dizda.cloudbackup.client.gaufrette');
-                $gaufrette->setFilesystem($this->getContainer()->get($filesystemName));
-                if(in_array('gaufrette', $this->splitStorages)){
-                    $gaufrette->upload($splitFiles);
-                }
-                else{
-                    $gaufrette->upload($wholeFile);
-                }
-            }
+//            $processor->cleanUp();
+//            $this->output->writeln('- <comment>Temporary files have been cleared</comment>.');
+//        }catch(\Exception $e){
+//            if($this->getContainer()->hasParameter('dizda_cloud_backup.error_notification')){
 
-            $processor->cleanUp();
-            $this->output->writeln('- <comment>Temporary files have been cleared</comment>.');
-        }catch(\Exception $e){  
-            if($this->getContainer()->hasParameter('dizda_cloud_backup.error_notification')){
-                $message = $this->getContainer()->get('mailer')->createMessage()
-                      ->setFrom($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['from'])
-                      ->setTo($this->getContainer()->getParameter('dizda_cloud_backup.error_notification')['to'])
-                      ->setSubject("DizdaBackupBundle: Backup error")
-                      ->setBody($e->getMessage()."( code: ".$e->getCode()."; file: ".$e->getFile()."; line: ".$e->getLine().")")
-                ;
-
-                $this->getContainer()->get('mailer')->send($message);
-            }
-            throw $e;
-        }
+//            }
+//            throw $e;
+//        }
     }
 
     private function checkSplitStorages()

@@ -95,3 +95,11 @@ services:
             - @logger
             - @dizda.cloudbackup.chain.database
             - @dizda.cloudbackup.chain.client
+            - @dizda.cloudbackup.service.mailer
+
+    # Services
+    dizda.cloudbackup.service.mailer:
+            class: Dizda\CloudBackupBundle\Service\Mailer
+            arguments:
+                - @mailer
+                - %dizda_cloud_backup.error_notification%

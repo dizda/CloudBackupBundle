@@ -5,6 +5,7 @@ namespace Dizda\CloudBackupBundle\Manager;
 use Dizda\CloudBackupBundle\Chain\ClientChain;
 use Dizda\CloudBackupBundle\Chain\DatabaseChain;
 use Dizda\CloudBackupBundle\Processors\ProcessorInterface;
+use Dizda\CloudBackupBundle\Service\Mailer;
 use Monolog\Logger;
 
 class BackupManager
@@ -24,26 +25,47 @@ class BackupManager
      */
     private $clientChain;
 
+    /**
+     * @var ProcessorInterface
+     */
     private $processor;
 
-    public function __construct(Logger $logger, DatabaseChain $databaseChain, ClientChain $clientChain)
+    /**
+     * @var Mailer
+     */
+    private $mailer;
+
+    public function __construct(Logger $logger, DatabaseChain $databaseChain, ClientChain $clientChain, Mailer $mailer)
     {
         $this->logger        = $logger;
         $this->databaseChain = $databaseChain;
         $this->clientChain   = $clientChain;
+        $this->mailer        = $mailer;
     }
 
     public function execute()
     {
-        // Dump all databases
-        $this->databaseChain->dump();
+        try {
 
-        $this->processor->compress();
+            // Dump all databases
+            $this->databaseChain->dump();
 
-        $wholeFile = $this->processor->getArchivePath();
+            $this->processor->compress();
 
-        // Transfer with all clients
-        $this->clientChain->upload($this->processor->getArchivePath());
+            $wholeFile = $this->processor->getArchivePath();
+            var_dump($wholeFile);
+
+            // Transfer with all clients
+            $this->clientChain->upload($this->processor->getArchivePath());
+
+            $this->processor->cleanUp();
+
+        } catch (\Exception $e) {
+
+            $this->mailer->sendException($e);
+
+            throw $e;
+        }
     }
 
     /**

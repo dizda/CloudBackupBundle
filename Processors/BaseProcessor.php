@@ -53,7 +53,7 @@ abstract class BaseProcessor implements ProcessorInterface
     }
 
     /**
-     * Compress to file with name like : hostname_2013-01-12_00-06-40.tar
+     * {@inheritdoc}
      */
     public function compress()
     {
@@ -66,7 +66,7 @@ abstract class BaseProcessor implements ProcessorInterface
         $this->filesystem->mkdir($this->outputPath);
         $this->execute($archive);
     }
-    
+
     /**
      * Handle process error on fails
      *
@@ -86,8 +86,7 @@ abstract class BaseProcessor implements ProcessorInterface
     }
 
     /**
-     * Remove all dirs with files
-     *
+     * {@inheritdoc}
      */
     public function cleanUp()
     {
@@ -106,9 +105,7 @@ abstract class BaseProcessor implements ProcessorInterface
     }
 
     /**
-     * Return path of the archive
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getArchivePath()
     {
