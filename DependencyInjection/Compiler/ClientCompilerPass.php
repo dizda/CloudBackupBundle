@@ -36,12 +36,16 @@ class ClientCompilerPass implements CompilerPassInterface
             // if the client is activated in the configuration file, we add it to the ClientChain
             $chainDefinition->addMethodCall('add', array(new Reference($serviceId)));
         }
-//        if (isset($container->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette'])) {
-//            $filesystemName = $container->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
-//
-//            $gaufrette = $container->get('dizda.cloudbackup.client.gaufrette');
-//            $gaufrette->setFilesystem($container->get($filesystemName));
-//        }
+
+        // If gaufrette is set, assign automatically the specified filesystem as the cloud client
+        if (isset($container->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette'])) {
+            $filesystemName = $container->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
+
+            $gaufrette = $container->getDefinition('dizda.cloudbackup.client.gaufrette');
+            $gaufrette->addMethodCall('setFilesystem', [
+                new Reference($filesystemName)
+            ]);
+        }
     }
 
 }
