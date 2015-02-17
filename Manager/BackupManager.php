@@ -55,10 +55,13 @@ class BackupManager
             // Dump all databases
             $this->databaseChain->dump();
 
+            // Backup folders if specified
+            $this->processor->copyFolders();
+
+            // Compress everything
             $this->processor->compress();
 
-            $wholeFile = $this->processor->getArchivePath();
-            var_dump($wholeFile);
+            var_dump($this->processor->getArchivePath());
 
             // Transfer with all clients
             $this->clientChain->upload($this->processor->getArchivePath());

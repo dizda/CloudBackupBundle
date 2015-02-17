@@ -48,20 +48,20 @@ class GoogleDriveClient implements ClientInterface
      */
     public function upload($archive)
     {
-        $this->output('- <comment>Uploading to Google Drive... </comment>', false);
+//        $this->output('- <comment>Uploading to Google Drive... </comment>', false);
         $service = $this->getDriveService();
-        if(is_array($archive)){
-            $this->output->writeln("");
-            foreach($archive as $file /* @var $file SplFileInfo*/){
-                $this->output->write(sprintf('----- <comment>Uploading file: %s... </comment>', $file->getFilename()));
-                $this->handleUpload($service, $file);
-                $this->output->writeln('<info>OK</info>');
-            }
-        }
-        else{
+//        if(is_array($archive)){
+//            $this->output->writeln("");
+//            foreach($archive as $file /* @var $file SplFileInfo*/){
+//                $this->output->write(sprintf('----- <comment>Uploading file: %s... </comment>', $file->getFilename()));
+//                $this->handleUpload($service, $file);
+//                $this->output->writeln('<info>OK</info>');
+//            }
+//        }
+//        else{
             $this->handleUpload($service, $archive);
             $this->output->writeln('<info>OK</info>');
-        }
+//        }
     }
 
     /**

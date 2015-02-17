@@ -27,7 +27,7 @@ class BackupCommand extends ContainerAwareCommand
 
 
     private $processors = array('tar', 'zip', '7z');
-    private $clients = array('dropbox', 'cloudapp', 'google_drive', 'gaufrette');
+//    private $clients = array('dropbox', 'cloudapp', 'google_drive', 'gaufrette');
 
     protected function configure()
     {
@@ -94,11 +94,11 @@ class BackupCommand extends ContainerAwareCommand
             $this->getContainer()->get('dizda.cloudbackup.manager.backup')->execute();
 
             //TODO: WTF is this
-            /*if ($input->getOption('folders')){
-                $this->output->write('- <comment>Copying folders... </comment> ');
-                $processor->copyFolders();
-                $this->output->writeln('<info>OK</info>');
-            }*/
+//            if ($input->getOption('folders')){
+//                $this->output->write('- <comment>Copying folders... </comment> ');
+//                $processor->copyFolders();
+//                $this->output->writeln('<info>OK</info>');
+//            }
 
 //            $this->output->write('- <comment>Compressing archive... </comment> ');
 //            $processor->compress();
@@ -148,7 +148,6 @@ class BackupCommand extends ContainerAwareCommand
 //                }
 //            }
 
-            //TODO: Gaufrete
 //            if (isset($this->storages['gaufrette'])) {
 //                $filesystemName = $this->getContainer()->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
 //

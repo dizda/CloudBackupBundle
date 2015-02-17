@@ -28,21 +28,21 @@ class GaufretteClient implements ClientInterface
 
     public function upload($archive)
     {
-        $this->output->write('- <comment>Uploading using Gaufrette... </comment>');
-        if(is_array($archive)){
-            $this->output->writeln("");
-            foreach($archive as $file /* @var $file SplFileInfo*/){
-                $this->output->write(sprintf('----- <comment>Uploading file: %s... </comment>', $file->getFilename()));
-                $fileName = explode('/', $file);
-                $this->filesystem->write(end($fileName), file_get_contents($file), true);
-                $this->output->writeln('<info>OK</info>');
-            }
-        }
-        else{
+//        $this->output->write('- <comment>Uploading using Gaufrette... </comment>');
+//        if(is_array($archive)){
+//            $this->output->writeln("");
+//            foreach($archive as $file /* @var $file SplFileInfo*/){
+//                $this->output->write(sprintf('----- <comment>Uploading file: %s... </comment>', $file->getFilename()));
+//                $fileName = explode('/', $file);
+//                $this->filesystem->write(end($fileName), file_get_contents($file), true);
+//                $this->output->writeln('<info>OK</info>');
+//            }
+//        }
+//        else{
             $fileName = explode('/', $archive);
             $this->filesystem->write(end($fileName), file_get_contents($archive), true);
-            $this->output->writeln('<info>OK</info>');
-        }
+//            $this->output->writeln('<info>OK</info>');
+//        }
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Dizda\CloudBackupBundle\Processors;
 
 use Dizda\CloudBackupBundle\Processors\ProcessorInterface;
+use Dizda\CloudBackupBundle\Splitters\ZipSplitSplitter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
@@ -48,7 +49,7 @@ abstract class BaseProcessor implements ProcessorInterface
     public function copyFolders(){
         // Copy folder for compression file
         foreach($this->folders as $folder){
-            $this->filesystem->mirror($this->rootPath.'/'.$folder, $this->outputPath.$folder);
+            $this->filesystem->mirror($this->rootPath . '/' . $folder, $this->outputPath . 'folders/' . $folder);
         }
     }
 
@@ -65,6 +66,16 @@ abstract class BaseProcessor implements ProcessorInterface
         $this->filesystem->mkdir($this->compressedArchivePath);
         $this->filesystem->mkdir($this->outputPath);
         $this->execute($archive);
+
+
+
+        // Below is split
+        var_dump('----split');
+        $split = new ZipSplitSplitter($this->archivePath, 350000);
+        $split->executeSplit();
+        $splitFiles = $split->getSplitFiles();
+        var_dump($splitFiles);
+        var_dump('----split');
     }
 
     /**

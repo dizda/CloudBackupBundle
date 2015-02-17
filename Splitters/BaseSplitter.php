@@ -32,6 +32,7 @@ abstract class BaseSplitter
         $file = new File($this->archivePath);
         $finder = new Finder();
         $finder->files()->in(dirname($this->archivePath))->notName($file->getFilename())->sortByModifiedTime();
+
         return iterator_to_array($finder);
     }
 
