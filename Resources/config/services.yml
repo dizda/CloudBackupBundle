@@ -66,30 +66,18 @@ services:
 
     dizda.cloudbackup.processor.tar:
         class: Dizda\CloudBackupBundle\Processors\TarProcessor
-        arguments: 
-            - %dizda_cloud_backup.root_folder%
-            - %dizda_cloud_backup.output_folder%
-            - %dizda_cloud_backup.output_file_prefix%
-            - %dizda_cloud_backup.folders%
-            - %dizda_cloud_backup.processor%
+        tags:
+            -  { name: dizda.cloudbackup.processor }
 
     dizda.cloudbackup.processor.zip:
         class: Dizda\CloudBackupBundle\Processors\ZipProcessor
-        arguments: 
-            - %dizda_cloud_backup.root_folder%
-            - %dizda_cloud_backup.output_folder%
-            - %dizda_cloud_backup.output_file_prefix%
-            - %dizda_cloud_backup.folders%            
-            - %dizda_cloud_backup.processor%
+        tags:
+            -  { name: dizda.cloudbackup.processor }
 
     dizda.cloudbackup.processor.7z:
         class: Dizda\CloudBackupBundle\Processors\SevenZipProcessor
-        arguments: 
-            - %dizda_cloud_backup.root_folder%
-            - %dizda_cloud_backup.output_folder%
-            - %dizda_cloud_backup.output_file_prefix%
-            - %dizda_cloud_backup.folders%            
-            - %dizda_cloud_backup.processor%
+        tags:
+            -  { name: dizda.cloudbackup.processor }
 
     # Managers
     dizda.cloudbackup.manager.backup:
@@ -98,3 +86,13 @@ services:
             - @logger
             - @dizda.cloudbackup.chain.database
             - @dizda.cloudbackup.chain.client
+            - @dizda.cloudbackup.manager.processor
+
+    dizda.cloudbackup.manager.processor:
+        class: Dizda\CloudBackupBundle\Manager\ProcessorManager
+        arguments:
+            - %dizda_cloud_backup.root_folder%
+            - %dizda_cloud_backup.output_folder%
+            - %dizda_cloud_backup.output_file_prefix%
+            - %dizda_cloud_backup.processor.date_format%
+            - %dizda_cloud_backup.folders%

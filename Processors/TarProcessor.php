@@ -2,7 +2,7 @@
 
 namespace Dizda\CloudBackupBundle\Processors;
 
-class TarProcessor extends BaseProcessor
+class TarProcessor extends BaseProcessor implements ProcessorInterface
 {
     /**
      * {@inheritdoc}

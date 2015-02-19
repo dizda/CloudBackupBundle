@@ -2,8 +2,9 @@
 
 namespace Dizda\CloudBackupBundle\Processors;
 
-class SevenZipProcessor extends BaseProcessor
+class SevenZipProcessor extends BaseProcessor implements ProcessorInterface
 {
+
     /**
      * {@inheritdoc}
      */

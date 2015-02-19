@@ -6,7 +6,6 @@ use Dizda\CloudBackupBundle\Clients\ClientChain;
 use Dizda\CloudBackupBundle\Clients\ClientInterface;
 use Dizda\CloudBackupBundle\Databases\DatabaseChain;
 use Dizda\CloudBackupBundle\Databases\DatabaseInterface;
-use Dizda\CloudBackupBundle\Processors\ProcessorInterface;
 use Monolog\Logger;
 
 class BackupManager
@@ -27,20 +26,22 @@ class BackupManager
     private $client;
 
     /**
-     * @var \Dizda\CloudBackupBundle\Processors\ProcessorInterface
+     * @var \Dizda\CloudBackupBundle\Manager\ProcessorManager
      */
     private $processor;
 
     /**
      * @param Logger $logger
-     * @param DatabaseChain $database
-     * @param ClientChain $client
+     * @param DatabaseInterface $database
+     * @param ClientInterface $client
+     * @param ProcessorManager $processor
      */
-    public function __construct(Logger $logger, DatabaseInterface $database, ClientInterface $client)
+    public function __construct(Logger $logger, DatabaseInterface $database, ClientInterface $client, ProcessorManager $processor)
     {
-        $this->logger   = $logger;
-        $this->database = $database;
-        $this->client   = $client;
+        $this->logger    = $logger;
+        $this->database  = $database;
+        $this->client    = $client;
+        $this->processor = $processor;
     }
 
     /**
@@ -73,15 +74,5 @@ class BackupManager
             //Should we throw a general exception here? Maybe we should return a bool.
             throw $e;
         }
-    }
-
-    /**
-     * Set the processor to compress files
-     *
-     * @param ProcessorInterface $processor
-     */
-    public function setProcessor(ProcessorInterface $processor)
-    {
-        $this->processor = $processor;
     }
 }
