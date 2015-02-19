@@ -30,17 +30,11 @@ class BackupManager
      */
     private $processor;
 
-    /**
-     * @var Mailer
-     */
-    private $mailer;
-
-    public function __construct(Logger $logger, DatabaseChain $databaseChain, ClientChain $clientChain, Mailer $mailer)
+    public function __construct(Logger $logger, DatabaseChain $databaseChain, ClientChain $clientChain)
     {
         $this->logger        = $logger;
         $this->databaseChain = $databaseChain;
         $this->clientChain   = $clientChain;
-        $this->mailer        = $mailer;
     }
 
     /**
@@ -70,7 +64,8 @@ class BackupManager
 
         } catch (\Exception $e) {
 
-            $this->mailer->sendException($e);
+            // write log
+            $this->logger->critical($e);
 
             throw $e;
         }
