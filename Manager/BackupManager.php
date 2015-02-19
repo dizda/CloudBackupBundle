@@ -3,7 +3,9 @@
 namespace Dizda\CloudBackupBundle\Manager;
 
 use Dizda\CloudBackupBundle\Clients\ClientChain;
+use Dizda\CloudBackupBundle\Clients\ClientInterface;
 use Dizda\CloudBackupBundle\Databases\DatabaseChain;
+use Dizda\CloudBackupBundle\Databases\DatabaseInterface;
 use Dizda\CloudBackupBundle\Processors\ProcessorInterface;
 use Monolog\Logger;
 
@@ -17,41 +19,38 @@ class BackupManager
     /**
      * @var \Dizda\CloudBackupBundle\Databases\DatabaseChain
      */
-    private $databaseChain;
+    private $database;
 
     /**
      * @var \Dizda\CloudBackupBundle\Clients\ClientChain
      */
-    private $clientChain;
+    private $client;
 
     /**
-     * @var ProcessorInterface
+     * @var \Dizda\CloudBackupBundle\Processors\ProcessorInterface
      */
     private $processor;
 
     /**
      * @param Logger $logger
-     * @param DatabaseChain $databaseChain
-     * @param ClientChain $clientChain
+     * @param DatabaseChain $database
+     * @param ClientChain $client
      */
-    public function __construct(Logger $logger, DatabaseChain $databaseChain, ClientChain $clientChain)
+    public function __construct(Logger $logger, DatabaseInterface $database, ClientInterface $client)
     {
-        $this->logger        = $logger;
-        $this->databaseChain = $databaseChain;
-        $this->clientChain   = $clientChain;
+        $this->logger   = $logger;
+        $this->database = $database;
+        $this->client   = $client;
     }
 
     /**
-     *
-     *
      * @throws \Exception
      */
     public function execute()
     {
         try {
-
             // Dump all databases
-            $this->databaseChain->dump();
+            $this->database->dump();
 
             // Backup folders if specified
             $this->processor->copyFolders();
@@ -62,7 +61,7 @@ class BackupManager
             var_dump($this->processor->getArchivePath());
 
             // Transfer with all clients
-            $this->clientChain->upload($this->processor->getArchivePath());
+            $this->client->upload($this->processor->getArchivePath());
 
             $this->processor->cleanUp();
 
@@ -71,6 +70,7 @@ class BackupManager
             // write log
             $this->logger->critical($e);
 
+            //Should we throw a general exception here? Maybe we should return a bool.
             throw $e;
         }
     }

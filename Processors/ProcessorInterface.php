@@ -42,4 +42,9 @@ interface ProcessorInterface
      * @return string
      */
     public function getArchivePath();
+
+    /**
+     * Make a copy of all folders specified in config
+     */
+    public function copyFolders();
 }
