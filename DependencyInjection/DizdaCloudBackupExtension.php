@@ -74,8 +74,8 @@ class DizdaCloudBackupExtension extends Extension
      */
     private function setProcessor($config, ContainerBuilder $container)
     {
-        $backupManager = $container->getDefinition('dizda.cloudbackup.manager.processor');
-        $backupManager->addMethodCall('setProcessor', [
+        $processorManager = $container->getDefinition('dizda.cloudbackup.manager.processor');
+        $processorManager->addMethodCall('setProcessor', [
             new Reference(
                 sprintf('dizda.cloudbackup.processor.%s', $container->getParameter('dizda_cloud_backup.processor')['type'])
             )
