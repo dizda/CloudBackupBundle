@@ -45,7 +45,9 @@ class BackupManager
     }
 
     /**
-     * @throws \Exception
+     * Start the backup
+     *
+     * @return bool
      */
     public function execute()
     {
@@ -67,12 +69,12 @@ class BackupManager
             $this->processor->cleanUp();
 
         } catch (\Exception $e) {
-
             // write log
-            $this->logger->critical($e);
+            $this->logger->critical('Error while DizdaBackupManager was running.'."\n".$e);
 
-            //Should we throw a general exception here? Maybe we should return a bool.
-            throw $e;
+            return false;
         }
+
+        return true;
     }
 }
