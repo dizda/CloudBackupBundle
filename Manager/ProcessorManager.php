@@ -126,7 +126,7 @@ class ProcessorManager
      */
     public function buildArchiveFilename()
     {
-        return $this->filePrefix . '_' . date($this->dateFormat) . $this->getExtension();
+        return $this->filePrefix . '_' . date($this->dateFormat) . $this->processor->getExtension();
     }
 
     /**
