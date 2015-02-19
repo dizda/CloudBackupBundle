@@ -1,9 +1,9 @@
 services:
     dizda.cloudbackup.chain.database:
-        class: Dizda\CloudBackupBundle\Chain\DatabaseChain
+        class: Dizda\CloudBackupBundle\Databases\DatabaseChain
 
     dizda.cloudbackup.chain.client:
-        class: Dizda\CloudBackupBundle\Chain\ClientChain
+        class: Dizda\CloudBackupBundle\Clients\ClientChain
 
     dizda.cloudbackup.client.cloudapp:
         class: Dizda\CloudBackupBundle\Clients\CloudAppClient
@@ -98,11 +98,3 @@ services:
             - @logger
             - @dizda.cloudbackup.chain.database
             - @dizda.cloudbackup.chain.client
-            - @dizda.cloudbackup.service.mailer
-
-    # Services
-    dizda.cloudbackup.service.mailer:
-            class: Dizda\CloudBackupBundle\Service\Mailer
-            arguments:
-                - @mailer
-                - %dizda_cloud_backup.error_notification%

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Chain;
+namespace Dizda\CloudBackupBundle\Databases;
 
 use Dizda\CloudBackupBundle\Databases\DatabaseInterface;
 
@@ -9,7 +9,7 @@ use Dizda\CloudBackupBundle\Databases\DatabaseInterface;
  *
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
  */
-class DatabaseChain
+class DatabaseChain implements DatabaseInterface
 {
     /**
      * @var array
@@ -17,7 +17,7 @@ class DatabaseChain
     protected $databases;
 
     /**
-     * @param array $databases
+     * @param DatabaseInterface[] $databases
      */
     public function __construct(array $databases = array())
     {

@@ -18,10 +18,4 @@ interface DatabaseInterface
      */
     public function dump();
 
-    /**
-     * Get command to execute dump
-     *
-     * @return string
-     */
-    public function getCommand();
 }

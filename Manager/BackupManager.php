@@ -2,10 +2,9 @@
 
 namespace Dizda\CloudBackupBundle\Manager;
 
-use Dizda\CloudBackupBundle\Chain\ClientChain;
-use Dizda\CloudBackupBundle\Chain\DatabaseChain;
+use Dizda\CloudBackupBundle\Clients\ClientChain;
+use Dizda\CloudBackupBundle\Databases\DatabaseChain;
 use Dizda\CloudBackupBundle\Processors\ProcessorInterface;
-use Dizda\CloudBackupBundle\Service\Mailer;
 use Monolog\Logger;
 
 class BackupManager
@@ -16,12 +15,12 @@ class BackupManager
     private $logger;
 
     /**
-     * @var \Dizda\CloudBackupBundle\Chain\DatabaseChain
+     * @var \Dizda\CloudBackupBundle\Databases\DatabaseChain
      */
     private $databaseChain;
 
     /**
-     * @var \Dizda\CloudBackupBundle\Chain\ClientChain
+     * @var \Dizda\CloudBackupBundle\Clients\ClientChain
      */
     private $clientChain;
 
@@ -31,16 +30,15 @@ class BackupManager
     private $processor;
 
     /**
-     * @var Mailer
+     * @param Logger $logger
+     * @param DatabaseChain $databaseChain
+     * @param ClientChain $clientChain
      */
-    private $mailer;
-
-    public function __construct(Logger $logger, DatabaseChain $databaseChain, ClientChain $clientChain, Mailer $mailer)
+    public function __construct(Logger $logger, DatabaseChain $databaseChain, ClientChain $clientChain)
     {
         $this->logger        = $logger;
         $this->databaseChain = $databaseChain;
         $this->clientChain   = $clientChain;
-        $this->mailer        = $mailer;
     }
 
     /**
@@ -70,7 +68,8 @@ class BackupManager
 
         } catch (\Exception $e) {
 
-            $this->mailer->sendException($e);
+            // write log
+            $this->logger->critical($e);
 
             throw $e;
         }
