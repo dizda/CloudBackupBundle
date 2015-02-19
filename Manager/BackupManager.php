@@ -3,8 +3,9 @@
 namespace Dizda\CloudBackupBundle\Manager;
 
 use Dizda\CloudBackupBundle\Clients\ClientChain;
+use Dizda\CloudBackupBundle\Clients\ClientInterface;
 use Dizda\CloudBackupBundle\Databases\DatabaseChain;
-use Dizda\CloudBackupBundle\Processors\ProcessorInterface;
+use Dizda\CloudBackupBundle\Databases\DatabaseInterface;
 use Monolog\Logger;
 
 class BackupManager
@@ -17,41 +18,42 @@ class BackupManager
     /**
      * @var \Dizda\CloudBackupBundle\Databases\DatabaseChain
      */
-    private $databaseChain;
+    private $database;
 
     /**
      * @var \Dizda\CloudBackupBundle\Clients\ClientChain
      */
-    private $clientChain;
+    private $client;
 
     /**
-     * @var ProcessorInterface
+     * @var \Dizda\CloudBackupBundle\Manager\ProcessorManager
      */
     private $processor;
 
     /**
      * @param Logger $logger
-     * @param DatabaseChain $databaseChain
-     * @param ClientChain $clientChain
+     * @param DatabaseInterface $database
+     * @param ClientInterface $client
+     * @param ProcessorManager $processor
      */
-    public function __construct(Logger $logger, DatabaseChain $databaseChain, ClientChain $clientChain)
+    public function __construct(Logger $logger, DatabaseInterface $database, ClientInterface $client, ProcessorManager $processor)
     {
-        $this->logger        = $logger;
-        $this->databaseChain = $databaseChain;
-        $this->clientChain   = $clientChain;
+        $this->logger    = $logger;
+        $this->database  = $database;
+        $this->client    = $client;
+        $this->processor = $processor;
     }
 
     /**
+     * Start the backup
      *
-     *
-     * @throws \Exception
+     * @return bool
      */
     public function execute()
     {
         try {
-
             // Dump all databases
-            $this->databaseChain->dump();
+            $this->database->dump();
 
             // Backup folders if specified
             $this->processor->copyFolders();
@@ -62,26 +64,17 @@ class BackupManager
             var_dump($this->processor->getArchivePath());
 
             // Transfer with all clients
-            $this->clientChain->upload($this->processor->getArchivePath());
+            $this->client->upload($this->processor->getArchivePath());
 
             $this->processor->cleanUp();
 
         } catch (\Exception $e) {
-
             // write log
-            $this->logger->critical($e);
+            $this->logger->critical('Error while DizdaBackupManager was running.'."\n".$e);
 
-            throw $e;
+            return false;
         }
-    }
 
-    /**
-     * Set the processor to compress files
-     *
-     * @param ProcessorInterface $processor
-     */
-    public function setProcessor(ProcessorInterface $processor)
-    {
-        $this->processor = $processor;
+        return true;
     }
 }
