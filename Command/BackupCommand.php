@@ -18,22 +18,10 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class BackupCommand extends ContainerAwareCommand
 {
-    private $processors = array('tar', 'zip', '7z');
 
     protected function configure()
     {
         $this
-            ->addArgument(
-                'processor',
-                InputArgument::OPTIONAL,
-                'Which processor use? (' . implode(', ', $this->processors) .')'
-            )
-            ->addOption(
-                'folders',
-                'F',
-                InputOption::VALUE_NONE,
-                'Do you want to export also folders?'
-            )
             ->setName('dizda:backup:start')
             ->setDescription('Upload a backup of your database to cloud services (use -F option for backup folders)');
     }
@@ -47,6 +35,5 @@ class BackupCommand extends ContainerAwareCommand
         }
 
         $output->writeln('<info>Backup complete.</info>');
-
     }
 }
