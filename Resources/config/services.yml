@@ -1,9 +1,9 @@
 services:
     dizda.cloudbackup.chain.database:
-        class: Dizda\CloudBackupBundle\Chain\DatabaseChain
+        class: Dizda\CloudBackupBundle\Databases\DatabaseChain
 
     dizda.cloudbackup.chain.client:
-        class: Dizda\CloudBackupBundle\Chain\ClientChain
+        class: Dizda\CloudBackupBundle\Clients\ClientChain
 
     dizda.cloudbackup.client.cloudapp:
         class: Dizda\CloudBackupBundle\Clients\CloudAppClient

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Chain;
+namespace Dizda\CloudBackupBundle\Clients;
 
 use Dizda\CloudBackupBundle\Clients\ClientInterface;
 
@@ -9,7 +9,7 @@ use Dizda\CloudBackupBundle\Clients\ClientInterface;
  *
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
  */
-class ClientChain
+class ClientChain implements ClientInterface
 {
     /**
      * @var array
