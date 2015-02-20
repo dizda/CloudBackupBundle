@@ -2,6 +2,9 @@
 
 namespace Dizda\CloudBackupBundle\Manager;
 
+use Dizda\CloudBackupBundle\Client\ClientInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class ClientChain
  *
@@ -15,10 +18,17 @@ class ClientManager
     protected $children;
 
     /**
-     * @param array $clients
+     * @var \Psr\Log\LoggerInterface logger
      */
-    public function __construct(array $clients = array())
+    protected $logger;
+
+    /**
+     * @param LoggerInterface $logger
+     * @param ClientInterface[] $clients
+     */
+    public function __construct(LoggerInterface $logger, array $clients = array())
     {
+        $this->logger = $logger;
         $this->children = $clients;
     }
 
@@ -40,17 +50,8 @@ class ClientManager
     public function upload($filePath)
     {
         foreach ($this->children as $child) {
+            $this->logger->info(sprintf('[Dizda Backup] Uploading to %s', $child->getName()));
             $child->upload($filePath);
         }
-    }
-
-    public function getName()
-    {
-        $names = array();
-        foreach ($this->children as $child) {
-            $names[] = $child->getName();
-        }
-
-        return sprintf('ClientChain of %d (%s)', count($names), implode(', ', $names));
     }
 }

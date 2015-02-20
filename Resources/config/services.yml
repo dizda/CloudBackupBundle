@@ -1,9 +1,13 @@
 services:
     dizda.cloudbackup.manager.database:
         class: Dizda\CloudBackupBundle\Manager\DatabaseManager
+        arguments:
+          - @logger
 
     dizda.cloudbackup.manager.client:
         class: Dizda\CloudBackupBundle\Manager\ClientManager
+        arguments:
+          - @logger
 
     dizda.cloudbackup.client.cloudapp:
         class: Dizda\CloudBackupBundle\Client\CloudAppClient

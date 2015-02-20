@@ -3,6 +3,7 @@
 namespace Dizda\CloudBackupBundle\Manager;
 
 use Dizda\CloudBackupBundle\Database\DatabaseInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class DatabaseChain
@@ -18,10 +19,17 @@ class DatabaseManager
     protected $children;
 
     /**
+     * @var \Psr\Log\LoggerInterface logger
+     */
+    protected $logger;
+
+    /**
+     * @param LoggerInterface $logger
      * @param DatabaseInterface[] $databases
      */
-    public function __construct(array $databases = array())
+    public function __construct(LoggerInterface $logger, array $databases = array())
     {
+        $this->logger = $logger;
         $this->children = $databases;
     }
 
@@ -41,17 +49,8 @@ class DatabaseManager
     public function dump()
     {
         foreach ($this->children as $child) {
+            $this->logger->info(sprintf('[Dizda Backup] Dumping %s database', $child->getName()));
             $child->dump();
         }
-    }
-
-    public function getName()
-    {
-        $names = array();
-        foreach ($this->children as $child) {
-            $names[] = $child->getName();
-        }
-
-        return sprintf('DatabaseChain of %d (%s)', count($names), implode(', ', $names));
     }
 }

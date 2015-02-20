@@ -2,15 +2,12 @@
 
 namespace Dizda\CloudBackupBundle\Manager;
 
-
-use Dizda\CloudBackupBundle\Client\ClientInterface;
-use Dizda\CloudBackupBundle\Database\DatabaseInterface;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class BackupManager
 {
     /**
-     * @var \Monolog\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
@@ -30,12 +27,12 @@ class BackupManager
     private $processor;
 
     /**
-     * @param Logger $logger
+     * @param LoggerInterface $logger
      * @param DatabaseManager $database
      * @param ClientManager $client
      * @param ProcessorManager $processor
      */
-    public function __construct(Logger $logger, DatabaseManager $database, ClientManager $client, ProcessorManager $processor)
+    public function __construct(LoggerInterface $logger, DatabaseManager $database, ClientManager $client, ProcessorManager $processor)
     {
         $this->logger    = $logger;
         $this->dbm       = $database;
@@ -52,7 +49,6 @@ class BackupManager
     {
         try {
             // Dump all databases
-            $this->logger->info('[Dizda Backup] Starting to dump the database.', array('databases'=>$this->dbm->getName()));
             $this->dbm->dump();
 
             // Backup folders if specified
@@ -60,13 +56,12 @@ class BackupManager
             $this->processor->copyFolders();
 
             // Compress everything
-            $this->logger->info('[Dizda Backup] Compressing to archive.', array('processor'=>$this->processor->getName()));
+            $this->logger->info(sprintf('[Dizda Backup] Compressing to archive using %s', $this->processor->getName()));
             $this->processor->compress();
 
             var_dump($this->processor->getArchivePath());
 
             // Transfer with all clients
-            $this->logger->info('[Dizda Backup] Uploading archive.', array('clients'=>$this->cm->getName()));
             $this->cm->upload($this->processor->getArchivePath());
 
             $this->logger->info('[Dizda Backup] Cleaning up after us.');
