@@ -2,9 +2,8 @@
 namespace Dizda\CloudBackupBundle\Database;
 
 /**
- * Class MySQL
+ * Class MySQL.
  *
- * @package Dizda\CloudBackupBundle\Database
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class MySQL extends BaseDatabase
@@ -17,7 +16,7 @@ class MySQL extends BaseDatabase
     private $fileName;
 
     /**
-     * DB Auth
+     * DB Auth.
      *
      * @param array  $params
      * @param string $basePath
@@ -35,7 +34,7 @@ class MySQL extends BaseDatabase
             $this->database = '--all-databases';
             $this->fileName = 'all-databases.sql';
         } else {
-            $this->fileName = $this->database . '.sql';
+            $this->fileName = $this->database.'.sql';
         }
 
         /* if user is set, we add authentification */
@@ -67,7 +66,7 @@ class MySQL extends BaseDatabase
         return sprintf('mysqldump %s %s > %s',
             $this->auth,
             $this->database,
-            $this->dataPath . $this->fileName);
+            $this->dataPath.$this->fileName);
     }
 
     /**

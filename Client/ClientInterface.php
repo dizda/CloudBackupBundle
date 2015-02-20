@@ -2,15 +2,14 @@
 namespace Dizda\CloudBackupBundle\Client;
 
 /**
- * Class ClientInterface
+ * Class ClientInterface.
  *
- * @package Dizda\CloudBackupBundle\Client
  * @author  Tobias Nyholm <tobias.nyholm@gmail.com>
  */
 interface ClientInterface
 {
     /**
-     * Upload a file to the cloud client
+     * Upload a file to the cloud client.
      *
      * @param string $archive
      *
@@ -19,7 +18,7 @@ interface ClientInterface
     public function upload($archive);
 
     /**
-     * The name of the client
+     * The name of the client.
      *
      * @return string
      */

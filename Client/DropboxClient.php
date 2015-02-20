@@ -2,14 +2,11 @@
 namespace Dizda\CloudBackupBundle\Client;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
-
 use DropboxUploader;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * Class DropboxClient
+ * Class DropboxClient.
  *
- * @package Dizda\CloudBackupBundle\Client
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class DropboxClient implements ClientInterface
@@ -20,7 +17,7 @@ class DropboxClient implements ClientInterface
     private $remotePath;
 
     /**
-     * @param array  $params user
+     * @param array $params user
      */
     public function __construct($params)
     {

@@ -3,14 +3,11 @@
 namespace Dizda\CloudBackupBundle\Client;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
-
 use CloudApp\API as CloudApp;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * Class CloudAppClient
+ * Class CloudAppClient.
  *
- * @package Dizda\CloudBackupBundle\Client
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class CloudAppClient implements ClientInterface

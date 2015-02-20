@@ -12,7 +12,6 @@ abstract class BaseProcessor
      */
     protected $options;
 
-
     /**
      * @param array $options
      */
@@ -22,7 +21,7 @@ abstract class BaseProcessor
     }
 
     /**
-     * Add new options to the existing once. This may overwrite
+     * Add new options to the existing once. This may overwrite.
      *
      * @param array $options
      *

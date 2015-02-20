@@ -2,15 +2,12 @@
 namespace Dizda\CloudBackupBundle\Client;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
-
 use Gaufrette\Filesystem;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class GaufretteClient
- * Client for Gaufrette drivers
+ * Client for Gaufrette drivers.
  *
- * @package Dizda\CloudBackupBundle\Client
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class GaufretteClient implements ClientInterface
@@ -19,7 +16,7 @@ class GaufretteClient implements ClientInterface
     private $filesystem;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -36,7 +33,7 @@ class GaufretteClient implements ClientInterface
     }
 
     /**
-     * Setting Gaufrette filesystem according to bundle configurations
+     * Setting Gaufrette filesystem according to bundle configurations.
      *
      * @param \Gaufrette\Filesystem $filesystem
      */

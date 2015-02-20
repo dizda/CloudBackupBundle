@@ -3,23 +3,19 @@
 namespace Dizda\CloudBackupBundle\Database;
 
 /**
- * Interface DatabaseInterface
+ * Interface DatabaseInterface.
  *
- * @package Dizda\CloudBackupBundle\Database
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
-
 interface DatabaseInterface
 {
     /**
-     * Migration procedure for each databases type
-     *
-     * @return void
+     * Migration procedure for each databases type.
      */
     public function dump();
 
     /**
-     * The name of the database
+     * The name of the database.
      *
      * @return string
      */

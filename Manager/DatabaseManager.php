@@ -6,7 +6,7 @@ use Dizda\CloudBackupBundle\Database\DatabaseInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class DatabaseChain
+ * Class DatabaseChain.
  *
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
  */
@@ -14,7 +14,6 @@ class DatabaseManager
 {
     /**
      * @var DatabaseInterface[] links
-     *
      */
     protected $children;
 
@@ -24,7 +23,7 @@ class DatabaseManager
     protected $logger;
 
     /**
-     * @param LoggerInterface $logger
+     * @param LoggerInterface     $logger
      * @param DatabaseInterface[] $databases
      */
     public function __construct(LoggerInterface $logger, array $databases = array())
@@ -34,7 +33,7 @@ class DatabaseManager
     }
 
     /**
-     * Add a database to the chain
+     * Add a database to the chain.
      *
      * @param DatabaseInterface $database
      */
@@ -44,7 +43,7 @@ class DatabaseManager
     }
 
     /**
-     * Dump all databases activated
+     * Dump all databases activated.
      */
     public function dump()
     {

@@ -3,17 +3,14 @@
 namespace Dizda\CloudBackupBundle\Tests\Database;
 
 use Dizda\CloudBackupBundle\Database\PostgreSQL;
-use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 
 /**
- * Class PostgreSQLTest
- *
- * @package Dizda\CloudBackupBundle\Tests\Databases
+ * Class PostgreSQLTest.
  */
 class PostgreSQLTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test different commands
+     * Test different commands.
      */
     public function testGetCommand()
     {
@@ -25,8 +22,8 @@ class PostgreSQLTest extends \PHPUnit_Framework_TestCase
                 'db_port'     => 5678,
                 'database'    => 'dizbdd',
                 'db_user'     => 'admin',
-                'db_password' => 'test'
-            )
+                'db_password' => 'test',
+            ),
         ), '/var/backup/');
         $this->assertEquals($postgresql->getCommand(),
             'export PGPASSWORD="test" && pg_dump --username "admin" --host localhost --port 5678 --format plain --encoding UTF8 "dizbdd" > "/var/backup/postgresql/dizbdd.sql"');
@@ -39,8 +36,8 @@ class PostgreSQLTest extends \PHPUnit_Framework_TestCase
                 'db_port'     => 2222,
                 'database'    => 'somebdd',
                 'db_user'     => 'postgres',
-                'db_password' => 'somepwd'
-            )
+                'db_password' => 'somepwd',
+            ),
         ), '/var/backup/');
         $this->assertEquals($postgresql->getCommand(),
             'export PGPASSWORD="somepwd" && pg_dump --username "postgres" --host somehost --port 2222 --format plain --encoding UTF8 "somebdd" > "/var/backup/postgresql/somebdd.sql"');
@@ -53,19 +50,17 @@ class PostgreSQLTest extends \PHPUnit_Framework_TestCase
                 'db_port'     => 2222,
                 'database'    => 'somebdd',
                 'db_user'     => null,
-                'db_password' => null
-            )
+                'db_password' => null,
+            ),
         ), '/var/backup/');
         $this->assertEquals($postgresql->getCommand(),
             'pg_dump --host somehost --port 2222 --format plain --encoding UTF8 "somebdd" > "/var/backup/postgresql/somebdd.sql"');
-
     }
-
 }
 
-
-class PostgreSQLDummy extends PostgreSQL {
-    public  function getCommand()
+class PostgreSQLDummy extends PostgreSQL
+{
+    public function getCommand()
     {
         return parent::getCommand();
     }

@@ -2,9 +2,8 @@
 namespace Dizda\CloudBackupBundle\Database;
 
 /**
- * Class MongoDB
+ * Class MongoDB.
  *
- * @package Dizda\CloudBackupBundle\Database
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class MongoDB extends BaseDatabase
@@ -15,7 +14,7 @@ class MongoDB extends BaseDatabase
     private $auth = '';
 
     /**
-     * DB Auth
+     * DB Auth.
      *
      * @param array  $params
      * @param string $basePath

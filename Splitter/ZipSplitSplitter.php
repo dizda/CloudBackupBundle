@@ -1,26 +1,25 @@
 <?php
 
 namespace Dizda\CloudBackupBundle\Splitter;
-use Symfony\Component\Finder\Finder;
+
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Process\Process;
 
 /**
- * Class ZipSplitSplitter
+ * Class ZipSplitSplitter.
  *
- * @package Dizda\CloudBackupBundle\Splitter
  * @author Nick Doulgeridis
  */
 class ZipSplitSplitter extends BaseSplitter
 {
     /**
-     * Runs the zipsplit command
+     * Runs the zipsplit command.
      */
     public function executeSplit()
     {
         $command = $this->getCommand();
-var_dump($command);
+        var_dump($command);
         $process = new Process($command);
         $process->setTimeout(null);
         $process->run();
@@ -33,7 +32,7 @@ var_dump($command);
     }
 
     /**
-     * Get the zipsplit command
+     * Get the zipsplit command.
      */
     public function getCommand()
     {
@@ -45,7 +44,7 @@ var_dump($command);
     }
 
     /**
-     * Rename files we split using the naming convention in config
+     * Rename files we split using the naming convention in config.
      */
     private function renameSplitFiles()
     {
@@ -63,6 +62,4 @@ var_dump($command);
             rename($file->getRealPath(), $new_filename);
         }
     }
-
-
 }

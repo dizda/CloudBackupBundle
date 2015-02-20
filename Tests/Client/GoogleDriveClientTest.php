@@ -11,13 +11,13 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
 {
     public function testUpload()
     {
-        $archive='/biz/baz/boz';
-        $mime='mime';
-        $clientProvider=$this->getMock('Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider');
-        $driveParent=$this->getMock('Google_Service_Drive_ParentReference');
+        $archive = '/biz/baz/boz';
+        $mime = 'mime';
+        $clientProvider = $this->getMock('Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider');
+        $driveParent = $this->getMock('Google_Service_Drive_ParentReference');
         $driveService = $this->getDriveService();
 
-        $driveFile=$this->getMock('Google_Service_Drive_DriveFile');
+        $driveFile = $this->getMock('Google_Service_Drive_DriveFile');
         $driveFile->expects($this->once())
             ->method('setMimeType')
             ->with($this->equalTo($mime));
@@ -26,7 +26,7 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
             ->method('setParents')
             ->with($this->equalTo(array($driveParent)));
 
-        $drive=$this->getMockBuilder('Dizda\CloudBackupBundle\Client\GoogleDriveClient')
+        $drive = $this->getMockBuilder('Dizda\CloudBackupBundle\Client\GoogleDriveClient')
             ->setConstructorArgs(array($clientProvider, 'foobar', '/foo/bar'))
             ->setMethods(array('output', 'getDriveService', 'getDriveFile', 'getMimeType', 'getParentFolder', 'getFileContents'))
             ->getMock();
@@ -62,7 +62,6 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
      * @return mixed
      */
     private function getDriveService()
@@ -95,22 +94,40 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
     public function testGetDriveFile()
     {
         $drive = new Dummy();
-        $file=$drive->getDriveFile('foo/bar.txt');
+        $file = $drive->getDriveFile('foo/bar.txt');
         $this->assertEquals('bar.txt', $file->getTitle());
     }
 }
 
-class Dummy extends GoogleDriveClient {
-
+class Dummy extends GoogleDriveClient
+{
     public function __construct($path = '/foo/bar/biz')
     {
-        $this->remotePath=$path;
+        $this->remotePath = $path;
     }
 
-    public function getMimeType($a) { return parent::getMimeType($a); }
-    public function getParentFolder(\Google_Service_Drive $a) { return parent::getParentFolder($a); }
-    public function getDriveService() { return parent::getDriveService(); }
-    public function getDriveFile($a) { return parent::getDriveFile($a); }
-    public function output($a, $b=true) { parent::output($a, $b); }
-    public function getFileContents($a) { return parent::getFileContents($a); }
+    public function getMimeType($a)
+    {
+        return parent::getMimeType($a);
+    }
+    public function getParentFolder(\Google_Service_Drive $a)
+    {
+        return parent::getParentFolder($a);
+    }
+    public function getDriveService()
+    {
+        return parent::getDriveService();
+    }
+    public function getDriveFile($a)
+    {
+        return parent::getDriveFile($a);
+    }
+    public function output($a, $b = true)
+    {
+        parent::output($a, $b);
+    }
+    public function getFileContents($a)
+    {
+        return parent::getFileContents($a);
+    }
 }

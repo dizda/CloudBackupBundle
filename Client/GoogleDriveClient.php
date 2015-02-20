@@ -3,12 +3,10 @@ namespace Dizda\CloudBackupBundle\Client;
 
 use Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * Class GoogleDriveClient
+ * Class GoogleDriveClient.
  *
- * @package Dizda\CloudBackupBundle\Client
  * @author  Tobias Nyholm <tobias.nyholm@gmail.com>
  */
 class GoogleDriveClient implements ClientInterface
@@ -30,8 +28,8 @@ class GoogleDriveClient implements ClientInterface
 
     /**
      * @param ClientProvider $clientProvider
-     * @param string $tokenName
-     * @param string $remotePath
+     * @param string         $tokenName
+     * @param string         $remotePath
      */
     public function __construct(ClientProvider $clientProvider, $tokenName, $remotePath)
     {
@@ -69,31 +67,32 @@ class GoogleDriveClient implements ClientInterface
      * @param \Google_Service_Drive $service
      *
      * @return \Google_Service_Drive_ParentReference|null
+     *
      * @throws \Symfony\Component\Security\Core\Exception\LockedException
      */
     protected function getParentFolder(\Google_Service_Drive $service)
     {
-        $parts = explode('/', ltrim($this->remotePath,'/'));
-        $folderId=null;
+        $parts = explode('/', ltrim($this->remotePath, '/'));
+        $folderId = null;
         foreach ($parts as $name) {
-            $q = 'mimeType="application/vnd.google-apps.folder" and title contains "' . $name . '"';
+            $q = 'mimeType="application/vnd.google-apps.folder" and title contains "'.$name.'"';
             if ($folderId) {
-                $q.=sprintf(' and "%s" in parents', $folderId);
+                $q .= sprintf(' and "%s" in parents', $folderId);
             }
             $folders = $service->files->listFiles(array(
-                    'q'=> $q,
+                    'q' => $q,
                 ))->getItems();
-            if (count($folders)==0) {
+            if (count($folders) == 0) {
                 //TODO create the missing folder.
                 throw new \LogicException('Remote path does not exist.');
             } else {
-                /** @var \Google_Service_Drive_DriveFile $folders[0] */
-                $folderId=$folders[0]->id;
+                /* @var \Google_Service_Drive_DriveFile $folders[0] */
+                $folderId = $folders[0]->id;
             }
         }
 
         if (!$folderId) {
-            return null;
+            return;
         }
 
         $parent = new \Google_Service_Drive_ParentReference();
@@ -103,7 +102,6 @@ class GoogleDriveClient implements ClientInterface
     }
 
     /**
-     *
      * @return \Google_Service_Drive
      */
     protected function getDriveService()
@@ -133,14 +131,13 @@ class GoogleDriveClient implements ClientInterface
      * @param $message
      * @param bool $newLine
      */
-    protected function output($message, $newLine=true)
+    protected function output($message, $newLine = true)
     {
         if ($newLine) {
             $this->output->writeln($message);
         } else {
             $this->output->write($message);
         }
-
     }
 
     /**
@@ -162,19 +159,20 @@ class GoogleDriveClient implements ClientInterface
     /**
      * @param $service
      * @param $archive
+     *
      * @return mixed
+     *
      * @throws \Exception
      */
     private function handleUpload($service, $archive)
     {
-
         $file = $this->getDriveFile($archive);
 
         $mime = $this->getMimeType($archive);
         $file->setMimeType($mime);
 
         if ($this->remotePath !== '/') {
-            $parent=$this->getParentFolder($service);
+            $parent = $this->getParentFolder($service);
 
             if ($parent) {
                 $file->setParents(array($parent));

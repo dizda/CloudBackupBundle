@@ -3,17 +3,14 @@
 namespace Dizda\CloudBackupBundle\Tests\Database;
 
 use Dizda\CloudBackupBundle\Database\MySQL;
-use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 
 /**
- * Class MySQLTest
- *
- * @package Dizda\CloudBackupBundle\Tests\Databases
+ * Class MySQLTest.
  */
 class MySQLTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test different commands
+     * Test different commands.
      */
     public function testGetCommand()
     {
@@ -25,8 +22,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_port'     => 3306,
                 'database'    => 'dizbdd',
                 'db_user'     => 'root',
-                'db_password' => 'test'
-            )
+                'db_password' => 'test',
+            ),
         ), '/var/backup/');
         $this->assertEquals($mysql->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' --all-databases > /var/backup/mysql/all-databases.sql");
 
@@ -38,8 +35,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_port'     => 3306,
                 'database'    => 'dizbdd',
                 'db_user'     => 'root',
-                'db_password' => 'test'
-            )
+                'db_password' => 'test',
+            ),
         ), '/var/backup/');
         $this->assertEquals($mysql->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' dizbdd > /var/backup/mysql/dizbdd.sql");
 
@@ -51,8 +48,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_port'     => 2222,
                 'database'    => 'somebdd',
                 'db_user'     => 'mysql',
-                'db_password' => 'somepwd'
-            )
+                'db_password' => 'somepwd',
+            ),
         ), '/var/backup/');
         $this->assertEquals($mysql->getCommand(), "mysqldump --host='somehost' --port='2222' --user='mysql' --password='somepwd' somebdd > /var/backup/mysql/somebdd.sql");
 
@@ -64,8 +61,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_port'     => 2222,
                 'database'    => 'somebdd',
                 'db_user'     => null,
-                'db_password' => null
-            )
+                'db_password' => null,
+            ),
         ), '/var/backup/');
         $this->assertEquals($mysql->getCommand(), 'mysqldump  somebdd > /var/backup/mysql/somebdd.sql');
 
@@ -77,17 +74,16 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_port'     => 2222,
                 'database'    => 'somebdd',
                 'db_user'     => null,
-                'db_password' => null
-            )
+                'db_password' => null,
+            ),
         ), '/var/backup/');
         $this->assertEquals($mysql->getCommand(), 'mysqldump  --all-databases > /var/backup/mysql/all-databases.sql');
     }
-
 }
 
-
-class MySQLDummy extends MySQL {
-    public  function getCommand()
+class MySQLDummy extends MySQL
+{
+    public function getCommand()
     {
         return parent::getCommand();
     }

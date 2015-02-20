@@ -8,7 +8,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 /**
- * A ProcessorManager handles the compression, cleanup etc for a specific processor
+ * A ProcessorManager handles the compression, cleanup etc for a specific processor.
  *
  * @author Tobias Nyholm
  */
@@ -20,7 +20,7 @@ class ProcessorManager
     protected $processor;
 
     /**
-     * This is the path to the latest created archive
+     * This is the path to the latest created archive.
      *
      * @var string archivePath
      */
@@ -62,21 +62,20 @@ class ProcessorManager
     protected $dateFormat;
 
     /**
-     *
-     * @param string $rootPath Path to root folder
+     * @param string $rootPath   Path to root folder
      * @param string $outputPath Path to folder with archived files
      * @param string $filePrefix Prefix for archive file (e.g. sitename)
-     * @param string  $dateFormat Date function format
-     * @param array  $folders Array of folders to archive (relative to $rootPath)
+     * @param string $dateFormat Date function format
+     * @param array  $folders    Array of folders to archive (relative to $rootPath)
      */
-    public function __construct($rootPath, $outputPath, $filePrefix, $dateFormat, array $folders=array())
+    public function __construct($rootPath, $outputPath, $filePrefix, $dateFormat, array $folders = array())
     {
         $this->rootPath   = $rootPath;
         $this->outputPath = $outputPath;
         $this->filePrefix = $filePrefix;
         $this->folders    = $folders;
         $this->dateFormat = $dateFormat;
-        $this->compressedArchivePath = $this->outputPath .'../backup_compressed/';
+        $this->compressedArchivePath = $this->outputPath.'../backup_compressed/';
 
         $this->filesystem = new Filesystem();
     }
@@ -94,21 +93,22 @@ class ProcessorManager
     }
 
     /**
-     * Make a copy of all folders specified in config
+     * Make a copy of all folders specified in config.
      */
-    public function copyFolders(){
+    public function copyFolders()
+    {
         // Copy folder for compression file
-        foreach($this->folders as $folder){
-            $this->filesystem->mirror($this->rootPath . '/' . $folder, $this->outputPath . 'folders/' . $folder);
+        foreach ($this->folders as $folder) {
+            $this->filesystem->mirror($this->rootPath.'/'.$folder, $this->outputPath.'folders/'.$folder);
         }
     }
 
     /**
-     * Compress to file with name like : hostname_2013-01-12_00-06-40.tar
+     * Compress to file with name like : hostname_2013-01-12_00-06-40.tar.
      */
     public function compress()
     {
-        $this->archivePath = $this->compressedArchivePath . $this->buildArchiveFilename();
+        $this->archivePath = $this->compressedArchivePath.$this->buildArchiveFilename();
 
         $archive = $this->processor->getCompressionCommand($this->archivePath, $this->outputPath);
 
@@ -120,17 +120,17 @@ class ProcessorManager
     }
 
     /**
-     * Return archive file name
+     * Return archive file name.
      *
      * @return string
      */
     public function buildArchiveFilename()
     {
-        return $this->filePrefix . '_' . date($this->dateFormat) . $this->processor->getExtension();
+        return $this->filePrefix.'_'.date($this->dateFormat).$this->processor->getExtension();
     }
 
     /**
-     * Handle process error on fails
+     * Handle process error on fails.
      *
      * @param string $command
      *
@@ -148,7 +148,7 @@ class ProcessorManager
     }
 
     /**
-     * Return path of the archive
+     * Return path of the archive.
      *
      * @return string
      */
@@ -158,7 +158,7 @@ class ProcessorManager
     }
 
     /**
-     * Remove all dirs with files
+     * Remove all dirs with files.
      */
     public function cleanUp()
     {
@@ -167,7 +167,7 @@ class ProcessorManager
     }
 
     /**
-     * Here is the split
+     * Here is the split.
      */
     private function split()
     {

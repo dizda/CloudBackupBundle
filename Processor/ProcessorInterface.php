@@ -2,15 +2,14 @@
 namespace Dizda\CloudBackupBundle\Processor;
 
 /**
- * Interface ProcessorInterface
+ * Interface ProcessorInterface.
  *
- * @package Dizda\CloudBackupBundle\Processor
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 interface ProcessorInterface
 {
     /**
-     * Get compression command
+     * Get compression command.
      *
      * @param string $archivePath
      * @param string $basePath
@@ -20,14 +19,14 @@ interface ProcessorInterface
     public function getCompressionCommand($archivePath, $basePath);
 
     /**
-     * Get file extension (with leading dot)
+     * Get file extension (with leading dot).
      *
      * @return string
      */
     public function getExtension();
 
     /**
-     * The name of the processor
+     * The name of the processor.
      *
      * @return string
      */
