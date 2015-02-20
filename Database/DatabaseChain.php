@@ -12,7 +12,7 @@ use Dizda\CloudBackupBundle\Database\DatabaseInterface;
 class DatabaseChain implements DatabaseInterface
 {
     /**
-     * @var array
+     * @var DatabaseInterface[] databases
      */
     protected $databases;
 
@@ -42,5 +42,15 @@ class DatabaseChain implements DatabaseInterface
         foreach ($this->databases as $database) {
             $database->dump();
         }
+    }
+
+    public function getName()
+    {
+        $names = array();
+        foreach ($this->databases as $database) {
+            $names[] = $database->getName();
+        }
+
+        return sprintf('DatabaseChain of %d (%s)', count($names), implode(', ', $names));
     }
 }
