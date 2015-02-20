@@ -1,7 +1,7 @@
 <?php
 namespace Dizda\CloudBackupBundle\Command;
 
-use Dizda\CloudBackupBundle\Splitters\ZipSplitSplitter;
+use Dizda\CloudBackupBundle\Splitter\ZipSplitSplitter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

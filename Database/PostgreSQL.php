@@ -1,10 +1,10 @@
 <?php
-namespace Dizda\CloudBackupBundle\Databases;
+namespace Dizda\CloudBackupBundle\Database;
 
 /**
  * Class MySQL
  *
- * @package Dizda\CloudBackupBundle\Databases
+ * @package Dizda\CloudBackupBundle\Database
  * @author  István Manzuk <istvan.manzuk@gmail.com>
  */
 class PostgreSQL extends BaseDatabase
@@ -68,4 +68,8 @@ class PostgreSQL extends BaseDatabase
             $this->dataPath . $this->fileName);
     }
 
+    public function getName()
+    {
+        return 'PostgreSQL';
+    }
 }

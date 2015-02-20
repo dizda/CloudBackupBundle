@@ -1,11 +1,11 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Databases;
+namespace Dizda\CloudBackupBundle\Database;
 
 /**
  * Interface DatabaseInterface
  *
- * @package Dizda\CloudBackupBundle\Databases
+ * @package Dizda\CloudBackupBundle\Database
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 
@@ -18,4 +18,10 @@ interface DatabaseInterface
      */
     public function dump();
 
+    /**
+     * The name of the database
+     *
+     * @return string
+     */
+    public function getName();
 }

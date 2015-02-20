@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Splitters;
+namespace Dizda\CloudBackupBundle\Splitter;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\File\File;
@@ -9,7 +9,7 @@ use Symfony\Component\Process\Process;
 /**
  * Class ZipSplitSplitter
  *
- * @package Dizda\CloudBackupBundle\Splitters
+ * @package Dizda\CloudBackupBundle\Splitter
  * @author Nick Doulgeridis
  */
 class ZipSplitSplitter extends BaseSplitter

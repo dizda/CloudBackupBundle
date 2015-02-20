@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Processors;
+namespace Dizda\CloudBackupBundle\Processor;
 
 class TarProcessor extends BaseProcessor implements ProcessorInterface
 {
@@ -30,5 +30,10 @@ class TarProcessor extends BaseProcessor implements ProcessorInterface
             implode(' ', $zipParams), 
             $archivePath
         );
+    }
+
+    public function getName()
+    {
+        return 'Tar';
     }
 }

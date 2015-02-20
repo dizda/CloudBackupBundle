@@ -1,8 +1,8 @@
 <?php
 
 namespace Dizda\CloudBackupBundle\Tests\Splitters;
-use Dizda\CloudBackupBundle\Splitters\ZipSplitSplitter;
 
+use Dizda\CloudBackupBundle\Splitter\ZipSplitSplitter;
 
 /**
  * @author Nick Doulgeridis

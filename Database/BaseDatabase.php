@@ -1,5 +1,5 @@
 <?php
-namespace Dizda\CloudBackupBundle\Databases;
+namespace Dizda\CloudBackupBundle\Database;
 
 use Monolog\Logger;
 use Symfony\Component\Filesystem\Filesystem;
@@ -8,7 +8,7 @@ use Symfony\Component\Process\Process;
 /**
  * Class BaseDatabase
  *
- * @package Dizda\CloudBackupBundle\Databases
+ * @package Dizda\CloudBackupBundle\Database
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 abstract class BaseDatabase implements DatabaseInterface

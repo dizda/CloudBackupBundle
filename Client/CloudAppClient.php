@@ -1,5 +1,6 @@
 <?php
-namespace Dizda\CloudBackupBundle\Clients;
+
+namespace Dizda\CloudBackupBundle\Client;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -9,7 +10,7 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * Class CloudAppClient
  *
- * @package Dizda\CloudBackupBundle\Clients
+ * @package Dizda\CloudBackupBundle\Client
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class CloudAppClient implements ClientInterface
@@ -46,5 +47,10 @@ class CloudAppClient implements ClientInterface
 //            $this->output->writeln('<info>OK</info>');
 //        }
 
+    }
+
+    public function getName()
+    {
+        return 'CloudApp';
     }
 }

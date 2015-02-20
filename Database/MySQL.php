@@ -1,10 +1,10 @@
 <?php
-namespace Dizda\CloudBackupBundle\Databases;
+namespace Dizda\CloudBackupBundle\Database;
 
 /**
  * Class MySQL
  *
- * @package Dizda\CloudBackupBundle\Databases
+ * @package Dizda\CloudBackupBundle\Database
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class MySQL extends BaseDatabase
@@ -70,4 +70,8 @@ class MySQL extends BaseDatabase
             $this->dataPath . $this->fileName);
     }
 
+    public function getName()
+    {
+        return 'MySQL';
+    }
 }

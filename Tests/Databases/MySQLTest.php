@@ -2,7 +2,7 @@
 
 namespace Dizda\CloudBackupBundle\Tests\Databases;
 
-use Dizda\CloudBackupBundle\Databases\MySQL;
+use Dizda\CloudBackupBundle\Database\MySQL;
 use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 
 /**
