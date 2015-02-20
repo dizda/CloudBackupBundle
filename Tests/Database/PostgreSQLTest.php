@@ -18,7 +18,7 @@ class PostgreSQLTest extends AbstractTesting
     public function testGetCommand()
     {
         // dump specified database
-        $postgresql = new PostgreSQL(array(
+        $postgresql = new PostgreSQLDummy(array(
             'postgresql' => array(
                 'all_databases' => true,
                 'db_host'     => 'localhost',
@@ -32,7 +32,7 @@ class PostgreSQLTest extends AbstractTesting
             'export PGPASSWORD="test" && pg_dump --username "admin" --host localhost --port 5678 --format plain --encoding UTF8 "dizbdd" > "/var/backup/postgresql/dizbdd.sql"');
 
         // dump specified database
-        $postgresql = new PostgreSQL(array(
+        $postgresql = new PostgreSQLDummy(array(
             'postgresql' => array(
                 'all_databases' => true,
                 'db_host'     => 'somehost',
@@ -46,7 +46,7 @@ class PostgreSQLTest extends AbstractTesting
             'export PGPASSWORD="somepwd" && pg_dump --username "postgres" --host somehost --port 2222 --format plain --encoding UTF8 "somebdd" > "/var/backup/postgresql/somebdd.sql"');
 
         // dump specified database with no auth
-        $postgresql = new PostgreSQL(array(
+        $postgresql = new PostgreSQLDummy(array(
             'postgresql' => array(
                 'all_databases' => false,
                 'db_host'     => 'somehost',
@@ -61,4 +61,12 @@ class PostgreSQLTest extends AbstractTesting
 
     }
 
+}
+
+
+class PostgreSQLDummy extends PostgreSQL {
+    public  function getCommand()
+    {
+        return parent::getCommand();
+    }
 }

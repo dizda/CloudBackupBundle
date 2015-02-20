@@ -18,7 +18,7 @@ class MySQLTest extends AbstractTesting
     public function testGetCommand()
     {
         // dump all databases
-        $mysql = new MySQL(array(
+        $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => true,
                 'db_host'     => 'localhost',
@@ -31,7 +31,7 @@ class MySQLTest extends AbstractTesting
         $this->assertEquals($mysql->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' --all-databases > /var/backup/mysql/all-databases.sql");
 
         // dump specified database
-        $mysql = new MySQL(array(
+        $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => false,
                 'db_host'     => 'localhost',
@@ -44,7 +44,7 @@ class MySQLTest extends AbstractTesting
         $this->assertEquals($mysql->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' dizbdd > /var/backup/mysql/dizbdd.sql");
 
         // dump specified database
-        $mysql = new MySQL(array(
+        $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => false,
                 'db_host'     => 'somehost',
@@ -57,7 +57,7 @@ class MySQLTest extends AbstractTesting
         $this->assertEquals($mysql->getCommand(), "mysqldump --host='somehost' --port='2222' --user='mysql' --password='somepwd' somebdd > /var/backup/mysql/somebdd.sql");
 
         // dump specified database with no auth
-        $mysql = new MySQL(array(
+        $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => false,
                 'db_host'     => 'somehost',
@@ -70,7 +70,7 @@ class MySQLTest extends AbstractTesting
         $this->assertEquals($mysql->getCommand(), 'mysqldump  somebdd > /var/backup/mysql/somebdd.sql');
 
         // dump all databases with no auth
-        $mysql = new MySQL(array(
+        $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => true,
                 'db_host'     => 'somehost',
@@ -83,4 +83,12 @@ class MySQLTest extends AbstractTesting
         $this->assertEquals($mysql->getCommand(), 'mysqldump  --all-databases > /var/backup/mysql/all-databases.sql');
     }
 
+}
+
+
+class MySQLDummy extends MySQL {
+    public  function getCommand()
+    {
+        return parent::getCommand();
+    }
 }

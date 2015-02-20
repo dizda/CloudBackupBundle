@@ -61,7 +61,7 @@ class MongoDB extends BaseDatabase
     /**
      * {@inheritdoc}
      */
-    public function getCommand()
+    protected function getCommand()
     {
         return sprintf('mongodump %s %s --out %s',
             $this->auth,

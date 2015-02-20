@@ -58,7 +58,7 @@ class PostgreSQL extends BaseDatabase
     /**
      * {@inheritdoc}
      */
-    public function getCommand()
+    protected function getCommand()
     {
         //TODO: pg_dumpall support
         return sprintf('%spg_dump %s "%s" > "%s"',

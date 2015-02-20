@@ -20,11 +20,6 @@ abstract class BaseDatabase implements DatabaseInterface
     protected $timeout;
 
     /**
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
      * Get SF2 Filesystem
      *
      * @param string $basePath
@@ -70,16 +65,5 @@ abstract class BaseDatabase implements DatabaseInterface
         $this->timeout = $timeout;
 
         return $this;
-    }
-
-    public function dump()
-    {
-        $dbName = explode('\\', get_class($this));
-        $this->logger->info(sprintf('Dumping %s database', end($dbName)));
-    }
-
-    public function setLogger(Logger $logger)
-    {
-        $this->logger = $logger;
     }
 }

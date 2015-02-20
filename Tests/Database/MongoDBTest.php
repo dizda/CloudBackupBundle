@@ -18,7 +18,7 @@ class MongoDBTest extends AbstractTesting
     public function testGetCommand()
     {
         // dump all dbs
-        $mongodb = new MongoDB(array(
+        $mongodb = new MongoDBDummy(array(
             'mongodb' => array(
                 'all_databases' => true,
                 'db_host'     => 'localhost',
@@ -31,7 +31,7 @@ class MongoDBTest extends AbstractTesting
         $this->assertEquals($mongodb->getCommand(), 'mongodump -h localhost --port 27017  --out /var/backup/mongo/');
 
         // dump one db with not auth
-        $mongodb = new MongoDB(array(
+        $mongodb = new MongoDBDummy(array(
             'mongodb' => array(
                 'all_databases' => false,
                 'db_host'     => 'localhost',
@@ -44,7 +44,7 @@ class MongoDBTest extends AbstractTesting
         $this->assertEquals($mongodb->getCommand(), 'mongodump -h localhost --port 27017 --db dizbdd --out /var/backup/mongo/');
 
         // dump one db with auth
-        $mongodb = new MongoDB(array(
+        $mongodb = new MongoDBDummy(array(
             'mongodb' => array(
                 'all_databases' => false,
                 'db_host'     => 'localhost',
@@ -57,4 +57,11 @@ class MongoDBTest extends AbstractTesting
         $this->assertEquals($mongodb->getCommand(), 'mongodump -h localhost --port 27017 -u dizda -p imRootBro --db dizbdd --out /var/backup/mongo/');
     }
 
+}
+
+class MongoDBDummy extends MongoDB {
+    public  function getCommand()
+    {
+        return parent::getCommand();
+    }
 }

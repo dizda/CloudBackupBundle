@@ -62,7 +62,7 @@ class MySQL extends BaseDatabase
     /**
      * {@inheritdoc}
      */
-    public function getCommand()
+    protected function getCommand()
     {
         return sprintf('mysqldump %s %s > %s',
             $this->auth,
