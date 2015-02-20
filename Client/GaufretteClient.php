@@ -55,4 +55,8 @@ class GaufretteClient implements ClientInterface
         $this->filesystem = $filesystem;
     }
 
+    public function getName()
+    {
+        return 'Gaufrette';
+    }
 }

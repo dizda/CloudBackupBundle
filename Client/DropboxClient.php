@@ -49,4 +49,8 @@ class DropboxClient implements ClientInterface
 //        }
     }
 
+    public function getName()
+    {
+        return 'Dropbox';
+    }
 }

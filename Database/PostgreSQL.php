@@ -68,4 +68,8 @@ class PostgreSQL extends BaseDatabase
             $this->dataPath . $this->fileName);
     }
 
+    public function getName()
+    {
+        return 'PostgreSQL';
+    }
 }

@@ -25,4 +25,11 @@ interface ProcessorInterface
      * @return string
      */
     public function getExtension();
+
+    /**
+     * The name of the processor
+     *
+     * @return string
+     */
+    public function getName();
 }

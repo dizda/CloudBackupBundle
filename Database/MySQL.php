@@ -70,4 +70,8 @@ class MySQL extends BaseDatabase
             $this->dataPath . $this->fileName);
     }
 
+    public function getName()
+    {
+        return 'MySQL';
+    }
 }

@@ -30,4 +30,9 @@ class ZipProcessor extends BaseProcessor implements ProcessorInterface
 
         return sprintf('cd %s && zip %s %s .', $basePath, implode(' ', $params), $archivePath);
     }
+
+    public function getName()
+    {
+        return 'Zip';
+    }
 }

@@ -18,4 +18,10 @@ interface DatabaseInterface
      */
     public function dump();
 
+    /**
+     * The name of the database
+     *
+     * @return string
+     */
+    public function getName();
 }

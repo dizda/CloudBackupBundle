@@ -200,4 +200,9 @@ class GoogleDriveClient implements ClientInterface
             'uploadType' => 'media',
         ));
     }
+
+    public function getName()
+    {
+        return 'GoogleDrive';
+    }
 }

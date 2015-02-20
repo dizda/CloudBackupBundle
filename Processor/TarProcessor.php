@@ -31,4 +31,9 @@ class TarProcessor extends BaseProcessor implements ProcessorInterface
             $archivePath
         );
     }
+
+    public function getName()
+    {
+        return 'Tar';
+    }
 }

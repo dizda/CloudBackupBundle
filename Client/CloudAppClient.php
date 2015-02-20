@@ -48,4 +48,9 @@ class CloudAppClient implements ClientInterface
 //        }
 
     }
+
+    public function getName()
+    {
+        return 'CloudApp';
+    }
 }

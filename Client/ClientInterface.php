@@ -10,4 +10,11 @@ namespace Dizda\CloudBackupBundle\Client;
 interface ClientInterface
 {
     public function upload($archive);
+
+    /**
+     * The name of the client
+     *
+     * @return string
+     */
+    public function getName();
 }
