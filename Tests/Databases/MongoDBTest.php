@@ -2,7 +2,7 @@
 
 namespace Dizda\CloudBackupBundle\Tests\Databases;
 
-use Dizda\CloudBackupBundle\Databases\MongoDB;
+use Dizda\CloudBackupBundle\Database\MongoDB;
 use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 
 /**

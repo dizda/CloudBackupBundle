@@ -1,10 +1,10 @@
 <?php
-namespace Dizda\CloudBackupBundle\Databases;
+namespace Dizda\CloudBackupBundle\Database;
 
 /**
  * Class MongoDB
  *
- * @package Dizda\CloudBackupBundle\Databases
+ * @package Dizda\CloudBackupBundle\Database
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class MongoDB extends BaseDatabase

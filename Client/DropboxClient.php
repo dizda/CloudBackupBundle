@@ -1,5 +1,5 @@
 <?php
-namespace Dizda\CloudBackupBundle\Clients;
+namespace Dizda\CloudBackupBundle\Client;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -9,7 +9,7 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * Class DropboxClient
  *
- * @package Dizda\CloudBackupBundle\Clients
+ * @package Dizda\CloudBackupBundle\Client
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class DropboxClient implements ClientInterface

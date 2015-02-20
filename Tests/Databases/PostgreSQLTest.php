@@ -2,7 +2,7 @@
 
 namespace Dizda\CloudBackupBundle\Tests\Databases;
 
-use Dizda\CloudBackupBundle\Databases\PostgreSQL;
+use Dizda\CloudBackupBundle\Database\PostgreSQL;
 use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 
 /**

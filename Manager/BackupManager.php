@@ -2,10 +2,10 @@
 
 namespace Dizda\CloudBackupBundle\Manager;
 
-use Dizda\CloudBackupBundle\Clients\ClientChain;
-use Dizda\CloudBackupBundle\Clients\ClientInterface;
-use Dizda\CloudBackupBundle\Databases\DatabaseChain;
-use Dizda\CloudBackupBundle\Databases\DatabaseInterface;
+use Dizda\CloudBackupBundle\Client\ClientChain;
+use Dizda\CloudBackupBundle\Client\ClientInterface;
+use Dizda\CloudBackupBundle\Database\DatabaseChain;
+use Dizda\CloudBackupBundle\Database\DatabaseInterface;
 use Monolog\Logger;
 
 class BackupManager
@@ -16,12 +16,12 @@ class BackupManager
     private $logger;
 
     /**
-     * @var \Dizda\CloudBackupBundle\Databases\DatabaseChain
+     * @var \Dizda\CloudBackupBundle\Database\DatabaseChain
      */
     private $database;
 
     /**
-     * @var \Dizda\CloudBackupBundle\Clients\ClientChain
+     * @var \Dizda\CloudBackupBundle\Client\ClientChain
      */
     private $client;
 

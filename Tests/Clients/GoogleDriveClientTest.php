@@ -2,7 +2,7 @@
 
 namespace Dizda\CloudBackupBundle\Tests\Clients;
 
-use Dizda\CloudBackupBundle\Clients\GoogleDriveClient;
+use Dizda\CloudBackupBundle\Client\GoogleDriveClient;
 
 /**
  * @author Tobias Nyholm
@@ -26,7 +26,7 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
             ->method('setParents')
             ->with($this->equalTo(array($driveParent)));
 
-        $drive=$this->getMockBuilder('Dizda\CloudBackupBundle\Clients\GoogleDriveClient')
+        $drive=$this->getMockBuilder('Dizda\CloudBackupBundle\Client\GoogleDriveClient')
             ->setConstructorArgs(array($clientProvider, 'foobar', '/foo/bar'))
             ->setMethods(array('output', 'getDriveService', 'getDriveFile', 'getMimeType', 'getParentFolder', 'getFileContents'))
             ->getMock();

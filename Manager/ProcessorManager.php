@@ -2,8 +2,8 @@
 
 namespace Dizda\CloudBackupBundle\Manager;
 
-use Dizda\CloudBackupBundle\Processors\ProcessorInterface;
-use Dizda\CloudBackupBundle\Splitters\ZipSplitSplitter;
+use Dizda\CloudBackupBundle\Processor\ProcessorInterface;
+use Dizda\CloudBackupBundle\Splitter\ZipSplitSplitter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
@@ -15,7 +15,7 @@ use Symfony\Component\Process\Process;
 class ProcessorManager
 {
     /**
-     * @var \Dizda\CloudBackupBundle\Processors\ProcessorInterface processor
+     * @var \Dizda\CloudBackupBundle\Processor\ProcessorInterface processor
      */
     protected $processor;
 
@@ -82,7 +82,7 @@ class ProcessorManager
     }
 
     /**
-     * @param \Dizda\CloudBackupBundle\Processors\ProcessorInterface $processor
+     * @param \Dizda\CloudBackupBundle\Processor\ProcessorInterface $processor
      *
      * @return $this
      */

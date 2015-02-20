@@ -1,8 +1,8 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Databases;
+namespace Dizda\CloudBackupBundle\Database;
 
-use Dizda\CloudBackupBundle\Databases\DatabaseInterface;
+use Dizda\CloudBackupBundle\Database\DatabaseInterface;
 
 /**
  * Class DatabaseChain

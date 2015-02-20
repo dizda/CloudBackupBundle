@@ -2,7 +2,7 @@
 
 namespace Dizda\CloudBackupBundle\Tests\Processors;
 
-use Dizda\CloudBackupBundle\Processors\SevenZipProcessor;
+use Dizda\CloudBackupBundle\Processor\SevenZipProcessor;
 use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 
 /**

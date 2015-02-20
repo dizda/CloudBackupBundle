@@ -1,38 +1,38 @@
 services:
     dizda.cloudbackup.chain.database:
-        class: Dizda\CloudBackupBundle\Databases\DatabaseChain
+        class: Dizda\CloudBackupBundle\Database\DatabaseChain
 
     dizda.cloudbackup.chain.client:
-        class: Dizda\CloudBackupBundle\Clients\ClientChain
+        class: Dizda\CloudBackupBundle\Client\ClientChain
 
     dizda.cloudbackup.client.cloudapp:
-        class: Dizda\CloudBackupBundle\Clients\CloudAppClient
+        class: Dizda\CloudBackupBundle\Client\CloudAppClient
         arguments:
             - %dizda_cloud_backup.cloud_storages%
         tags:
             -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.dropbox:
-        class: Dizda\CloudBackupBundle\Clients\DropboxClient
+        class: Dizda\CloudBackupBundle\Client\DropboxClient
         arguments:
             - %dizda_cloud_backup.cloud_storages%
         tags:
             -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.google_drive:
-        class: Dizda\CloudBackupBundle\Clients\GoogleDriveClient
+        class: Dizda\CloudBackupBundle\Client\GoogleDriveClient
         public: false
         arguments: [~, ~, ~]
         tags:
             -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.gaufrette:
-        class: Dizda\CloudBackupBundle\Clients\GaufretteClient
+        class: Dizda\CloudBackupBundle\Client\GaufretteClient
         tags:
             -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.database.mongodb:
-        class: Dizda\CloudBackupBundle\Databases\MongoDB
+        class: Dizda\CloudBackupBundle\Database\MongoDB
         arguments:
             - %dizda_cloud_backup.databases%
             - %dizda_cloud_backup.output_folder%
@@ -43,7 +43,7 @@ services:
             -  { name: dizda.cloudbackup.database }
 
     dizda.cloudbackup.database.mysql:
-        class: Dizda\CloudBackupBundle\Databases\MySQL
+        class: Dizda\CloudBackupBundle\Database\MySQL
         arguments:
             - %dizda_cloud_backup.databases%
             - %dizda_cloud_backup.output_folder%
@@ -54,7 +54,7 @@ services:
             -  { name: dizda.cloudbackup.database }
 
     dizda.cloudbackup.database.postgresql:
-        class: Dizda\CloudBackupBundle\Databases\PostgreSQL
+        class: Dizda\CloudBackupBundle\Database\PostgreSQL
         arguments:
             - %dizda_cloud_backup.databases%
             - %dizda_cloud_backup.output_folder%
@@ -65,17 +65,17 @@ services:
             -  { name: dizda.cloudbackup.database }
 
     dizda.cloudbackup.processor.tar:
-        class: Dizda\CloudBackupBundle\Processors\TarProcessor
+        class: Dizda\CloudBackupBundle\Processor\TarProcessor
         tags:
             -  { name: dizda.cloudbackup.processor }
 
     dizda.cloudbackup.processor.zip:
-        class: Dizda\CloudBackupBundle\Processors\ZipProcessor
+        class: Dizda\CloudBackupBundle\Processor\ZipProcessor
         tags:
             -  { name: dizda.cloudbackup.processor }
 
     dizda.cloudbackup.processor.7z:
-        class: Dizda\CloudBackupBundle\Processors\SevenZipProcessor
+        class: Dizda\CloudBackupBundle\Processor\SevenZipProcessor
         tags:
             -  { name: dizda.cloudbackup.processor }
 

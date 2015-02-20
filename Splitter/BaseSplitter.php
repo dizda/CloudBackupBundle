@@ -1,13 +1,13 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Splitters;
+namespace Dizda\CloudBackupBundle\Splitter;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Finder\Finder;
 
 /**
  * Interface SplittersInterface
  *
- * @package Dizda\CloudBackupBundle\Splitters
+ * @package Dizda\CloudBackupBundle\Splitter
  * @author Nick Doulgeridis
  */
 abstract class BaseSplitter

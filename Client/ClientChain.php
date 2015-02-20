@@ -1,8 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Clients;
-
-use Dizda\CloudBackupBundle\Clients\ClientInterface;
+namespace Dizda\CloudBackupBundle\Client;
 
 /**
  * Class ClientChain

@@ -1,10 +1,10 @@
 <?php
-namespace Dizda\CloudBackupBundle\Processors;
+namespace Dizda\CloudBackupBundle\Processor;
 
 /**
  * Interface ProcessorInterface
  *
- * @package Dizda\CloudBackupBundle\Processors
+ * @package Dizda\CloudBackupBundle\Processor
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 interface ProcessorInterface

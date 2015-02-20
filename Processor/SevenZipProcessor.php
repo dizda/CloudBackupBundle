@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Processors;
+namespace Dizda\CloudBackupBundle\Processor;
 
 class SevenZipProcessor extends BaseProcessor implements ProcessorInterface
 {
