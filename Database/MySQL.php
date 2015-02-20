@@ -70,6 +70,9 @@ class MySQL extends BaseDatabase
             $this->dataPath . $this->fileName);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'MySQL';

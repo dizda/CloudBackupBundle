@@ -9,6 +9,13 @@ namespace Dizda\CloudBackupBundle\Client;
  */
 interface ClientInterface
 {
+    /**
+     * Upload a file to the cloud client
+     *
+     * @param string $archive
+     *
+     * @return bool
+     */
     public function upload($archive);
 
     /**

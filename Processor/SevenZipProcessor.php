@@ -36,6 +36,9 @@ class SevenZipProcessor extends BaseProcessor implements ProcessorInterface
         return sprintf('cd %s && 7z a %s %s', $basePath, implode(' ', $params), $archivePath);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'SevenZip';

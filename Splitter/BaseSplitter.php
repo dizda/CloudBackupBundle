@@ -12,8 +12,16 @@ use Symfony\Component\Finder\Finder;
  */
 abstract class BaseSplitter
 {
+    /**
+     * @var string archivePath
+     */
     private $archivePath;
+
+    /**
+     * @var integer splitSize
+     */
     private $splitSize;
+
     /**
      * @param $archive_path
      * @param $split_size
@@ -37,7 +45,7 @@ abstract class BaseSplitter
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getSplitSize()
     {

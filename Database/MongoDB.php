@@ -69,6 +69,9 @@ class MongoDB extends BaseDatabase
             $this->dataPath);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'MongoDB';

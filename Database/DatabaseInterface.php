@@ -14,7 +14,7 @@ interface DatabaseInterface
     /**
      * Migration procedure for each databases type
      *
-     * @return mixed
+     * @return void
      */
     public function dump();
 

@@ -26,27 +26,17 @@ class GaufretteClient implements ClientInterface
         $this->output     = new ConsoleOutput();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function upload($archive)
     {
-//        $this->output->write('- <comment>Uploading using Gaufrette... </comment>');
-//        if(is_array($archive)){
-//            $this->output->writeln("");
-//            foreach($archive as $file /* @var $file SplFileInfo*/){
-//                $this->output->write(sprintf('----- <comment>Uploading file: %s... </comment>', $file->getFilename()));
-//                $fileName = explode('/', $file);
-//                $this->filesystem->write(end($fileName), file_get_contents($file), true);
-//                $this->output->writeln('<info>OK</info>');
-//            }
-//        }
-//        else{
-            $fileName = explode('/', $archive);
-            $this->filesystem->write(end($fileName), file_get_contents($archive), true);
-//            $this->output->writeln('<info>OK</info>');
-//        }
+        $fileName = explode('/', $archive);
+        $this->filesystem->write(end($fileName), file_get_contents($archive), true);
     }
 
     /**
-     * Setting gaufrette filesystem according to bundle configurations
+     * Setting Gaufrette filesystem according to bundle configurations
      *
      * @param \Gaufrette\Filesystem $filesystem
      */
@@ -55,6 +45,9 @@ class GaufretteClient implements ClientInterface
         $this->filesystem = $filesystem;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'Gaufrette';

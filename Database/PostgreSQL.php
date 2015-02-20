@@ -68,6 +68,9 @@ class PostgreSQL extends BaseDatabase
             $this->dataPath . $this->fileName);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'PostgreSQL';

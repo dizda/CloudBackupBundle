@@ -32,6 +32,9 @@ class TarProcessor extends BaseProcessor implements ProcessorInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'Tar';
