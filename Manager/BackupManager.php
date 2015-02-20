@@ -53,7 +53,7 @@ class BackupManager
     {
         try {
             // Dump all databases
-            $this->logger->info('[Dizda Backup] Starting to dump the database.');
+            $this->logger->info('[Dizda Backup] Starting to dump the database.', array('databases'=>$this->database->getName()));
             $this->database->dump();
 
             // Backup folders if specified
@@ -61,13 +61,13 @@ class BackupManager
             $this->processor->copyFolders();
 
             // Compress everything
-            $this->logger->info('[Dizda Backup] Compressing to archive.');
+            $this->logger->info('[Dizda Backup] Compressing to archive.', array('processor'=>$this->processor->getName()));
             $this->processor->compress();
 
             var_dump($this->processor->getArchivePath());
 
             // Transfer with all clients
-            $this->logger->info('[Dizda Backup] Uploading archive.');
+            $this->logger->info('[Dizda Backup] Uploading archive.', array('clients'=>$this->client->getName()));
             $this->client->upload($this->processor->getArchivePath());
 
             $this->logger->info('[Dizda Backup] Cleaning up after us.');

@@ -178,4 +178,9 @@ class ProcessorManager
         var_dump($splitFiles);
         var_dump('----split');
     }
+
+    public function getName()
+    {
+        return $this->processor->getName();
+    }
 }
