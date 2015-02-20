@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Database;
+namespace Dizda\CloudBackupBundle\Manager;
 
 use Dizda\CloudBackupBundle\Database\DatabaseInterface;
 
@@ -9,7 +9,7 @@ use Dizda\CloudBackupBundle\Database\DatabaseInterface;
  *
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
  */
-class DatabaseChain implements DatabaseInterface
+class DatabaseManager
 {
     /**
      * @var DatabaseInterface[] links

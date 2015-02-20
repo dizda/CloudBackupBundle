@@ -2,9 +2,8 @@
 
 namespace Dizda\CloudBackupBundle\Manager;
 
-use Dizda\CloudBackupBundle\Client\ClientChain;
+
 use Dizda\CloudBackupBundle\Client\ClientInterface;
-use Dizda\CloudBackupBundle\Database\DatabaseChain;
 use Dizda\CloudBackupBundle\Database\DatabaseInterface;
 use Monolog\Logger;
 
@@ -16,14 +15,14 @@ class BackupManager
     private $logger;
 
     /**
-     * @var \Dizda\CloudBackupBundle\Database\DatabaseChain
+     * @var \Dizda\CloudBackupBundle\Manager\DatabaseManager
      */
-    private $database;
+    private $dbm;
 
     /**
-     * @var \Dizda\CloudBackupBundle\Client\ClientChain
+     * @var \Dizda\CloudBackupBundle\Manager\ClientManager
      */
-    private $client;
+    private $cm;
 
     /**
      * @var \Dizda\CloudBackupBundle\Manager\ProcessorManager
@@ -32,15 +31,15 @@ class BackupManager
 
     /**
      * @param Logger $logger
-     * @param DatabaseInterface $database
-     * @param ClientInterface $client
+     * @param DatabaseManager $database
+     * @param ClientManager $client
      * @param ProcessorManager $processor
      */
-    public function __construct(Logger $logger, DatabaseInterface $database, ClientInterface $client, ProcessorManager $processor)
+    public function __construct(Logger $logger, DatabaseManager $database, ClientManager $client, ProcessorManager $processor)
     {
         $this->logger    = $logger;
-        $this->database  = $database;
-        $this->client    = $client;
+        $this->dbm       = $database;
+        $this->cm        = $client;
         $this->processor = $processor;
     }
 
@@ -53,8 +52,8 @@ class BackupManager
     {
         try {
             // Dump all databases
-            $this->logger->info('[Dizda Backup] Starting to dump the database.', array('databases'=>$this->database->getName()));
-            $this->database->dump();
+            $this->logger->info('[Dizda Backup] Starting to dump the database.', array('databases'=>$this->dbm->getName()));
+            $this->dbm->dump();
 
             // Backup folders if specified
             $this->logger->info('[Dizda Backup] Copying folders.');
@@ -67,8 +66,8 @@ class BackupManager
             var_dump($this->processor->getArchivePath());
 
             // Transfer with all clients
-            $this->logger->info('[Dizda Backup] Uploading archive.', array('clients'=>$this->client->getName()));
-            $this->client->upload($this->processor->getArchivePath());
+            $this->logger->info('[Dizda Backup] Uploading archive.', array('clients'=>$this->cm->getName()));
+            $this->cm->upload($this->processor->getArchivePath());
 
             $this->logger->info('[Dizda Backup] Cleaning up after us.');
             $this->processor->cleanUp();

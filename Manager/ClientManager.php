@@ -1,13 +1,13 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Client;
+namespace Dizda\CloudBackupBundle\Manager;
 
 /**
  * Class ClientChain
  *
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
  */
-class ClientChain implements ClientInterface
+class ClientManager
 {
     /**
      * @var ClientInterface[] children

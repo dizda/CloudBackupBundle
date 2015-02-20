@@ -33,7 +33,7 @@ class TaggedServicesPass implements CompilerPassInterface
         $databases = $container->findTaggedServiceIds('dizda.cloudbackup.database');
         $dbEnabled = $container->getParameter('dizda_cloud_backup.databases');
 
-        $chainDefinition = $container->getDefinition('dizda.cloudbackup.chain.database');
+        $databaseManager = $container->getDefinition('dizda.cloudbackup.manager.database');
 
         foreach ($databases as $serviceId => $tags) {
             // Get the name of the database
@@ -45,7 +45,7 @@ class TaggedServicesPass implements CompilerPassInterface
             }
 
             // if the database is activated in the configuration file, we add it to the DatabaseChain
-            $chainDefinition->addMethodCall('add', array(new Reference($serviceId)));
+            $databaseManager->addMethodCall('add', array(new Reference($serviceId)));
         }
     }
 
@@ -57,7 +57,7 @@ class TaggedServicesPass implements CompilerPassInterface
         $clients        = $container->findTaggedServiceIds('dizda.cloudbackup.client');
         $clientsEnabled = $container->getParameter('dizda_cloud_backup.cloud_storages');
 
-        $chainDefinition = $container->getDefinition('dizda.cloudbackup.chain.client');
+        $clientManager = $container->getDefinition('dizda.cloudbackup.manager.client');
 
         foreach ($clients as $serviceId => $tags) {
             // Get the name of the database
@@ -69,7 +69,7 @@ class TaggedServicesPass implements CompilerPassInterface
             }
 
             // if the client is activated in the configuration file, we add it to the ClientChain
-            $chainDefinition->addMethodCall('add', array(new Reference($serviceId)));
+            $clientManager->addMethodCall('add', array(new Reference($serviceId)));
         }
 
         // If gaufrette is set, assign automatically the specified filesystem as the cloud client
