@@ -53,24 +53,29 @@ class BackupManager
     {
         try {
             // Dump all databases
+            $this->logger->info('[Dizda Backup] Starting to dump the database.');
             $this->database->dump();
 
             // Backup folders if specified
+            $this->logger->info('[Dizda Backup] Copying folders.');
             $this->processor->copyFolders();
 
             // Compress everything
+            $this->logger->info('[Dizda Backup] Compressing to archive.');
             $this->processor->compress();
 
             var_dump($this->processor->getArchivePath());
 
             // Transfer with all clients
+            $this->logger->info('[Dizda Backup] Uploading archive.');
             $this->client->upload($this->processor->getArchivePath());
 
+            $this->logger->info('[Dizda Backup] Cleaning up after us.');
             $this->processor->cleanUp();
 
         } catch (\Exception $e) {
             // write log
-            $this->logger->critical('Error while DizdaBackupManager was running.'."\n".$e);
+            $this->logger->critical('[Dizda Backup] Unexpected exception.', array('exception'=>$e));
 
             return false;
         }

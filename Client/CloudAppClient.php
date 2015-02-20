@@ -1,4 +1,5 @@
 <?php
+
 namespace Dizda\CloudBackupBundle\Client;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
