@@ -10,7 +10,7 @@ use Dizda\CloudBackupBundle\Tests\AbstractTesting;
  *
  * @package Dizda\CloudBackupBundle\Tests\Processors
  */
-class SevenZipTest extends AbstractTesting
+class SevenZipTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test different commands
