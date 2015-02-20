@@ -10,16 +10,16 @@ namespace Dizda\CloudBackupBundle\Client;
 class ClientChain implements ClientInterface
 {
     /**
-     * @var ClientInterface[] clients
+     * @var ClientInterface[] children
      */
-    protected $clients;
+    protected $children;
 
     /**
      * @param array $clients
      */
     public function __construct(array $clients = array())
     {
-        $this->clients = $clients;
+        $this->children = $clients;
     }
 
     /**
@@ -29,7 +29,7 @@ class ClientChain implements ClientInterface
      */
     public function add(ClientInterface $client)
     {
-        $this->clients[] = $client;
+        $this->children[] = $client;
     }
 
     /**
@@ -39,16 +39,16 @@ class ClientChain implements ClientInterface
      */
     public function upload($filePath)
     {
-        foreach ($this->clients as $client) {
-            $client->upload($filePath);
+        foreach ($this->children as $child) {
+            $child->upload($filePath);
         }
     }
 
     public function getName()
     {
         $names = array();
-        foreach ($this->clients as $client) {
-            $names[] = $client->getName();
+        foreach ($this->children as $child) {
+            $names[] = $child->getName();
         }
 
         return sprintf('ClientChain of %d (%s)', count($names), implode(', ', $names));
