@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Tests\Databases;
+namespace Dizda\CloudBackupBundle\Tests\Database;
 
 use Dizda\CloudBackupBundle\Database\MySQL;
 use Dizda\CloudBackupBundle\Tests\AbstractTesting;

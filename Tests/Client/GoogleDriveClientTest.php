@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Tests\Clients;
+namespace Dizda\CloudBackupBundle\Tests\Client;
 
 use Dizda\CloudBackupBundle\Client\GoogleDriveClient;
 

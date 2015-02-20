@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Tests\Processors;
+namespace Dizda\CloudBackupBundle\Tests\Processor;
 
 use Dizda\CloudBackupBundle\Processor\ZipProcessor;
 use Dizda\CloudBackupBundle\Tests\AbstractTesting;

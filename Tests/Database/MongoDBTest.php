@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Tests\Databases;
+namespace Dizda\CloudBackupBundle\Tests\Database;
 
 use Dizda\CloudBackupBundle\Database\MongoDB;
 use Dizda\CloudBackupBundle\Tests\AbstractTesting;
@@ -8,7 +8,7 @@ use Dizda\CloudBackupBundle\Tests\AbstractTesting;
 /**
  * Class MongoDBTest
  *
- * @package Dizda\CloudBackupBundle\Tests\Databases
+ * @package Dizda\CloudBackupBundle\Tests\Database
  */
 class MongoDBTest extends AbstractTesting
 {
