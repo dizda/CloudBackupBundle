@@ -10,7 +10,7 @@ use Dizda\CloudBackupBundle\Tests\AbstractTesting;
  *
  * @package Dizda\CloudBackupBundle\Tests\Databases
  */
-class MySQLTest extends AbstractTesting
+class MySQLTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test different commands

@@ -10,7 +10,7 @@ use Dizda\CloudBackupBundle\Tests\AbstractTesting;
  *
  * @package Dizda\CloudBackupBundle\Tests\Database
  */
-class MongoDBTest extends AbstractTesting
+class MongoDBTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test different commands

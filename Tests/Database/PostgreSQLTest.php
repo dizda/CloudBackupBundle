@@ -10,7 +10,7 @@ use Dizda\CloudBackupBundle\Tests\AbstractTesting;
  *
  * @package Dizda\CloudBackupBundle\Tests\Databases
  */
-class PostgreSQLTest extends AbstractTesting
+class PostgreSQLTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test different commands
