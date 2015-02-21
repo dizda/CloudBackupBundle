@@ -27,9 +27,9 @@ class BackupManager
     private $processor;
 
     /**
-     * @param LoggerInterface $logger
-     * @param DatabaseManager $database
-     * @param ClientManager $client
+     * @param LoggerInterface  $logger
+     * @param DatabaseManager  $database
+     * @param ClientManager    $client
      * @param ProcessorManager $processor
      */
     public function __construct(LoggerInterface $logger, DatabaseManager $database, ClientManager $client, ProcessorManager $processor)
@@ -41,7 +41,7 @@ class BackupManager
     }
 
     /**
-     * Start the backup
+     * Start the backup.
      *
      * @return bool
      */
@@ -66,10 +66,9 @@ class BackupManager
 
             $this->logger->info('[Dizda Backup] Cleaning up after us.');
             $this->processor->cleanUp();
-
         } catch (\Exception $e) {
             // write log
-            $this->logger->critical('[Dizda Backup] Unexpected exception.', array('exception'=>$e));
+            $this->logger->critical('[Dizda Backup] Unexpected exception.', array('exception' => $e));
 
             return false;
         }

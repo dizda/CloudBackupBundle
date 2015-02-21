@@ -1,6 +1,6 @@
 <?php
 
-namespace Dizda\CloudBackupBundle\Tests\Splitters;
+namespace Dizda\CloudBackupBundle\Tests\Splitter;
 
 use Dizda\CloudBackupBundle\Splitter\ZipSplitSplitter;
 
@@ -22,4 +22,3 @@ class ZipSplitTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-

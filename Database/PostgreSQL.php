@@ -2,9 +2,8 @@
 namespace Dizda\CloudBackupBundle\Database;
 
 /**
- * Class MySQL
+ * Class MySQL.
  *
- * @package Dizda\CloudBackupBundle\Database
  * @author  István Manzuk <istvan.manzuk@gmail.com>
  */
 class PostgreSQL extends BaseDatabase
@@ -18,7 +17,7 @@ class PostgreSQL extends BaseDatabase
     private $fileName;
 
     /**
-     * DB Auth
+     * DB Auth.
      *
      * @param array  $params
      * @param string $basePath
@@ -31,7 +30,7 @@ class PostgreSQL extends BaseDatabase
         $this->database   = $params['database'];
         $this->auth       = '';
         $this->authPrefix = '';
-        $this->fileName   = $this->database . '.sql';
+        $this->fileName   = $this->database.'.sql';
 
         if ($params['db_password']) {
             $this->authPrefix = sprintf('export PGPASSWORD="%s" && ', $params['db_password']);
@@ -58,16 +57,19 @@ class PostgreSQL extends BaseDatabase
     /**
      * {@inheritdoc}
      */
-    public function getCommand()
+    protected function getCommand()
     {
         //TODO: pg_dumpall support
         return sprintf('%spg_dump %s "%s" > "%s"',
             $this->authPrefix,
             $this->auth,
             $this->database,
-            $this->dataPath . $this->fileName);
+            $this->dataPath.$this->fileName);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'PostgreSQL';

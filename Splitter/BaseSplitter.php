@@ -1,19 +1,27 @@
 <?php
 
 namespace Dizda\CloudBackupBundle\Splitter;
+
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Interface SplittersInterface
+ * Interface SplittersInterface.
  *
- * @package Dizda\CloudBackupBundle\Splitter
  * @author Nick Doulgeridis
  */
 abstract class BaseSplitter
 {
+    /**
+     * @var string archivePath
+     */
     private $archivePath;
+
+    /**
+     * @var integer splitSize
+     */
     private $splitSize;
+
     /**
      * @param $archive_path
      * @param $split_size
@@ -37,7 +45,7 @@ abstract class BaseSplitter
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getSplitSize()
     {
@@ -63,10 +71,10 @@ abstract class BaseSplitter
     /**
      * @void
      */
-    public abstract function executeSplit();
+    abstract public function executeSplit();
 
     /**
      * @return string
      */
-    public abstract function getCommand();
+    abstract public function getCommand();
 }

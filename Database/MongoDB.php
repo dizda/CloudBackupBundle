@@ -2,9 +2,8 @@
 namespace Dizda\CloudBackupBundle\Database;
 
 /**
- * Class MongoDB
+ * Class MongoDB.
  *
- * @package Dizda\CloudBackupBundle\Database
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class MongoDB extends BaseDatabase
@@ -15,7 +14,7 @@ class MongoDB extends BaseDatabase
     private $auth = '';
 
     /**
-     * DB Auth
+     * DB Auth.
      *
      * @param array  $params
      * @param string $basePath
@@ -61,7 +60,7 @@ class MongoDB extends BaseDatabase
     /**
      * {@inheritdoc}
      */
-    public function getCommand()
+    protected function getCommand()
     {
         return sprintf('mongodump %s %s --out %s',
             $this->auth,
@@ -69,6 +68,9 @@ class MongoDB extends BaseDatabase
             $this->dataPath);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'MongoDB';

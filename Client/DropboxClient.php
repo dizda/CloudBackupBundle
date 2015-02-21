@@ -2,14 +2,11 @@
 namespace Dizda\CloudBackupBundle\Client;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
-
 use DropboxUploader;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * Class DropboxClient
+ * Class DropboxClient.
  *
- * @package Dizda\CloudBackupBundle\Client
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class DropboxClient implements ClientInterface
@@ -20,7 +17,7 @@ class DropboxClient implements ClientInterface
     private $remotePath;
 
     /**
-     * @param array  $params user
+     * @param array $params user
      */
     public function __construct($params)
     {
@@ -31,24 +28,19 @@ class DropboxClient implements ClientInterface
         $this->remotePath = $params['remote_path'];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function upload($archive)
     {
-//        $this->output->write('- <comment>Uploading to Dropbox... </comment>');
         $dropbox = new DropboxUploader($this->user, $this->password);
-//        if(is_array($archive)){
-//            $this->output->writeln("");
-//            foreach($archive as $file /* @var $file SplFileInfo*/){
-//                $this->output->write(sprintf('----- <comment>Uploading file: %s... </comment>', $file->getFilename()));
-//                $dropbox->upload($file, $this->remotePath);
-//                $this->output->writeln('<info>OK</info>');
-//            }
-//        }
-//        else{
-            $dropbox->upload($archive, $this->remotePath);
-//            $this->output->writeln('<info>OK</info>');
-//        }
+
+        $dropbox->upload($archive, $this->remotePath);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'Dropbox';

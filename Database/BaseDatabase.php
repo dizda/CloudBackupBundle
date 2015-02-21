@@ -1,14 +1,12 @@
 <?php
 namespace Dizda\CloudBackupBundle\Database;
 
-use Monolog\Logger;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 /**
- * Class BaseDatabase
+ * Class BaseDatabase.
  *
- * @package Dizda\CloudBackupBundle\Database
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 abstract class BaseDatabase implements DatabaseInterface
@@ -20,24 +18,19 @@ abstract class BaseDatabase implements DatabaseInterface
     protected $timeout;
 
     /**
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
-     * Get SF2 Filesystem
+     * Get SF2 Filesystem.
      *
      * @param string $basePath
      */
     public function __construct($basePath)
     {
-        $this->dataPath = $basePath . static::DB_PATH . '/';
+        $this->dataPath = $basePath.static::DB_PATH.'/';
         $this->filesystem = new Filesystem();
         $this->timeout = 300;
     }
 
     /**
-     * Handle process error on fails
+     * Handle process error on fails.
      *
      * @param string $command
      *
@@ -52,9 +45,9 @@ abstract class BaseDatabase implements DatabaseInterface
             throw new \RuntimeException($process->getErrorOutput());
         }
     }
-    
+
     /**
-     * Prepare path for dump file
+     * Prepare path for dump file.
      */
     protected function preparePath()
     {
@@ -63,6 +56,7 @@ abstract class BaseDatabase implements DatabaseInterface
 
     /**
      * @param int $timeout
+     *
      * @return $this
      */
     public function setTimeout($timeout)
@@ -70,16 +64,5 @@ abstract class BaseDatabase implements DatabaseInterface
         $this->timeout = $timeout;
 
         return $this;
-    }
-
-    public function dump()
-    {
-        $dbName = explode('\\', get_class($this));
-        $this->logger->info(sprintf('Dumping %s database', end($dbName)));
-    }
-
-    public function setLogger(Logger $logger)
-    {
-        $this->logger = $logger;
     }
 }

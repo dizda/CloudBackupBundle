@@ -4,11 +4,11 @@ namespace Dizda\CloudBackupBundle\Processor;
 
 class SevenZipProcessor extends BaseProcessor implements ProcessorInterface
 {
-
     /**
      * {@inheritdoc}
      */
-    public function getExtension() {
+    public function getExtension()
+    {
         return '.7z';
     }
 
@@ -20,7 +20,7 @@ class SevenZipProcessor extends BaseProcessor implements ProcessorInterface
         $params = array();
 
         if (isset($this->options['password']) && $this->options['password']) {
-            $params[] = '-p' . $this->options['password'];
+            $params[] = '-p'.$this->options['password'];
         }
 
         if (isset($this->options['compression_ratio']) && $this->options['compression_ratio'] >= 0) {
@@ -30,12 +30,15 @@ class SevenZipProcessor extends BaseProcessor implements ProcessorInterface
                 $compression_ratio--;
             }
 
-            $params[] = '-mx' . $compression_ratio;
+            $params[] = '-mx'.$compression_ratio;
         }
 
         return sprintf('cd %s && 7z a %s %s', $basePath, implode(' ', $params), $archivePath);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'SevenZip';

@@ -22,12 +22,13 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": ">=2.1",
+        "symfony/monolog-bundle": "~2.3",
         "knplabs/knp-gaufrette-bundle": "<0.3.0"
     },
 
     "require-dev": {
         "google/apiclient": "@dev",
-        "symfony/symfony": "v2.3.1"
+        "symfony/symfony": "v2.3.1",
     },
 
     "suggest": {

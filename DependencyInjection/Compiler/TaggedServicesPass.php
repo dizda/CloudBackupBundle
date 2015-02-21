@@ -7,14 +7,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class TaggedServicesPass
+ * Class TaggedServicesPass.
  *
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
  * @author Tobias Nyholm
  */
 class TaggedServicesPass implements CompilerPassInterface
 {
-
     /**
      * @param ContainerBuilder $container
      */
@@ -78,7 +77,7 @@ class TaggedServicesPass implements CompilerPassInterface
 
             $gaufrette = $container->getDefinition('dizda.cloudbackup.client.gaufrette');
             $gaufrette->addMethodCall('setFilesystem', [
-                new Reference($filesystemName)
+                new Reference($filesystemName),
             ]);
         }
     }
@@ -95,5 +94,4 @@ class TaggedServicesPass implements CompilerPassInterface
             $container->getDefinition($serviceId)->addMethodCall('addOptions', array($options));
         }
     }
-
 }

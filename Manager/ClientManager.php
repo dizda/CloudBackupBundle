@@ -6,7 +6,7 @@ use Dizda\CloudBackupBundle\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class ClientChain
+ * Class ClientChain.
  *
  * @author Jonathan Dizdarevic <dizda@dizda.fr>
  */
@@ -23,7 +23,7 @@ class ClientManager
     protected $logger;
 
     /**
-     * @param LoggerInterface $logger
+     * @param LoggerInterface   $logger
      * @param ClientInterface[] $clients
      */
     public function __construct(LoggerInterface $logger, array $clients = array())
@@ -33,7 +33,7 @@ class ClientManager
     }
 
     /**
-     * Add a client to the chain
+     * Add a client to the chain.
      *
      * @param ClientInterface $client
      */
@@ -43,7 +43,7 @@ class ClientManager
     }
 
     /**
-     * Upload to all active clients
+     * Upload to all active clients.
      *
      * @param string $filePath
      */
