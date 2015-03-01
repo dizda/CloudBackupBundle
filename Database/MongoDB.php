@@ -51,8 +51,6 @@ class MongoDB extends BaseDatabase
      */
     public function dump()
     {
-        parent::dump();
-
         $this->preparePath();
         $this->execute($this->getCommand());
     }

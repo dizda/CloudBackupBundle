@@ -42,7 +42,6 @@ services:
             - %dizda_cloud_backup.output_folder%
         calls:
             - [ setTimeout, [ %dizda_cloud_backup.timeout% ] ]
-            - [ setLogger, [ @logger ] ]
         tags:
             -  { name: dizda.cloudbackup.database }
 
@@ -53,7 +52,6 @@ services:
             - %dizda_cloud_backup.output_folder%
         calls:
             - [ setTimeout, [ %dizda_cloud_backup.timeout% ] ]
-            - [ setLogger, [ @logger ] ]
         tags:
             -  { name: dizda.cloudbackup.database }
 
@@ -64,7 +62,6 @@ services:
             - %dizda_cloud_backup.output_folder%
         calls:
             - [ setTimeout, [ %dizda_cloud_backup.timeout% ] ]
-            - [ setLogger, [ @logger ] ]
         tags:
             -  { name: dizda.cloudbackup.database }
 
