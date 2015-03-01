@@ -52,11 +52,11 @@ class BackupManager
             $this->dbm->dump();
 
             // Backup folders if specified
-            $this->logger->info('[Dizda Backup] Copying folders.');
+            $this->logger->info('[dizda-backup] Copying folders.');
             $this->processor->copyFolders();
 
             // Compress everything
-            $this->logger->info(sprintf('[Dizda Backup] Compressing to archive using %s', $this->processor->getName()));
+            $this->logger->info(sprintf('[dizda-backup] Compressing to archive using %s', $this->processor->getName()));
             $this->processor->compress();
 
             var_dump($this->processor->getArchivePath());
@@ -64,11 +64,11 @@ class BackupManager
             // Transfer with all clients
             $this->cm->upload($this->processor->getArchivePath());
 
-            $this->logger->info('[Dizda Backup] Cleaning up after us.');
+            $this->logger->info('[dizda-backup] Cleaning up after us.');
             $this->processor->cleanUp();
         } catch (\Exception $e) {
             // write log
-            $this->logger->critical('[Dizda Backup] Unexpected exception.', array('exception' => $e));
+            $this->logger->critical('[dizda-backup] Unexpected exception.', array('exception' => $e));
 
             return false;
         }

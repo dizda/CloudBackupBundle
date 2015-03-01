@@ -20,7 +20,7 @@ class BackupCommand extends ContainerAwareCommand
     {
         $this
             ->setName('dizda:backup:start')
-            ->setDescription('Upload a backup of your database to cloud services (use -F option for backup folders)');
+            ->setDescription('Upload a backup of your database to your cloud services.');
     }
 
     /**
