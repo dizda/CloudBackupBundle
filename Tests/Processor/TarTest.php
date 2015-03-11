@@ -15,49 +15,35 @@ class TarTest extends \PHPUnit_Framework_TestCase
     public function testGetCompressionCommand()
     {
         // build necessary data
-        $rootPath = '/';
-        $outputPath = '/var/backup/';
-        $dateformat = 'Y-m-d_H-i-s';
-        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array(),
-        ));
-        $archivePath = $outputPath.$processor->buildArchiveFilename();
+        $outputPath  = '/var/backup/';
+        $archivePath = $outputPath . 'coucou.zip';
 
         // compress with default params
-        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array(),
-        ));
+        $processor = new TarProcessor(array());
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "tar  c -C $outputPath . | gzip  > $archivePath");
+            "tar  c -C $outputPath . | gzip  > $archivePath"
+        );
 
         // compress with password - password not used in tar processor
-        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array('password' => 'qwerty'),
-        ));
+        $processor = new TarProcessor(array('password' => 'qwerty'));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "tar  c -C $outputPath . | gzip  > $archivePath");
+            "tar  c -C $outputPath . | gzip  > $archivePath"
+        );
 
         // compress with compression rate = 0
-        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array('compression_ratio' => 0),
-        ));
+        $processor = new TarProcessor(array('compression_ratio' => 0));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "tar  c -C $outputPath . | gzip -0 > $archivePath");
+            "tar  c -C $outputPath . | gzip -0 > $archivePath"
+        );
 
         // compress with compression rate = 9
-        $processor = new TarProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array('compression_ratio' => 9),
-        ));
+        $processor = new TarProcessor(array('compression_ratio' => 9));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "tar  c -C $outputPath . | gzip -9 > $archivePath");
+            "tar  c -C $outputPath . | gzip -9 > $archivePath"
+        );
     }
 }

@@ -14,61 +14,43 @@ class SevenZipTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCompressionCommand()
     {
-        //        $processor = self::$kernel->getContainer()->get('dizda.cloudbackup.processor.7z');
-
         // build necessary data
-        $rootPath = '/';
-        $outputPath = '/var/backup/';
-        $dateformat = 'Y-m-d_H-i-s';
-        $processor = new SevenZipProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array(),
-        ));
-        $archivePath = $outputPath.$processor->buildArchiveFilename();
+        $outputPath  = '/var/backup/';
+        $archivePath = $outputPath . 'coucou.zip';
 
         // compress with default params
-        $processor = new SevenZipProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array(),
-        ));
+        $processor = new SevenZipProcessor(array());
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "cd $outputPath && 7z a  $archivePath");
+            "cd $outputPath && 7z a  $archivePath"
+        );
 
         // compress with password
-        $processor = new SevenZipProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array('password' => 'qwerty'),
-        ));
+        $processor = new SevenZipProcessor(array('password' => 'qwerty'));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "cd $outputPath && 7z a -pqwerty $archivePath");
+            "cd $outputPath && 7z a -pqwerty $archivePath"
+        );
 
         // compress with compression rate = 0
-        $processor = new SevenZipProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array('compression_ratio' => 0),
-        ));
+        $processor = new SevenZipProcessor(array('compression_ratio' => 0));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "cd $outputPath && 7z a -mx0 $archivePath");
+            "cd $outputPath && 7z a -mx0 $archivePath"
+        );
 
         // compress with compression rate = 9
-        $processor = new SevenZipProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array('compression_ratio' => 9),
-        ));
+        $processor = new SevenZipProcessor(array('compression_ratio' => 9));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "cd $outputPath && 7z a -mx9 $archivePath");
+            "cd $outputPath && 7z a -mx9 $archivePath"
+        );
 
         // compress with compression rate = 2 - will be 1 - 7z don't support even numers of compression rate
-        $processor = new SevenZipProcessor($rootPath, $outputPath, 'database', array(), array(
-            'date_format' => $dateformat,
-            'options'     => array('compression_ratio' => 2),
-        ));
+        $processor = new SevenZipProcessor(array('compression_ratio' => 2));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "cd $outputPath && 7z a -mx1 $archivePath");
+            "cd $outputPath && 7z a -mx1 $archivePath"
+        );
     }
 }

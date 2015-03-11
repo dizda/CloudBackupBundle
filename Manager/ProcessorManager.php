@@ -108,7 +108,7 @@ class ProcessorManager
      */
     public function compress()
     {
-        $this->archivePath = $this->compressedArchivePath.$this->buildArchiveFilename();
+        $this->archivePath = $this->compressedArchivePath . $this->buildArchiveFilename();
 
         $archive = $this->processor->getCompressionCommand($this->archivePath, $this->outputPath);
 
@@ -116,17 +116,17 @@ class ProcessorManager
         $this->filesystem->mkdir($this->outputPath);
         $this->execute($archive);
 
-        $this->split();
+//        $this->split();
     }
 
     /**
-     * Return archive file name.
+     * Return the archive file name.
      *
      * @return string
      */
     public function buildArchiveFilename()
     {
-        return $this->filePrefix.'_'.date($this->dateFormat).$this->processor->getExtension();
+        return $this->filePrefix . '_' . date($this->dateFormat) . $this->processor->getExtension();
     }
 
     /**
@@ -168,10 +168,11 @@ class ProcessorManager
 
     /**
      * Here is the split.
+     *
+     * TODO:
      */
     private function split()
     {
-        var_dump('----split');
         $split = new ZipSplitSplitter($this->archivePath, 350000);
         $split->executeSplit();
         $splitFiles = $split->getSplitFiles();
