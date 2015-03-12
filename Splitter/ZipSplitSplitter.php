@@ -19,7 +19,6 @@ class ZipSplitSplitter extends BaseSplitter
     public function executeSplit()
     {
         $command = $this->getCommand();
-        var_dump($command);
         $process = new Process($command);
         $process->setTimeout(null);
         $process->run();

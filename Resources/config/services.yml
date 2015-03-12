@@ -95,5 +95,5 @@ services:
             - %dizda_cloud_backup.root_folder%
             - %dizda_cloud_backup.output_folder%
             - %dizda_cloud_backup.output_file_prefix%
-            - %dizda_cloud_backup.processor.date_format%
+            - %dizda_cloud_backup.processor%
             - %dizda_cloud_backup.folders%

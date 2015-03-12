@@ -57,24 +57,24 @@ class ProcessorManager
     protected $filePrefix;
 
     /**
-     * @var string dateFormat
+     * @var array properties
      */
-    protected $dateFormat;
+    protected $properties;
 
     /**
      * @param string $rootPath   Path to root folder
      * @param string $outputPath Path to folder with archived files
      * @param string $filePrefix Prefix for archive file (e.g. sitename)
-     * @param string $dateFormat Date function format
+     * @param array  $properties Date function format
      * @param array  $folders    Array of folders to archive (relative to $rootPath)
      */
-    public function __construct($rootPath, $outputPath, $filePrefix, $dateFormat, array $folders = array())
+    public function __construct($rootPath, $outputPath, $filePrefix, $properties, array $folders = array())
     {
         $this->rootPath   = $rootPath;
         $this->outputPath = $outputPath;
         $this->filePrefix = $filePrefix;
         $this->folders    = $folders;
-        $this->dateFormat = $dateFormat;
+        $this->properties = $properties;
         $this->compressedArchivePath = $this->outputPath.'../backup_compressed/';
 
         $this->filesystem = new Filesystem();
@@ -116,7 +116,9 @@ class ProcessorManager
         $this->filesystem->mkdir($this->outputPath);
         $this->execute($archive);
 
-//        $this->split();
+        if ($this->properties['options']['split']['enable']) {
+            $this->split();
+        }
     }
 
     /**
@@ -126,7 +128,7 @@ class ProcessorManager
      */
     public function buildArchiveFilename()
     {
-        return $this->filePrefix . '_' . date($this->dateFormat) . $this->processor->getExtension();
+        return $this->filePrefix . '_' . date($this->properties['date_format']) . $this->processor->getExtension();
     }
 
     /**
@@ -176,8 +178,6 @@ class ProcessorManager
         $split = new ZipSplitSplitter($this->archivePath, 350000);
         $split->executeSplit();
         $splitFiles = $split->getSplitFiles();
-        var_dump($splitFiles);
-        var_dump('----split');
     }
 
     public function getName()

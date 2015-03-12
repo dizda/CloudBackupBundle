@@ -88,10 +88,10 @@ class TaggedServicesPass implements CompilerPassInterface
     public function processorCompilerPass(ContainerBuilder $container)
     {
         $processors = $container->findTaggedServiceIds('dizda.cloudbackup.processor');
-        $options = $container->getParameter('dizda_cloud_backup.processor.options');
+        $options = $container->getParameter('dizda_cloud_backup.processor');
 
         foreach ($processors as $serviceId => $tags) {
-            $container->getDefinition($serviceId)->addMethodCall('addOptions', array($options));
+            $container->getDefinition($serviceId)->addMethodCall('addOptions', array($options['options']));
         }
     }
 }

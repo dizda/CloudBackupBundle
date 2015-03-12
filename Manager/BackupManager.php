@@ -58,14 +58,12 @@ class BackupManager
             // Compress everything
             $this->logger->info(sprintf('[dizda-backup] Compressing to archive using %s', $this->processor->getName()));
             $this->processor->compress();
-//
-//            var_dump($this->processor->getArchivePath());
-//
-//            // Transfer with all clients
-//            $this->cm->upload($this->processor->getArchivePath());
-//
-//            $this->logger->info('[dizda-backup] Cleaning up after us.');
-//            $this->processor->cleanUp();
+
+            // Transfer with all clients
+            $this->cm->upload($this->processor->getArchivePath());
+
+            $this->logger->info('[dizda-backup] Cleaning up after us.');
+            $this->processor->cleanUp();
         } catch (\Exception $e) {
             // write log
             $this->logger->critical('[dizda-backup] Unexpected exception.', array('exception' => $e));

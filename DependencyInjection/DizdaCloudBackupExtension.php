@@ -80,8 +80,8 @@ class DizdaCloudBackupExtension extends Extension
             ),
         ]);
 
-        $container->setParameter('dizda_cloud_backup.processor.date_format', $config['processor']['date_format']);
-        $container->setParameter('dizda_cloud_backup.processor.options', $config['processor']['options']);
+//        $container->setParameter('dizda_cloud_backup.processor.date_format', $config['processor']['date_format']);
+//        $container->setParameter('dizda_cloud_backup.processor.options', $config['processor']['options']);
     }
 
     /**
