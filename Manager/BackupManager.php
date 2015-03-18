@@ -33,11 +33,15 @@ class BackupManager
      * @param ClientManager    $client
      * @param ProcessorManager $processor
      */
-    public function __construct(LoggerInterface $logger, DatabaseManager $database, ClientManager $client, ProcessorManager $processor)
-    {
-        $this->logger    = $logger;
-        $this->dbm       = $database;
-        $this->cm        = $client;
+    public function __construct(
+        LoggerInterface $logger,
+        DatabaseManager $database,
+        ClientManager $client,
+        ProcessorManager $processor
+    ) {
+        $this->logger = $logger;
+        $this->dbm = $database;
+        $this->cm = $client;
         $this->processor = $processor;
     }
 
@@ -48,6 +52,7 @@ class BackupManager
      */
     public function execute()
     {
+        $successful = true;
         try {
             // Dump all databases
             $this->dbm->dump();
@@ -62,25 +67,23 @@ class BackupManager
 
             // Transfer with all clients
             $this->cm->upload($this->processor->getArchivePath());
-
         } catch (\Exception $e) {
             // Write log
             $this->logger->critical('[dizda-backup] Unexpected exception.', array('exception' => $e));
 
-            return false;
-        } finally {
-            // If we catch an exception or not, we would still like to try cleaning up after us
-            $this->logger->info('[dizda-backup] Cleaning up after us.');
-
-            try {
-                $this->processor->cleanUp();
-            } catch (IOException $e) {
-                $this->logger->error('[dizda-backup] Cleaning up failed.');
-
-                return false;
-            }
+            $successful = false;
         }
 
-        return true;
+        try {
+            // If we catch an exception or not, we would still like to try cleaning up after us
+            $this->logger->info('[dizda-backup] Cleaning up after us.');
+            $this->processor->cleanUp();
+        } catch (IOException $e) {
+            $this->logger->error('[dizda-backup] Cleaning up failed.');
+
+            return false;
+        }
+
+        return $successful;
     }
 }
