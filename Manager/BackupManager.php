@@ -65,7 +65,7 @@ class BackupManager
 
         } catch (\Exception $e) {
             // Write log
-            $this->logger->critical('[dizda-backup] Unexpected exception.', array('exception' => $e->getMessage()));
+            $this->logger->critical('[dizda-backup] Unexpected exception.', array('exception' => $e));
 
             return false;
         } finally {
