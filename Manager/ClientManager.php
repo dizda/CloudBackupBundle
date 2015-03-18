@@ -49,14 +49,20 @@ class ClientManager
      */
     public function upload($filePath)
     {
+        $exception = null;
         foreach ($this->children as $child) {
             $this->logger->info(sprintf('[Dizda Backup] Uploading to %s', $child->getName()));
 
             try {
                 $child->upload($filePath);
             } catch (\Exception $e) {
-                $this->logger->error($e->getMessage());
+                //save the exception for later, there might be other children that are working
+                $exception = $e;
             }
+        }
+
+        if ($exception) {
+            throw $exception;
         }
     }
 }

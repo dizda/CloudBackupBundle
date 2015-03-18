@@ -3,6 +3,7 @@
 namespace Dizda\CloudBackupBundle\Manager;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 class BackupManager
 {
@@ -62,13 +63,22 @@ class BackupManager
             // Transfer with all clients
             $this->cm->upload($this->processor->getArchivePath());
 
-            $this->logger->info('[dizda-backup] Cleaning up after us.');
-            $this->processor->cleanUp();
         } catch (\Exception $e) {
-            // write log
-            $this->logger->critical('[dizda-backup] Unexpected exception.', array('exception' => $e));
+            // Write log
+            $this->logger->critical('[dizda-backup] Unexpected exception.', array('exception' => $e->getMessage()));
 
             return false;
+        } finally {
+            // If we catch an exception or not, we would still like to try cleaning up after us
+            $this->logger->info('[dizda-backup] Cleaning up after us.');
+
+            try {
+                $this->processor->cleanUp();
+            } catch (IOException $e) {
+                $this->logger->error('[dizda-backup] Cleaning up failed.');
+
+                return false;
+            }
         }
 
         return true;
