@@ -66,9 +66,11 @@ class DizdaCloudBackupExtension extends Extension
 
         $this->setDatabases($config, $container);
         $this->setProcessor($config, $container);
+        $this->setSplitter($config, $container);
     }
 
     /**
+     * @param array            $config
      * @param ContainerBuilder $container
      */
     private function setProcessor($config, ContainerBuilder $container)
@@ -76,13 +78,30 @@ class DizdaCloudBackupExtension extends Extension
         $processorManager = $container->getDefinition('dizda.cloudbackup.manager.processor');
         $processorManager->addMethodCall('setProcessor', [
             new Reference(
-                sprintf('dizda.cloudbackup.processor.%s', $container->getParameter('dizda_cloud_backup.processor')['type'])
+                sprintf('dizda.cloudbackup.processor.%s', $config['processor']['type'])
             ),
         ]);
-
-//        $container->setParameter('dizda_cloud_backup.processor.date_format', $config['processor']['date_format']);
-//        $container->setParameter('dizda_cloud_backup.processor.options', $config['processor']['options']);
     }
+
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     */
+    private function setSplitter($config, ContainerBuilder $container)
+    {
+        if (!$config['processor']['options']['split']['enable']) {
+            return;
+        }
+
+        $serviceId=sprintf('dizda.cloudbackup.splitter.%s', $config['processor']['type']);
+
+        //set the split size
+        $splitter = $container->getDefinition($serviceId);
+        $splitter->replaceArgument(0, $config['processor']['options']['split']['split_size']);
+
+        $processorManager = $container->getDefinition('dizda.cloudbackup.manager.processor');
+        $processorManager->addMethodCall('setSplitter', [ new Reference($serviceId) ]);
+   }
 
     /**
      * @param array            $config

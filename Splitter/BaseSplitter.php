@@ -23,13 +23,11 @@ abstract class BaseSplitter
     private $splitSize;
 
     /**
-     * @param $archive_path
-     * @param $split_size
+     * @param $splitSize
      */
-    public function __construct($archive_path, $split_size)
+    public function __construct($splitSize)
     {
-        $this->archivePath = $archive_path;
-        $this->splitSize = $split_size;
+        $this->splitSize = $splitSize;
     }
 
     /**
@@ -66,6 +64,18 @@ abstract class BaseSplitter
     public function getArchivePath()
     {
         return $this->archivePath;
+    }
+
+    /**
+     * @param string $archivePath
+     *
+     * @return $this
+     */
+    public function setArchivePath($archivePath)
+    {
+        $this->archivePath = $archivePath;
+
+        return $this;
     }
 
     /**
