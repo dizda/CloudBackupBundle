@@ -14,7 +14,8 @@ class ZipSplitTest extends \PHPUnit_Framework_TestCase
         $file = '/var/backup/test.zip';
         $outputFolder = dirname($file);
         $split_size = 1000;
-        $split = new ZipSplitSplitter($file, $split_size);
+        $split = new ZipSplitSplitter($split_size);
+        $split->setArchivePath($file);
 
         $this->assertEquals(
             $split->getCommand(),

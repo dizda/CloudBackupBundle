@@ -3,6 +3,7 @@
 namespace Dizda\CloudBackupBundle\Manager;
 
 use Dizda\CloudBackupBundle\Processor\ProcessorInterface;
+use Dizda\CloudBackupBundle\Splitter\BaseSplitter;
 use Dizda\CloudBackupBundle\Splitter\ZipSplitSplitter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
@@ -62,6 +63,11 @@ class ProcessorManager
     protected $properties;
 
     /**
+     * @var BaseSplitter slitter
+     */
+    protected $splitter;
+
+    /**
      * @param string $rootPath   Path to root folder
      * @param string $outputPath Path to folder with archived files
      * @param string $filePrefix Prefix for archive file (e.g. sitename)
@@ -116,7 +122,7 @@ class ProcessorManager
         $this->filesystem->mkdir($this->outputPath);
         $this->execute($archive);
 
-        if ($this->properties['options']['split']['enable']) {
+        if ($this->splitter !== null) {
             $this->split();
         }
     }
@@ -152,10 +158,14 @@ class ProcessorManager
     /**
      * Return path of the archive.
      *
-     * @return string
+     * @return array
      */
     public function getArchivePath()
     {
+        if (!is_array($this->archivePath)) {
+            return array($this->archivePath);
+        }
+
         return $this->archivePath;
     }
 
@@ -170,14 +180,24 @@ class ProcessorManager
 
     /**
      * Here is the split.
-     *
-     * TODO:
      */
     private function split()
     {
-        $split = new ZipSplitSplitter($this->archivePath, 350000);
-        $split->executeSplit();
-        $splitFiles = $split->getSplitFiles();
+        $this->splitter->setArchivePath($this->archivePath);
+        $this->splitter->executeSplit();
+        $this->archivePath = $this->splitter->getSplitFiles();
+    }
+
+    /**
+     * @param \Dizda\CloudBackupBundle\Splitter\BaseSplitter $splitter
+     *
+     * @return $this
+     */
+    public function setSplitter(BaseSplitter $splitter)
+    {
+        $this->splitter = $splitter;
+
+        return $this;
     }
 
     public function getName()

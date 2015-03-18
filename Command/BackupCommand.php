@@ -32,7 +32,7 @@ class BackupCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->getContainer()->get('dizda.cloudbackup.manager.backup')->execute()) {
-            $output->writeln('<error>Something went terribly wrong. We could not create a backup</error>');
+            $output->writeln('<error>Something went terribly wrong. We could not create a backup. Read your log files to see what caused this error.</error>');
 
             return 1; //error
         }

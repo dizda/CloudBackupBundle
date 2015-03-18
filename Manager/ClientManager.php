@@ -45,16 +45,21 @@ class ClientManager
     /**
      * Upload to all active clients.
      *
-     * @param string $filePath
+     * @param array $files is an array with file paths
      */
-    public function upload($filePath)
+    public function upload($files)
     {
         $exception = null;
+
+        //for each client
         foreach ($this->children as $child) {
             $this->logger->info(sprintf('[Dizda Backup] Uploading to %s', $child->getName()));
 
             try {
-                $child->upload($filePath);
+                //try to upload every file, one at a time
+                foreach ($files as $file) {
+                    $child->upload($file);
+                }
             } catch (\Exception $e) {
                 //save the exception for later, there might be other children that are working
                 $exception = $e;
