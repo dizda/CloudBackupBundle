@@ -45,13 +45,15 @@ class ClientManager
     /**
      * Upload to all active clients.
      *
-     * @param string $filePath
+     * @param array $files is an array with file paths
      */
-    public function upload($filePath)
+    public function upload($files)
     {
         foreach ($this->children as $child) {
             $this->logger->info(sprintf('[Dizda Backup] Uploading to %s', $child->getName()));
-            $child->upload($filePath);
+            foreach ($files as $file) {
+                $child->upload($file);
+            }
         }
     }
 }

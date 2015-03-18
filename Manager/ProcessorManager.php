@@ -158,10 +158,14 @@ class ProcessorManager
     /**
      * Return path of the archive.
      *
-     * @return string
+     * @return array
      */
     public function getArchivePath()
     {
+        if (!is_array($this->archivePath)) {
+            return array($this->archivePath);
+        }
+
         return $this->archivePath;
     }
 
@@ -179,10 +183,9 @@ class ProcessorManager
      */
     private function split()
     {
-        //$split = new ZipSplitSplitter($this->archivePath, 350000);
         $this->splitter->setArchivePath($this->archivePath);
         $this->splitter->executeSplit();
-        $splitFiles = $this->splitter->getSplitFiles();
+        $this->archivePath = $this->splitter->getSplitFiles();
     }
 
     /**
