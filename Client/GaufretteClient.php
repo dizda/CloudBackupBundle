@@ -12,16 +12,7 @@ use Gaufrette\Filesystem;
  */
 class GaufretteClient implements ClientInterface
 {
-    private $output;
     private $filesystem;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->output     = new ConsoleOutput();
-    }
 
     /**
      * {@inheritdoc}

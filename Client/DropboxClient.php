@@ -11,7 +11,6 @@ use DropboxUploader;
  */
 class DropboxClient implements ClientInterface
 {
-    private $output;
     private $user;
     private $password;
     private $remotePath;
@@ -21,7 +20,6 @@ class DropboxClient implements ClientInterface
      */
     public function __construct($params)
     {
-        $this->output     = new ConsoleOutput();
         $params           = $params['dropbox'];
         $this->user       = $params['user'];
         $this->password   = $params['password'];
