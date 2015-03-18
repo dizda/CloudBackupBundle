@@ -80,6 +80,10 @@ services:
         tags:
             -  { name: dizda.cloudbackup.processor }
 
+    dizda.cloudbackup.splitter.zip:
+        class: Dizda\CloudBackupBundle\Splitter\ZipSplitSplitter
+        arguments: [~]
+
     # Managers
     dizda.cloudbackup.manager.backup:
         class: Dizda\CloudBackupBundle\Manager\BackupManager
