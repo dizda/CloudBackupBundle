@@ -6,7 +6,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * This is the class that validates and merges configuration from your app/config files
+ * This is the class that validates and merges configuration from your app/config files.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  */
@@ -24,9 +24,12 @@ class Configuration implements ConfigurationInterface
         ->children()
             ->scalarNode('output_file_prefix')->defaultValue(gethostname())->end()
             ->arrayNode('error_notification')
+                ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('from')->defaultValue('dizda@backupbundle.com')->end()
-                    ->arrayNode('to')->prototype('scalar')->end()->end()
+                    ->arrayNode('to')
+                        ->prototype('scalar')->end()
+                    ->end()
                 ->end()
             ->end()
             ->scalarNode('timeout')->defaultValue(300)->end()

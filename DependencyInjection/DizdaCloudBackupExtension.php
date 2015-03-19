@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * This is the class that loads and manages your bundle configuration.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
@@ -27,11 +27,12 @@ class DizdaCloudBackupExtension extends Extension
         $loader->load('services.yml');
 
         /* Config output file */
-        $container->setParameter('dizda_cloud_backup.root_folder', $container->getParameter('kernel.root_dir') . '/../');
-        $container->setParameter('dizda_cloud_backup.output_folder', $container->getParameter('kernel.cache_dir') . '/backup/');
+        $container->setParameter('dizda_cloud_backup.root_folder', $container->getParameter('kernel.root_dir').'/../');
+        $container->setParameter('dizda_cloud_backup.output_folder', $container->getParameter('kernel.cache_dir').'/backup/');
 
+        /* Assign all config vars */
         foreach ($config as $k => $v) {
-            $container->setParameter('dizda_cloud_backup.' . $k, $v);
+            $container->setParameter('dizda_cloud_backup.'.$k, $v);
         }
 
         /* Config google drive */
@@ -46,9 +47,8 @@ class DizdaCloudBackupExtension extends Extension
                 ->replaceArgument(1, $config['cloud_storages']['google_drive']['token_name'])
                 ->replaceArgument(2, $config['cloud_storages']['google_drive']['remote_path']);
         }
-//        else {
-//            $this->setDefaultsParameters($container, array( 'dizda_cloud_backup.cloud_storages.google_drive.active'));
-//        }
+
+        /* Verify that we have our Dropbox library */
         if (isset($config['cloud_storages']['dropbox'])) {
             if (!class_exists('DropboxUploader')) {
                 throw new \LogicException('You need to add "hakre/dropbox-uploader" to your composer.json');
@@ -64,6 +64,51 @@ class DizdaCloudBackupExtension extends Extension
             $container->setParameter('dizda_cloud_backup.cloud_storages', array());
         }
 
+        $this->setDatabases($config, $container);
+        $this->setProcessor($config, $container);
+        $this->setSplitter($config, $container);
+    }
+
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     */
+    private function setProcessor($config, ContainerBuilder $container)
+    {
+        $processorManager = $container->getDefinition('dizda.cloudbackup.manager.processor');
+        $processorManager->addMethodCall('setProcessor', [
+            new Reference(
+                sprintf('dizda.cloudbackup.processor.%s', $config['processor']['type'])
+            ),
+        ]);
+    }
+
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     */
+    private function setSplitter($config, ContainerBuilder $container)
+    {
+        if (!$config['processor']['options']['split']['enable']) {
+            return;
+        }
+
+        $serviceId=sprintf('dizda.cloudbackup.splitter.%s', $config['processor']['type']);
+
+        //set the split size
+        $splitter = $container->getDefinition($serviceId);
+        $splitter->replaceArgument(0, $config['processor']['options']['split']['split_size']);
+
+        $processorManager = $container->getDefinition('dizda.cloudbackup.manager.processor');
+        $processorManager->addMethodCall('setSplitter', [ new Reference($serviceId) ]);
+   }
+
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     */
+    private function setDatabases($config, ContainerBuilder $container)
+    {
         $databases = $container->getParameter('dizda_cloud_backup.databases');
 
         // Setting mysql values
@@ -76,11 +121,9 @@ class DizdaCloudBackupExtension extends Extension
 
             /* if mysql config is not set, we taking from the parameters.yml values */
             if ($mysql['db_host'] === null && $mysql['db_user'] === null) {
-
                 $mysql['db_host'] = $container->getParameter('database_host');
 
-                if($container->getParameter('database_port') !== null) {
-
+                if ($container->getParameter('database_port') !== null) {
                     $mysql['db_port'] = $container->getParameter('database_port');
                 }
 
@@ -101,11 +144,9 @@ class DizdaCloudBackupExtension extends Extension
 
             /* if postgresql config is not set, we taking from the parameters.yml values */
             if ($postgresql['db_host'] === null && $postgresql['db_user'] === null) {
-
                 $postgresql['db_host'] = $container->getParameter('database_host');
 
-                if($container->getParameter('database_port') !== null) {
-
+                if ($container->getParameter('database_port') !== null) {
                     $postgresql['db_port'] = $container->getParameter('database_port');
                 }
 
@@ -117,6 +158,5 @@ class DizdaCloudBackupExtension extends Extension
         }
 
         $container->setParameter('dizda_cloud_backup.databases', $databases);
-
     }
 }

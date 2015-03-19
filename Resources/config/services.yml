@@ -1,69 +1,103 @@
 services:
+    dizda.cloudbackup.manager.database:
+        class: Dizda\CloudBackupBundle\Manager\DatabaseManager
+        arguments:
+          - @logger
+
+    dizda.cloudbackup.manager.client:
+        class: Dizda\CloudBackupBundle\Manager\ClientManager
+        arguments:
+          - @logger
+
     dizda.cloudbackup.client.cloudapp:
-        class: Dizda\CloudBackupBundle\Clients\CloudAppClient
+        class: Dizda\CloudBackupBundle\Client\CloudAppClient
         arguments:
             - %dizda_cloud_backup.cloud_storages%
+        tags:
+            -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.dropbox:
-        class: Dizda\CloudBackupBundle\Clients\DropboxClient
+        class: Dizda\CloudBackupBundle\Client\DropboxClient
         arguments:
             - %dizda_cloud_backup.cloud_storages%
+        tags:
+            -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.google_drive:
-        class: Dizda\CloudBackupBundle\Clients\GoogleDriveClient
+        class: Dizda\CloudBackupBundle\Client\GoogleDriveClient
         public: false
         arguments: [~, ~, ~]
+        tags:
+            -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.gaufrette:
-        class: Dizda\CloudBackupBundle\Clients\GaufretteClient
+        class: Dizda\CloudBackupBundle\Client\GaufretteClient
+        tags:
+            -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.database.mongodb:
-        class: Dizda\CloudBackupBundle\Databases\MongoDB
+        class: Dizda\CloudBackupBundle\Database\MongoDB
         arguments:
             - %dizda_cloud_backup.databases%
             - %dizda_cloud_backup.output_folder%
         calls:
             - [ setTimeout, [ %dizda_cloud_backup.timeout% ] ]
+        tags:
+            -  { name: dizda.cloudbackup.database }
 
     dizda.cloudbackup.database.mysql:
-        class: Dizda\CloudBackupBundle\Databases\MySQL
+        class: Dizda\CloudBackupBundle\Database\MySQL
         arguments:
             - %dizda_cloud_backup.databases%
             - %dizda_cloud_backup.output_folder%
         calls:
             - [ setTimeout, [ %dizda_cloud_backup.timeout% ] ]
+        tags:
+            -  { name: dizda.cloudbackup.database }
 
     dizda.cloudbackup.database.postgresql:
-        class: Dizda\CloudBackupBundle\Databases\PostgreSQL
+        class: Dizda\CloudBackupBundle\Database\PostgreSQL
         arguments:
             - %dizda_cloud_backup.databases%
             - %dizda_cloud_backup.output_folder%
         calls:
             - [ setTimeout, [ %dizda_cloud_backup.timeout% ] ]
+        tags:
+            -  { name: dizda.cloudbackup.database }
 
     dizda.cloudbackup.processor.tar:
-        class: Dizda\CloudBackupBundle\Processors\TarProcessor
-        arguments: 
-            - %dizda_cloud_backup.root_folder%
-            - %dizda_cloud_backup.output_folder%
-            - %dizda_cloud_backup.output_file_prefix%
-            - %dizda_cloud_backup.folders%
-            - %dizda_cloud_backup.processor%
+        class: Dizda\CloudBackupBundle\Processor\TarProcessor
+        tags:
+            -  { name: dizda.cloudbackup.processor }
 
     dizda.cloudbackup.processor.zip:
-        class: Dizda\CloudBackupBundle\Processors\ZipProcessor
-        arguments: 
-            - %dizda_cloud_backup.root_folder%
-            - %dizda_cloud_backup.output_folder%
-            - %dizda_cloud_backup.output_file_prefix%
-            - %dizda_cloud_backup.folders%            
-            - %dizda_cloud_backup.processor%
+        class: Dizda\CloudBackupBundle\Processor\ZipProcessor
+        tags:
+            -  { name: dizda.cloudbackup.processor }
 
     dizda.cloudbackup.processor.7z:
-        class: Dizda\CloudBackupBundle\Processors\SevenZipProcessor
-        arguments: 
+        class: Dizda\CloudBackupBundle\Processor\SevenZipProcessor
+        tags:
+            -  { name: dizda.cloudbackup.processor }
+
+    dizda.cloudbackup.splitter.zip:
+        class: Dizda\CloudBackupBundle\Splitter\ZipSplitSplitter
+        arguments: [~]
+
+    # Managers
+    dizda.cloudbackup.manager.backup:
+        class: Dizda\CloudBackupBundle\Manager\BackupManager
+        arguments:
+            - @logger
+            - @dizda.cloudbackup.manager.database
+            - @dizda.cloudbackup.manager.client
+            - @dizda.cloudbackup.manager.processor
+
+    dizda.cloudbackup.manager.processor:
+        class: Dizda\CloudBackupBundle\Manager\ProcessorManager
+        arguments:
             - %dizda_cloud_backup.root_folder%
             - %dizda_cloud_backup.output_folder%
             - %dizda_cloud_backup.output_file_prefix%
-            - %dizda_cloud_backup.folders%            
             - %dizda_cloud_backup.processor%
+            - %dizda_cloud_backup.folders%

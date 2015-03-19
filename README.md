@@ -80,9 +80,6 @@ dizda_cloud_backup:
     # such as: hostname_2014-01-01_21-08-39.tar
     output_file_prefix: hostname
     timeout: 300
-    error_notification: 
-        from: dizda@backupbundle.com
-        to: your@email.com
     processor:
         type: tar # Required: tar|zip|7z
         options:
@@ -213,8 +210,6 @@ $ php app/console dizda:backup:start zip
 ![](https://github.com/dizda/CloudBackupBundle/raw/master/Resources/doc/dizda-Cloud-Backup-Bundle-symfony2.png)
 
 In addition, using -F or --folder option the folders also will be added to the backup.
-
-If some problems occurs during the backup process and error_notification.to parameter is set the bundle will send an email to that address.
 
 Which archiver do I use?
 ------------------------
