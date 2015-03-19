@@ -12,7 +12,6 @@ use CloudApp\API as CloudApp;
  */
 class CloudAppClient implements ClientInterface
 {
-    private $output;
     private $user;
     private $password;
 
@@ -21,7 +20,6 @@ class CloudAppClient implements ClientInterface
      */
     public function __construct($params)
     {
-        $this->output     = new ConsoleOutput();
         $this->user       = $params['user'];
         $this->password   = $params['password'];
     }

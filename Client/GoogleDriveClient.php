@@ -2,7 +2,6 @@
 namespace Dizda\CloudBackupBundle\Client;
 
 use Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Class GoogleDriveClient.
@@ -11,11 +10,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  */
 class GoogleDriveClient implements ClientInterface
 {
-    /**
-     * @var ConsoleOutput output
-     */
-    protected $output;
-
     /**
      * @var \Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider clientProvider
      */
@@ -33,7 +27,6 @@ class GoogleDriveClient implements ClientInterface
      */
     public function __construct(ClientProvider $clientProvider, $tokenName, $remotePath)
     {
-        $this->output = new ConsoleOutput();
         $this->clientProvider = $clientProvider;
         $this->tokenName = $tokenName;
         $this->remotePath = $remotePath;
@@ -46,7 +39,6 @@ class GoogleDriveClient implements ClientInterface
     {
         $service = $this->getDriveService();
         $this->handleUpload($service, $archive);
-        $this->output->writeln('<info>OK</info>');
     }
 
     /**
@@ -72,7 +64,7 @@ class GoogleDriveClient implements ClientInterface
      */
     protected function getParentFolder(\Google_Service_Drive $service)
     {
-        $parts = explode('/', ltrim($this->remotePath, '/'));
+        $parts = explode('/', trim($this->remotePath, '/'));
         $folderId = null;
         foreach ($parts as $name) {
             $q = 'mimeType="application/vnd.google-apps.folder" and title contains "'.$name.'"';
@@ -125,19 +117,6 @@ class GoogleDriveClient implements ClientInterface
         $file->setTitle($filename);
 
         return $file;
-    }
-
-    /**
-     * @param $message
-     * @param bool $newLine
-     */
-    protected function output($message, $newLine = true)
-    {
-        if ($newLine) {
-            $this->output->writeln($message);
-        } else {
-            $this->output->write($message);
-        }
     }
 
     /**
