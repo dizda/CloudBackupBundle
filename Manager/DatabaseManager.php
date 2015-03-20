@@ -48,7 +48,7 @@ class DatabaseManager
     public function dump()
     {
         foreach ($this->children as $child) {
-            $this->logger->info(sprintf('[Dizda Backup] Dumping %s database', $child->getName()));
+            $this->logger->info(sprintf('[dizda-backup] Dumping %s database', $child->getName()));
             $child->dump();
         }
     }

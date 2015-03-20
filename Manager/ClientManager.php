@@ -53,7 +53,7 @@ class ClientManager
 
         //for each client
         foreach ($this->children as $child) {
-            $this->logger->info(sprintf('[Dizda Backup] Uploading to %s', $child->getName()));
+            $this->logger->info(sprintf('[dizda-backup] Uploading to %s', $child->getName()));
 
             try {
                 //try to upload every file, one at a time
