@@ -31,6 +31,8 @@ class BackupCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->checkEnvironment($output);
+
         if (!$this->getContainer()->get('dizda.cloudbackup.manager.backup')->execute()) {
             $output->writeln('<error>Something went terribly wrong. We could not create a backup. Read your log files to see what caused this error.</error>');
 
@@ -38,5 +40,20 @@ class BackupCommand extends ContainerAwareCommand
         }
 
         $output->writeln('<info>Backup complete.</info>');
+    }
+
+    /**
+     * Print a warning if we do not run the command in production environment
+     *
+     * @param OutputInterface $output
+     */
+    protected function checkEnvironment(OutputInterface $output)
+    {
+        if ($this->getContainer()->get('kernel')->getEnvironment() !== 'prod') {
+            $output->writeln('<bg=yellow>                                                                            </bg=yellow>');
+            $output->writeln('<bg=yellow;options=bold>  Warning:                                                                  </bg=yellow;options=bold>');
+            $output->writeln('<bg=yellow>  You shoild run the command in production environment ("--env=prod")       </bg=yellow>');
+            $output->writeln('<bg=yellow>                                                                            </bg=yellow>');
+        }
     }
 }
