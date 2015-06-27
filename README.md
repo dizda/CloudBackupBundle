@@ -211,6 +211,8 @@ $ php app/console dizda:backup:start zip
 
 In addition, using -F or --folder option the folders also will be added to the backup.
 
+Obviously, if some problems occurs during the backup process, you can configure monolog to send you emails. 
+
 Which archiver do I use?
 ------------------------
 
