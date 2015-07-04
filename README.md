@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/dizda/CloudBackupBundle.png?branch=master)](https://travis-ci.org/dizda/CloudBackupBundle)
+[![Latest Stable Version](https://poser.pugx.org/dizda/cloud-backup-bundle/v/stable)](https://packagist.org/packages/dizda/cloud-backup-bundle) [![Total Downloads](https://poser.pugx.org/dizda/cloud-backup-bundle/downloads)](https://packagist.org/packages/dizda/cloud-backup-bundle) [![Latest Unstable Version](https://poser.pugx.org/dizda/cloud-backup-bundle/v/unstable)](https://packagist.org/packages/dizda/cloud-backup-bundle) [![License](https://poser.pugx.org/dizda/cloud-backup-bundle/license)](https://packagist.org/packages/dizda/cloud-backup-bundle)
 CloudBackupBundle
 =================
 
