@@ -29,7 +29,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
         $processor = new ZipProcessor(array('password' => 'qwerty'));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            "cd $outputPath && zip -r -P qwerty $archivePath ."
+            'cd $outputPath && zip -r -P "qwerty" $archivePath .'
         );
 
         // compress with compression rate = 0
