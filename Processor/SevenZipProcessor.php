@@ -20,7 +20,7 @@ class SevenZipProcessor extends BaseProcessor implements ProcessorInterface
         $params = array();
 
         if (isset($this->options['password']) && $this->options['password']) {
-            $params[] = '-p'.$this->options['password'];
+            $params[] = '-p "'.$this->options['password'].'"';
         }
 
         if (isset($this->options['compression_ratio']) && $this->options['compression_ratio'] >= 0) {
