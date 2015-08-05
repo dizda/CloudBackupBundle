@@ -20,7 +20,7 @@ class ZipProcessor extends BaseProcessor implements ProcessorInterface
         $params = array('-r');
 
         if (isset($this->options['password']) && $this->options['password']) {
-            $params[] = '-P '.$this->options['password'];
+            $params[] = '-P "'.$this->options['password'].'"';
         }
 
         if (isset($this->options['compression_ratio']) && $this->options['compression_ratio'] >= 0) {
