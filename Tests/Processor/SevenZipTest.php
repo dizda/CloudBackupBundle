@@ -29,7 +29,7 @@ class SevenZipTest extends \PHPUnit_Framework_TestCase
         $processor = new SevenZipProcessor(array('password' => 'qwerty'));
         $this->assertEquals(
             $processor->getCompressionCommand($archivePath, $outputPath),
-            'cd $outputPath && 7z a -p "qwerty" $archivePath'
+            "cd $outputPath && 7z a -p \"qwerty\" $archivePath"
         );
 
         // compress with compression rate = 0
