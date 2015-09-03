@@ -74,7 +74,7 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('gaufrette')
                     ->info('Any gaufrette adapter is supported')
                         ->children()
-                            ->scalarNode('service_name')->isRequired()->end()
+                            ->arrayNode('service_name')->prototype('scalar')->end()->isRequired()->requiresAtLeastOneElement()->end()
                         ->end()
                     ->end()
                 ->end()

@@ -104,7 +104,9 @@ dizda_cloud_backup:
             password:    ~ # Required
         # or you can use Gaufrette as well (optional)
         gaufrette:
-            service_name: ~  # Gaufrette filesystem service name
+            service_name:   # Gaufrette filesystem(s) service name
+                - local_backup_filesystem
+                - amazon_backup_filesystem
         google_drive:
           token_name: ~ # Required
           remote_path: ~ # Not required, default "/", but you can use path like "/Accounts/backups/"
