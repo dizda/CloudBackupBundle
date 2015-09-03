@@ -73,12 +73,14 @@ class TaggedServicesPass implements CompilerPassInterface
 
         // If gaufrette is set, assign automatically the specified filesystem as the cloud client
         if (isset($container->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette'])) {
-            $filesystemName = $container->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
-
-            $gaufrette = $container->getDefinition('dizda.cloudbackup.client.gaufrette');
-            $gaufrette->addMethodCall('setFilesystem', [
-                new Reference($filesystemName),
-            ]);
+            $filesystem = $container->getParameter('dizda_cloud_backup.cloud_storages')['gaufrette']['service_name'];
+            foreach($filesystem as $filesystemName)
+            {
+                $gaufrette = $container->getDefinition('dizda.cloudbackup.client.gaufrette');
+                $gaufrette->addMethodCall('setFilesystem', [
+                    new Reference($filesystemName),
+                ]);
+            }
         }
     }
 
