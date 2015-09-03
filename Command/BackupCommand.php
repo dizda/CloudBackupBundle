@@ -51,8 +51,8 @@ class BackupCommand extends ContainerAwareCommand
     {
         if ($this->getContainer()->get('kernel')->getEnvironment() !== 'prod') {
             $output->writeln('<bg=yellow>                                                                            </bg=yellow>');
-            $output->writeln('<bg=yellow;options=bold>  Warning:                                                                  </bg=yellow;options=bold>');
-            $output->writeln('<bg=yellow>  You should run the command in production environment ("--env=prod")       </bg=yellow>');
+            $output->writeln('<bg=yellow;options=bold;fg=black>  Warning:                                                                  </bg=yellow;options=bold;fg=black>');
+            $output->writeln('<bg=yellow;fg=black>  You should run the command in production environment ("--env=prod")       </bg=yellow;fg=black>');
             $output->writeln('<bg=yellow>                                                                            </bg=yellow>');
         }
     }
