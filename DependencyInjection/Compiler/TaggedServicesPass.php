@@ -77,7 +77,7 @@ class TaggedServicesPass implements CompilerPassInterface
             foreach($filesystem as $filesystemName)
             {
                 $gaufrette = $container->getDefinition('dizda.cloudbackup.client.gaufrette');
-                $gaufrette->addMethodCall('setFilesystem', [
+                $gaufrette->addMethodCall('addFilesystem', [
                     new Reference($filesystemName),
                 ]);
             }

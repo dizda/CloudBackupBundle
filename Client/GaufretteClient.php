@@ -12,7 +12,7 @@ use Gaufrette\Filesystem;
  */
 class GaufretteClient implements ClientInterface
 {
-    private $filesystem;
+    private $filesystems;
 
     /**
      * {@inheritdoc}
@@ -20,7 +20,9 @@ class GaufretteClient implements ClientInterface
     public function upload($archive)
     {
         $fileName = explode('/', $archive);
-        $this->filesystem->write(end($fileName), file_get_contents($archive), true);
+        foreach ($this->filesystems as $filesystem) {
+            $filesystem->write(end($fileName), file_get_contents($archive), true);
+        }
     }
 
     /**
@@ -28,9 +30,9 @@ class GaufretteClient implements ClientInterface
      *
      * @param \Gaufrette\Filesystem $filesystem
      */
-    public function setFilesystem(Filesystem $filesystem)
+    public function addFilesystem(Filesystem $filesystem)
     {
-        $this->filesystem = $filesystem;
+        $this->filesystems[] = $filesystem;
     }
 
     /**
