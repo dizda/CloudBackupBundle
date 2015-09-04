@@ -86,4 +86,19 @@ class BackupManager
 
         return $successful;
     }
+
+    public function getClientManager()
+    {
+        return $this->cm;
+    }
+
+    public function getDatabaseManager()
+    {
+        return $this->dbm;
+    }
+
+    public function getProcessorManager()
+    {
+        return $this->processor;
+    }
 }
