@@ -200,6 +200,62 @@ class ProcessorManager
         return $this;
     }
 
+    /**
+     * Allow folders to be set after construction
+     *
+     * @param  array  $folders  Folders to set - Defaults to empty array
+     *
+     * @return $this
+     */
+    public function setFolders(array $folders = array())
+    {
+        $this->folders = $folders;
+
+        return $this;
+    }
+
+    /**
+     * Add a single folder for backup
+     *
+     * @param  string  $folder  Folder to add
+     *
+     * @return $this
+     */
+    public function addFolder($folder)
+    {
+        $this->folders[] = $folder;
+
+        return $this;
+    }
+
+    /**
+     * Allow file prefix to be set after construction
+     *
+     * @param  string  $filePrefix  Prefix to set
+     *
+     * @return $this
+     */
+    public function setFilePrefix($filePrefix)
+    {
+        $this->filePrefix = $filePrefix;
+
+        return $this;
+    }
+
+    /**
+     * Set a custom date format
+     *
+     * @param  string  $format  A valid date format as described at php.net/date
+     *
+     * @return $this
+     */
+    public function setDateFormat($format)
+    {
+        $this->properties['date_format'] = $format;
+
+        return $this;
+    }
+
     public function getName()
     {
         return $this->processor->getName();
