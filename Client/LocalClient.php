@@ -27,7 +27,7 @@ class LocalClient implements ClientInterface
     public function upload($archive)
     {
         $fileName = explode('/', $archive);
-        $status=copy ($archive, $this->path."/".end($fileName));
+        $status   = copy($archive, $this->path."/".end($fileName));
         if(!$status){
             throw new Exception('There was a problem moving backup file');
         }
