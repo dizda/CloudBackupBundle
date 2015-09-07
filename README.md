@@ -93,6 +93,9 @@ dizda_cloud_backup:
                 storages: [ Dropbox, CloudApp, GoogleDrive, Gaufrette ] # Which cloud storages will upload split files
     folders: [ web/uploads , other/folder ]
     cloud_storages:
+        # Local storage definition
+        local:
+            path: ~ # Required
         # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
         dropbox:
             user:     ~  # Required
