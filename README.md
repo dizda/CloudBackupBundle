@@ -113,6 +113,10 @@ dizda_cloud_backup:
         google_drive:
           token_name: ~ # Required
           remote_path: ~ # Not required, default "/", but you can use path like "/Accounts/backups/"
+        # Using dropbox via official API. You need to add "dropbox/dropbox-sdk": "1.1.*" in your composer.json file
+        dropbox_sdk:
+            remote_path: ~ # Required. Path to upload files (where the root '/' will be application folder)
+            access_token: ~ # Required. Access token provided by DropBox to authenticate your application. You can follow instructions at https://www.dropbox.com/developers/core/start/php
 
     databases:
         mongodb:

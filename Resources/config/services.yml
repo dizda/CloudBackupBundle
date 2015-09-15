@@ -29,6 +29,13 @@ services:
             - %dizda_cloud_backup.cloud_storages%
         tags:
             -  { name: dizda.cloudbackup.client }
+            
+    dizda.cloudbackup.client.dropbox_sdk:
+        class: Dizda\CloudBackupBundle\Client\DropboxSdkClient
+        arguments:
+            - %dizda_cloud_backup.cloud_storages%
+        tags:
+            -  { name: dizda.cloudbackup.client }
 
     dizda.cloudbackup.client.google_drive:
         class: Dizda\CloudBackupBundle\Client\GoogleDriveClient
