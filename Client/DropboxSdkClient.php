@@ -1,16 +1,19 @@
 <?php
 namespace Dizda\CloudBackupBundle\Client;
 
-use Symfony\Component\Console\Output\ConsoleOutput;
-use \Dropbox as dbx;
+use Dizda\CloudBackupBundle\Exception\UploadException;
+use \Dropbox as Dropbox;
 
 /**
- * Class DropboxClient.
+ * Class DropboxSdkClient.
  *
- * @author  Jonathan Dizdarevic <dizda@dizda.fr>
+ * @author David Fuertes
  */
 class DropboxSdkClient implements ClientInterface
 {
+    /**
+     * @var string
+     */
     private $access_token;
 
     /**
@@ -28,23 +31,19 @@ class DropboxSdkClient implements ClientInterface
      */
     public function upload($archive)
     {
-        $fileName = explode('/', $archive);
-        
-        $pathError = dbx\Path::findErrorNonRoot($this->remotePath);
+        $fileName  = explode('/', $archive);
+        $pathError = Dropbox\Path::findErrorNonRoot($this->remotePath);
+
         if ($pathError !== null) {
-            fwrite(STDERR, "Invalid <dropbox-path>: $pathError\n");
-            die;
+            throw new UploadException(sprintf('Invalid path "%s".', $archive));
         }
 
-        $client = new dbx\Client($this->access_token, "CloudBackupBundle");
-                
-        $size = \filesize($archive);   
+        $client = new Dropbox\Client($this->access_token, 'CloudBackupBundle');
+        $size   = filesize($archive);
 
-        $fp = fopen($archive, "rb");
-        $metadata = $client->uploadFile($this->remotePath."/".end($fileName), dbx\WriteMode::add(), $fp, $size);
+        $fp = fopen($archive, 'rb');
+        $client->uploadFile($this->remotePath.'/'.end($fileName), Dropbox\WriteMode::add(), $fp, $size);
         fclose($fp);
-
-        //print_r($metadata); // Printing response form Dropbox
     }
 
     /**
