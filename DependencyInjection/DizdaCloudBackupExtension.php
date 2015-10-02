@@ -49,9 +49,9 @@ class DizdaCloudBackupExtension extends Extension
         }
 
         /* Verify that we have our Dropbox library */
-        if (isset($config['cloud_storages']['dropbox'])) {
-            if (!class_exists('DropboxUploader')) {
-                throw new \LogicException('You need to add "hakre/dropbox-uploader" to your composer.json');
+        if (isset($config['cloud_storages']['dropbox_sdk'])) {
+            if (!class_exists('Dropbox\\Client')) {
+                throw new \LogicException('You need to install "dropbox/dropbox-sdk" library to use it as a cloud storage provider.');
             }
         }
 
