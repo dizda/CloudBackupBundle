@@ -63,7 +63,6 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
         new Dizda\CloudBackupBundle\DizdaCloudBackupBundle(),
         // ...
     );
@@ -96,11 +95,6 @@ dizda_cloud_backup:
         # Local storage definition
         local:
             path: ~ # Required
-        # Dropbox account credentials (use parameters in config.yml and store real values in prameters.yml)
-        dropbox:
-            user:     ~  # Required
-            password: ~  # Required
-            remote_path: ~ # Not required, default "/", but you can use path like "/Accounts/backups/"
         # CloudApp account. Can be optional, like dropbox.
         cloudapp:
             user:        ~ # Required
@@ -152,10 +146,9 @@ dizda_cloud_backup:
             password: %dizda_cloud_archive_password%
 
     cloud_storages:
-        dropbox:
-            user:        %dizda_cloud_dropbox_user%
-            password:    %dizda_cloud_dropbox_password%
-            remote_path: %dizda_cloud_dropbox_remote_path%
+        dropbox_sdk:
+            access_token: %dizda_cloud_dropbox_token%
+            remote_path: /backup
 
     databases:
         mongodb:
@@ -181,8 +174,7 @@ dizda_cloud_backup:
     database_user: myLogin
     database_password: myDatabasePassword
     # ...
-    dizda_cloud_dropbox_user:     myDropboxUser
-    dizda_cloud_dropbox_password: MyDropboxPassword
+    dizda_cloud_dropbox_token:     myDropboxUser
     dizda_cloud_mongodb_user:     mongodbUser
     dizda_cloud_mongodb_password: mongodbPass
     dizda_cloud_archive_password: ArchivePassword
@@ -197,7 +189,7 @@ The bundle adds one command to symfony console: ``app/console dizda:backup:start
 For example the following cron command dumps your database every days at 6am on a server :
 ```
 # m h  dom mon dow   command
-0 6 * * * php /opt/www/symfony-project/app/console dizda:backup:start
+0 6 * * * cd /var/www/yourproject && php app/console --env=prod dizda:backup:start > /dev/null 2>&1
 ```
 
 Info : To edit crontab for the user www-data (to prevent permissions error) :
@@ -208,13 +200,13 @@ $ crontab -u www-data -e
 or simply
 
 ```bash
-$ php app/console dizda:backup:start
+$ php app/console --env=prod dizda:backup:start
 ```
 
 You may point concrete archiver in command line:
 
 ```bash
-$ php app/console dizda:backup:start zip
+$ php app/console --env=prod dizda:backup:start zip
 ```
 
 ![](https://github.com/dizda/CloudBackupBundle/raw/master/Resources/doc/dizda-Cloud-Backup-Bundle-symfony2.png)
@@ -288,7 +280,5 @@ after "deploy", "symfony:dizda:backup:start"
 End
 ---
 This bundle was inspired from [KachkaevDropboxBackupBundle](https://github.com/kachkaev/KachkaevDropboxBackupBundle).
-
-It is Symfony2.1, 2.2 and 2.3+ compatible.
 
 Enjoy, PR are welcome !

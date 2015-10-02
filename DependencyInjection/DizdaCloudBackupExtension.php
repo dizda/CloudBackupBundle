@@ -37,7 +37,7 @@ class DizdaCloudBackupExtension extends Extension
 
         /* Config google drive */
         if (isset($config['cloud_storages']['google_drive'])) {
-            if (!class_exists('Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider')) {
+            if (!class_exists('Happyr\\GoogleSiteAuthenticatorBundle\\Service\\ClientProvider')) {
                 throw new \LogicException('DizdaCloudBundle: You need to install and configure Happyr/GoogleSiteAuthenticatorBundle to be able to use Google Drive as remote storage.');
             }
 
@@ -52,6 +52,13 @@ class DizdaCloudBackupExtension extends Extension
         if (isset($config['cloud_storages']['dropbox_sdk'])) {
             if (!class_exists('Dropbox\\Client')) {
                 throw new \LogicException('You need to install "dropbox/dropbox-sdk" library to use it as a cloud storage provider.');
+            }
+        }
+
+        /* Verify that we have Gaufrette library if activated in the config */
+        if (isset($config['cloud_storages']['gaufrette'])) {
+            if (!class_exists('Knp\\Bundle\\GaufretteBundle\\KnpGaufretteBundle')) {
+                throw new \LogicException('You need to install "knplabs/knp-gaufrette-bundle" library to use it as a cloud storage provider.');
             }
         }
 
