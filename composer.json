@@ -22,7 +22,7 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": ">=2.1",
-        "symfony/monolog-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.3"
     },
 
     "require-dev": {
