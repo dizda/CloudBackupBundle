@@ -17,7 +17,7 @@ Databases supported :
 * PostgreSQL (excluding all_databases option)
 
 Cloud services supported :
-* __Dropbox__       (with the help of [DropboxUploader by hakre](https://github.com/hakre/DropboxUploader))
+* __Dropbox__       ([Dropbox SDK](https://github.com/dropbox/dropbox-sdk-php))
 * __CloudApp__      (thanks to [CloudAPP-API-PHP-wrapper](https://github.com/matthiasplappert/CloudApp-API-PHP-wrapper))
 * __Amazon S3__     (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
 * __Google Drive__  (thanks to [HappyrGoogleSiteAuthenticatorBundle](https://github.com/Happyr/GoogleSiteAuthenticatorBundle))
