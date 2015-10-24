@@ -58,7 +58,7 @@ class MySQL extends BaseDatabase
             $this->auth = sprintf('-u%s', $params['db_user']);
 
             if ($params['db_password']) {
-                $this->auth = sprintf("--host='%s' --port='%d' --user='%s' --password='%s'", $params['db_host'], $params['db_port'], $params['db_user'], $params['db_password']);
+                $this->auth = sprintf("--host=\"%s\" --port=\"%d\" --user=\"%s\" --password=\"%s\"", $params['db_host'], $params['db_port'], $params['db_user'], $params['db_password']);
             }
         }
     }
