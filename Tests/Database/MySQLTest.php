@@ -51,7 +51,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_password' => 'somepwd',
             ),
         ), '/var/backup/');
-        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"somehost\" --port=\"2222\" --user=\"mysql\" --password='\"somepwd\" somebdd > /var/backup/mysql/somebdd.sql");
+        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"somehost\" --port=\"2222\" --user=\"mysql\" --password=\"somepwd\" somebdd > /var/backup/mysql/somebdd.sql");
 
         // dump specified database with no auth
         $mysql = new MySQLDummy(array(
