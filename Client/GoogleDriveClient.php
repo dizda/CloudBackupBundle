@@ -99,6 +99,15 @@ class GoogleDriveClient implements ClientInterface
     protected function getDriveService()
     {
         $client = $this->clientProvider->getClient($this->tokenName);
+
+        // Make sure CURL do not timeout on you when you upload a large file
+        $client->setClassConfig('Google_IO_Curl', 'options',
+            array(
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT => 500,
+            )
+        );
+
         $service = new \Google_Service_Drive($client);
 
         return $service;
