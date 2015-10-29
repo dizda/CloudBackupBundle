@@ -11,7 +11,7 @@ use Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider;
  */
 class GoogleDriveClient implements ClientInterface
 {
-    const CHUNK_SIZE_BYTES = 1048576; //1 * 1024 * 1024
+    const CHUNK_SIZE_BYTES = 10485760; //10 * 1024 * 1024
 
     /**
      * @var \Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider clientProvider
@@ -189,7 +189,10 @@ class GoogleDriveClient implements ClientInterface
         $byteCount = 0;
         $giantChunk = '';
         while (!feof($handle)) {
-            // fread will never return more than 8192 bytes if the stream is read buffered and it does not represent a plain file
+            /*
+             * fread will never return more than 8192 bytes if the stream is read
+             * buffered and it does not represent a plain file
+             */
             $chunk = fread($handle, 8192);
             $byteCount += strlen($chunk);
             $giantChunk .= $chunk;
@@ -232,8 +235,6 @@ class GoogleDriveClient implements ClientInterface
         $status = false;
         $handle = fopen($archive, 'rb');
         while (!$status && !feof($handle)) {
-            // fread will never return more than 8192 bytes if the stream is read buffered and it does not represent a plain file
-            // An example of a read buffered file is when reading from a URL
             $chunk = $this->readChunk($handle, self::CHUNK_SIZE_BYTES);
             $status = $media->nextChunk($chunk);
         }
