@@ -1,4 +1,5 @@
 <?php
+
 namespace Dizda\CloudBackupBundle\Client;
 
 use Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider;
@@ -10,6 +11,8 @@ use Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider;
  */
 class GoogleDriveClient implements ClientInterface
 {
+    const CHUNK_SIZE_BYTES = 1 * 1024 * 1024;
+
     /**
      * @var \Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider clientProvider
      */
@@ -21,15 +24,27 @@ class GoogleDriveClient implements ClientInterface
     protected $remotePath;
 
     /**
+     * @var int
+     */
+    protected $timeout;
+
+    /**
+     * @var \Google_Client
+     */
+    private $client;
+
+    /**
      * @param ClientProvider $clientProvider
      * @param string         $tokenName
      * @param string         $remotePath
+     * @param int            $timeout
      */
-    public function __construct(ClientProvider $clientProvider, $tokenName, $remotePath)
+    public function __construct(ClientProvider $clientProvider, $tokenName, $remotePath, $timeout)
     {
         $this->clientProvider = $clientProvider;
         $this->tokenName = $tokenName;
         $this->remotePath = $remotePath;
+        $this->timeout = $timeout;
     }
 
     /**
@@ -98,13 +113,12 @@ class GoogleDriveClient implements ClientInterface
      */
     protected function getDriveService()
     {
-        $client = $this->clientProvider->getClient($this->tokenName);
+        $client = $this->getClient();
 
         // Make sure CURL do not timeout on you when you upload a large file
         $client->setClassConfig('Google_IO_Curl', 'options',
             array(
-                CURLOPT_CONNECTTIMEOUT => 10,
-                CURLOPT_TIMEOUT => 500,
+                CURLOPT_TIMEOUT => $this->timeout,
             )
         );
 
@@ -145,14 +159,14 @@ class GoogleDriveClient implements ClientInterface
     }
 
     /**
-     * @param $service
-     * @param $archive
+     * @param \Google_Service_Drive $service
+     * @param string                $archive
      *
-     * @return mixed
+     * @return \Google_Service_Drive_DriveFile
      *
      * @throws \Exception
      */
-    private function handleUpload($service, $archive)
+    private function handleUpload(\Google_Service_Drive $service, $archive)
     {
         $file = $this->getDriveFile($archive);
 
@@ -167,11 +181,41 @@ class GoogleDriveClient implements ClientInterface
             }
         }
 
-        return $service->files->insert($file, array(
-            'data' => $this->getFileContents($archive),
-            'mimeType' => $mime,
-            'uploadType' => 'media',
-        ));
+        $client = $this->getClient();
+        // Call the API with the media upload, defer so it doesn't immediately return.
+        $client->setDefer(true);
+        $request = $service->files->insert($file);
+
+        // Create a media file upload to represent our upload process.
+        $media = new \Google_Http_MediaFileUpload($client, $request, $mime, null, true, self::CHUNK_SIZE_BYTES);
+        $media->setFileSize(filesize($archive));
+
+        return $this->uploadFileInChunks($archive, $media);
+    }
+
+    /**
+     * Get a chunk of data from a file resource
+     *
+     * @param resource $handle
+     * @param integer $chunkSize
+     *
+     * @return string
+     */
+    protected function readChunk($handle, $chunkSize)
+    {
+        $byteCount = 0;
+        $giantChunk = '';
+        while (!feof($handle)) {
+            // fread will never return more than 8192 bytes if the stream is read buffered and it does not represent a plain file
+            $chunk = fread($handle, 8192);
+            $byteCount += strlen($chunk);
+            $giantChunk .= $chunk;
+            if ($byteCount >= $chunkSize) {
+                return $giantChunk;
+            }
+        }
+
+        return $giantChunk;
     }
 
     /**
@@ -180,5 +224,38 @@ class GoogleDriveClient implements ClientInterface
     public function getName()
     {
         return 'GoogleDrive';
+    }
+
+    /**
+     * @return \Google_Client
+     */
+    protected function getClient()
+    {
+        if ($this->client === null) {
+            $this->client = $this->clientProvider->getClient($this->tokenName);
+        }
+
+        return $this->client;
+    }
+
+    /**
+     * @param $archive
+     * @param $media
+     *
+     * @return bool
+     */
+    private function uploadFileInChunks($archive, $media)
+    {
+        $status = false;
+        $handle = fopen($archive, 'rb');
+        while (!$status && !feof($handle)) {
+            // fread will never return more than 8192 bytes if the stream is read buffered and it does not represent a plain file
+            // An example of a read buffered file is when reading from a URL
+            $chunk = $this->readChunk($handle, self::CHUNK_SIZE_BYTES);
+            $status = $media->nextChunk($chunk);
+        }
+        fclose($handle);
+
+        return $status;
     }
 }
