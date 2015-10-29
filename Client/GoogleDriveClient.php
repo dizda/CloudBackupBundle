@@ -228,7 +228,7 @@ class GoogleDriveClient implements ClientInterface
      * @param $archive
      * @param $media
      *
-     * @return bool
+     * @return \Google_Service_Drive_DriveFile
      */
     protected function uploadFileInChunks($archive, $media)
     {
