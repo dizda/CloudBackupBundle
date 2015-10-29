@@ -11,7 +11,7 @@ use Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider;
  */
 class GoogleDriveClient implements ClientInterface
 {
-    const CHUNK_SIZE_BYTES = 10485760; //10 * 1024 * 1024
+    const CHUNK_SIZE_BYTES = 20971520; //20 * 1024 * 1024
 
     /**
      * @var \Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider clientProvider
