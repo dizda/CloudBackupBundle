@@ -17,6 +17,14 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
         $driveParent = $this->getMock('Google_Service_Drive_ParentReference');
         $driveService = $this->getDriveService();
 
+        $client = $this->getMockBuilder('Google_Client')
+            ->disableOriginalConstructor()
+            ->setMethods(array('setDefer'))
+            ->getMock();
+
+        $client->expects($this->once())
+            ->method('setDefer');
+
         $driveFile = $this->getMock('Google_Service_Drive_DriveFile');
         $driveFile->expects($this->once())
             ->method('setMimeType')
@@ -27,8 +35,8 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo(array($driveParent)));
 
         $drive = $this->getMockBuilder('Dizda\CloudBackupBundle\Client\GoogleDriveClient')
-            ->setConstructorArgs(array($clientProvider, 'foobar', '/foo/bar'))
-            ->setMethods(array('output', 'getDriveService', 'getDriveFile', 'getMimeType', 'getParentFolder', 'getFileContents'))
+            ->setConstructorArgs(array($clientProvider, 'foobar', '/foo/bar', '100'))
+            ->setMethods(array('getClient', 'uploadFileInChunks', 'getMediaUploadFile', 'getDriveService', 'getDriveFile', 'getMimeType', 'getParentFolder'))
             ->getMock();
 
         $drive->expects($this->any())
@@ -54,9 +62,18 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
             ->willReturn($driveParent);
 
         $drive->expects($this->once())
-            ->method('getFileContents')
-            ->with($this->equalTo($archive))
-            ->willReturn('data');
+            ->method('getClient')
+            ->willReturn($client);
+
+        $drive->expects($this->once())
+            ->method('getMediaUploadFile')
+            ->with($this->equalTo($archive), $this->equalTo($client), $this->equalTo('request'), $this->equalTo($mime))
+            ->willReturn('media');
+
+        $drive->expects($this->once())
+            ->method('uploadFileInChunks')
+            ->with($this->equalTo($archive), $this->equalTo('media'))
+            ->willReturn('media');
 
         $drive->upload($archive);
     }
@@ -71,7 +88,8 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('insert'))
             ->getMock();
         $driveFiles->expects($this->once())
-            ->method('insert');
+            ->method('insert')
+            ->willReturn('request');
 
         $driveService = $this->getMockBuilder('Google_Service_Drive')
             ->disableOriginalConstructor()
@@ -82,14 +100,6 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
         return $driveService;
     }
 
-    /**
-     * @expectedException \Exception
-     */
-    public function testGetFileContents()
-    {
-        $drive = new Dummy();
-        $drive->getFileContents('/example/path');
-    }
 
     public function testGetDriveFile()
     {
@@ -121,13 +131,5 @@ class Dummy extends GoogleDriveClient
     public function getDriveFile($a)
     {
         return parent::getDriveFile($a);
-    }
-    public function output($a, $b = true)
-    {
-        parent::output($a, $b);
-    }
-    public function getFileContents($a)
-    {
-        return parent::getFileContents($a);
     }
 }

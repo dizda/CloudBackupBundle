@@ -143,22 +143,6 @@ class GoogleDriveClient implements ClientInterface
     }
 
     /**
-     * @param $archive
-     *
-     * @return string
-     */
-    protected function getFileContents($archive)
-    {
-        $data = @file_get_contents($archive);
-
-        if ($data === false) {
-            throw new \Exception(sprintf('Could not read file: %s', $archive));
-        }
-
-        return $data;
-    }
-
-    /**
      * @param \Google_Service_Drive $service
      * @param string                $archive
      *
@@ -187,8 +171,7 @@ class GoogleDriveClient implements ClientInterface
         $request = $service->files->insert($file);
 
         // Create a media file upload to represent our upload process.
-        $media = new \Google_Http_MediaFileUpload($client, $request, $mime, null, true, self::CHUNK_SIZE_BYTES);
-        $media->setFileSize(filesize($archive));
+        $media = $this->getMediaUploadFile($archive, $client, $request, $mime);
 
         return $this->uploadFileInChunks($archive, $media);
     }
@@ -244,7 +227,7 @@ class GoogleDriveClient implements ClientInterface
      *
      * @return bool
      */
-    private function uploadFileInChunks($archive, $media)
+    protected function uploadFileInChunks($archive, $media)
     {
         $status = false;
         $handle = fopen($archive, 'rb');
@@ -257,5 +240,21 @@ class GoogleDriveClient implements ClientInterface
         fclose($handle);
 
         return $status;
+    }
+
+    /**
+     * @param $archive
+     * @param $client
+     * @param $request
+     * @param $mime
+     *
+     * @return \Google_Http_MediaFileUpload
+     */
+    protected function getMediaUploadFile($archive, $client, $request, $mime)
+    {
+        $media = new \Google_Http_MediaFileUpload($client, $request, $mime, null, true, self::CHUNK_SIZE_BYTES);
+        $media->setFileSize(filesize($archive));
+
+        return $media;
     }
 }
