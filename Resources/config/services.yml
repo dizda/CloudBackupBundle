@@ -1,3 +1,6 @@
+parameters:
+    dizda.cloudbackup.google_drive.timeout: 100
+
 services:
     dizda.cloudbackup.manager.database:
         class: Dizda\CloudBackupBundle\Manager\DatabaseManager
@@ -40,7 +43,7 @@ services:
     dizda.cloudbackup.client.google_drive:
         class: Dizda\CloudBackupBundle\Client\GoogleDriveClient
         public: false
-        arguments: [~, ~, ~]
+        arguments: [~, ~, ~, %dizda.cloudbackup.google_drive.timeout%]
         tags:
             -  { name: dizda.cloudbackup.client }
 
