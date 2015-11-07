@@ -112,7 +112,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'database'      => 'dizbdd',
                 'db_user'       => 'root',
                 'db_password'   => 'test',
-                'ignore_tables' => ['table1', 'table2'],
+                'ignore_tables' => array('table1', 'table2'),
             ),
         ), '/var/backup/');
 
@@ -132,7 +132,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'database'      => null,
                 'db_user'       => 'root',
                 'db_password'   => 'test',
-                'ignore_tables' => ['db1.table1', 'db2.table2'],
+                'ignore_tables' => array('db1.table1', 'db2.table2'),
             ),
         ), '/var/backup/');
 
@@ -153,7 +153,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'database'      => null,
                 'db_user'       => 'root',
                 'db_password'   => 'test',
-                'ignore_tables' => ['table1'],
+                'ignore_tables' => array('table1'),
             ),
         ), '/var/backup/');
 
