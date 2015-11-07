@@ -126,6 +126,9 @@ dizda_cloud_backup:
             db_port: ~           # Default 3306
             db_user: ~
             db_password: ~
+            ignore_tables:       # Specify full name if dumping all databases. `dbname.tablename`
+                - table1
+                - table2
 
         postgresql:
             database: dbname     # Required
