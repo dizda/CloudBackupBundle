@@ -14,6 +14,7 @@ class MySQL extends BaseDatabase
     private $database;
     private $auth = '';
     private $fileName;
+    private $ignoreTables = '';
 
     /**
      * DB Auth.
@@ -35,6 +36,21 @@ class MySQL extends BaseDatabase
             $this->fileName = 'all-databases.sql';
         } else {
             $this->fileName = $this->database.'.sql';
+        }
+
+        if (isset($params['ignore_tables'])) {
+            foreach ($params['ignore_tables'] as $ignoreTable) {
+                if ($this->allDatabases) {
+                    if (false === strpos($ignoreTable, '.')) {
+                        throw new \LogicException(
+                            'When dumping all databases both database and table must be specified when ignoring table'
+                        );
+                    }
+                    $this->ignoreTables .= sprintf('--ignore-table=%s ', $ignoreTable);
+                } else {
+                    $this->ignoreTables .= sprintf('--ignore-table=%s.%s ', $this->database, $ignoreTable);
+                }
+            }
         }
 
         /* if user is set, we add authentification */
@@ -61,9 +77,10 @@ class MySQL extends BaseDatabase
      */
     protected function getCommand()
     {
-        return sprintf('mysqldump %s %s > %s',
+        return sprintf('mysqldump %s %s %s > %s',
             $this->auth,
             $this->database,
+            $this->ignoreTables,
             $this->dataPath.$this->fileName);
     }
 
