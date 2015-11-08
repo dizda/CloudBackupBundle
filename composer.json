@@ -6,7 +6,6 @@
     "homepage": "https://github.com/dizda/CloudBackupBundle",
     "license": "MIT",
 
-
     "authors": [
         {
             "name": "Jonathan Dizdarevic",
@@ -43,11 +42,5 @@
         }
     },
 
-    "target-dir": "Dizda/CloudBackupBundle",
-
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Dizda/CloudBackupBundle"
 }
