@@ -3,7 +3,6 @@
 namespace Dizda\CloudBackupBundle\Manager;
 
 use Dizda\CloudBackupBundle\Event\BackupCompletedEvent;
-use Dizda\CloudBackupBundle\Events;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -96,9 +95,24 @@ class BackupManager
         }
 
         if ($successful) {
-            $this->eventDispatcher->dispatch(Events::BACKUP_COMPLETED, new BackupCompletedEvent());
+            $this->eventDispatcher->dispatch(BackupCompletedEvent::EVENT_NAME, new BackupCompletedEvent());
         }
 
         return $successful;
+    }
+
+    public function getClientManager()
+    {
+        return $this->cm;
+    }
+
+    public function getDatabaseManager()
+    {
+        return $this->dbm;
+    }
+
+    public function getProcessorManager()
+    {
+        return $this->processor;
     }
 }
