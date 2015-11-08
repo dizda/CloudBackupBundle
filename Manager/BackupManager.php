@@ -17,17 +17,17 @@ class BackupManager
     /**
      * @var \Dizda\CloudBackupBundle\Manager\DatabaseManager
      */
-    private $dbm;
+    private $databaseManager;
 
     /**
      * @var \Dizda\CloudBackupBundle\Manager\ClientManager
      */
-    private $cm;
+    private $clientManager;
 
     /**
      * @var \Dizda\CloudBackupBundle\Manager\ProcessorManager
      */
-    private $processor;
+    private $processorManager;
 
     /**
      * @var EventDispatcherInterface
@@ -36,22 +36,22 @@ class BackupManager
 
     /**
      * @param LoggerInterface          $logger
-     * @param DatabaseManager          $database
-     * @param ClientManager            $client
-     * @param ProcessorManager         $processor
+     * @param DatabaseManager          $databaseManager
+     * @param ClientManager            $clientManager
+     * @param ProcessorManager         $processorManager
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         LoggerInterface $logger,
-        DatabaseManager $database,
-        ClientManager $client,
-        ProcessorManager $processor,
+        DatabaseManager $databaseManager,
+        ClientManager $clientManager,
+        ProcessorManager $processorManager,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->logger = $logger;
-        $this->dbm = $database;
-        $this->cm = $client;
-        $this->processor = $processor;
+        $this->databaseManager = $databaseManager;
+        $this->clientManager = $clientManager;
+        $this->processorManager = $processorManager;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -65,18 +65,18 @@ class BackupManager
         $successful = true;
         try {
             // Dump all databases
-            $this->dbm->dump();
+            $this->databaseManager->dump();
 
             // Backup folders if specified
             $this->logger->info('[dizda-backup] Copying folders.');
-            $this->processor->copyFolders();
+            $this->processorManager->copyFolders();
 
             // Compress everything
-            $this->logger->info(sprintf('[dizda-backup] Compressing to archive using %s', $this->processor->getName()));
-            $this->processor->compress();
+            $this->logger->info(sprintf('[dizda-backup] Compressing to archive using %s', $this->processorManager->getName()));
+            $this->processorManager->compress();
 
             // Transfer with all clients
-            $this->cm->upload($this->processor->getArchivePath());
+            $this->clientManager->upload($this->processorManager->getArchivePath());
         } catch (\Exception $e) {
             // Write log
             $this->logger->critical('[dizda-backup] Unexpected exception.', array('exception' => $e));
@@ -87,9 +87,9 @@ class BackupManager
         try {
             // If we catch an exception or not, we would still like to try cleaning up after us
             $this->logger->info('[dizda-backup] Cleaning up after us.');
-            $this->processor->cleanUp();
+            $this->processorManager->cleanUp();
         } catch (IOException $e) {
-            $this->logger->error('[dizda-backup] Cleaning up failed.');
+            $this->logger->error('[dizda-backup] Cleaning up failed.', array('exception' => $e));
 
             return false;
         }
@@ -99,20 +99,5 @@ class BackupManager
         }
 
         return $successful;
-    }
-
-    public function getClientManager()
-    {
-        return $this->cm;
-    }
-
-    public function getDatabaseManager()
-    {
-        return $this->dbm;
-    }
-
-    public function getProcessorManager()
-    {
-        return $this->processor;
     }
 }
