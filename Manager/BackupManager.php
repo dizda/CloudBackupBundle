@@ -2,7 +2,10 @@
 
 namespace Dizda\CloudBackupBundle\Manager;
 
+use Dizda\CloudBackupBundle\Event\BackupCompletedEvent;
+use Dizda\CloudBackupBundle\Events;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 
 class BackupManager
@@ -28,21 +31,29 @@ class BackupManager
     private $processor;
 
     /**
-     * @param LoggerInterface  $logger
-     * @param DatabaseManager  $database
-     * @param ClientManager    $client
-     * @param ProcessorManager $processor
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @param LoggerInterface          $logger
+     * @param DatabaseManager          $database
+     * @param ClientManager            $client
+     * @param ProcessorManager         $processor
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         LoggerInterface $logger,
         DatabaseManager $database,
         ClientManager $client,
-        ProcessorManager $processor
+        ProcessorManager $processor,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->logger = $logger;
         $this->dbm = $database;
         $this->cm = $client;
         $this->processor = $processor;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -84,21 +95,10 @@ class BackupManager
             return false;
         }
 
+        if ($successful) {
+            $this->eventDispatcher->dispatch(Events::BACKUP_COMPLETED, new BackupCompletedEvent());
+        }
+
         return $successful;
-    }
-
-    public function getClientManager()
-    {
-        return $this->cm;
-    }
-
-    public function getDatabaseManager()
-    {
-        return $this->dbm;
-    }
-
-    public function getProcessorManager()
-    {
-        return $this->processor;
     }
 }

@@ -109,6 +109,7 @@ services:
             - @dizda.cloudbackup.manager.database
             - @dizda.cloudbackup.manager.client
             - @dizda.cloudbackup.manager.processor
+            - @event_dispatcher
 
     dizda.cloudbackup.manager.processor:
         class: Dizda\CloudBackupBundle\Manager\ProcessorManager
