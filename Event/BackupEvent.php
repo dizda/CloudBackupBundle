@@ -4,7 +4,7 @@ namespace Dizda\CloudBackupBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-class BackupCompletedEvent extends Event
+class BackupEvent extends Event
 {
-    const EVENT_NAME = 'backup_completed';
+    const BACKUP_COMPLETED = 'dizda.cloudbackup.backup_completed';
 }
