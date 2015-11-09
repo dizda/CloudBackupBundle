@@ -122,6 +122,8 @@ class BackupManager
     }
 
     /**
+     * @deprecated
+     *
      * @return ProcessorManager
      */
     public function getProcessorManager()
