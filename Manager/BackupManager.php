@@ -100,4 +100,32 @@ class BackupManager
 
         return $successful;
     }
+
+    /**
+     * @deprecated
+     *
+     * @return ClientManager
+     */
+    public function getClientManager()
+    {
+        return $this->clientManager;
+    }
+
+    /**
+     * @deprecated
+     *
+     * @return DatabaseManager
+     */
+    public function getDatabaseManager()
+    {
+        return $this->databaseManager;
+    }
+
+    /**
+     * @return ProcessorManager
+     */
+    public function getProcessorManager()
+    {
+        return $this->processorManager;
+    }
 }
