@@ -2,7 +2,9 @@
 
 namespace Dizda\CloudBackupBundle\Manager;
 
+use Dizda\CloudBackupBundle\Event\BackupEvent;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 
 class BackupManager
@@ -28,21 +30,29 @@ class BackupManager
     private $processor;
 
     /**
-     * @param LoggerInterface  $logger
-     * @param DatabaseManager  $database
-     * @param ClientManager    $client
-     * @param ProcessorManager $processor
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @param LoggerInterface          $logger
+     * @param DatabaseManager          $database
+     * @param ClientManager            $client
+     * @param ProcessorManager         $processor
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         LoggerInterface $logger,
         DatabaseManager $database,
         ClientManager $client,
-        ProcessorManager $processor
+        ProcessorManager $processor,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->logger = $logger;
         $this->dbm = $database;
         $this->cm = $client;
         $this->processor = $processor;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -82,6 +92,10 @@ class BackupManager
             $this->logger->error('[dizda-backup] Cleaning up failed.');
 
             return false;
+        }
+
+        if ($successful) {
+            $this->eventDispatcher->dispatch(BackupEvent::BACKUP_COMPLETED, new BackupEvent());
         }
 
         return $successful;
