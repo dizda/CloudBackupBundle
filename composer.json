@@ -33,7 +33,8 @@
         "matthiasplappert/cloudapp-api": "To support upload to CloudApp",
         "happyr/google-site-authenticator-bundle": "To enable upload dumps on google drive.",
         "dropbox/dropbox-sdk": "To enable upload to Dropbox",
-        "knplabs/knp-gaufrette-bundle": "To use Gaufrette as a cloud storage"
+        "knplabs/knp-gaufrette-bundle": "To use Gaufrette as a cloud storage",
+        "jongotlin/deadmanssnitch-bundle": "To report your successful backups to deadmanssnitch.com"
     },
 
     "autoload": {
