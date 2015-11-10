@@ -6,7 +6,7 @@ use DropboxUploader;
 
 /**
  * Class DropboxClient.
- *
+ * @deprecated Will be removed in 4.0. Please use DropboxSDKClient
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
 class DropboxClient implements ClientInterface
