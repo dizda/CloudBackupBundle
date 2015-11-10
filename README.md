@@ -280,6 +280,10 @@ before "deploy", "symfony:dizda:backup:start"
 after "deploy", "symfony:dizda:backup:start"
 ```
 
+Report to Deadmanssnitch.com
+----------------------------
+To be sure your backup scripts are actually run you can report each successful backup to [deadmanssnitch.com](http://www.deadmanssnitch.com) using [DeadmanssnitchBundle](https://github.com/jongotlin/DeadmanssnitchBundle).
+
 End
 ---
 This bundle was inspired from [KachkaevDropboxBackupBundle](https://github.com/kachkaev/KachkaevDropboxBackupBundle).
