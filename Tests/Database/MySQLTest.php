@@ -25,7 +25,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/var/backup/');
 
-        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" --all-databases > /var/backup/mysql/all-databases.sql");
+        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" --all-databases  > /var/backup/mysql/all-databases.sql");
     }
 
     /**
@@ -55,8 +55,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/var/backup/');
 
-        $this->assertEquals($mysql1->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" dizbdd > /var/backup/mysql/dizbdd.sql");
-        $this->assertEquals($mysql2->getCommand(), "mysqldump --host=\"somehost\" --port=\"2222\" --user=\"mysql\" --password=\"somepwd\" somebdd > /var/backup/mysql/somebdd.sql");
+        $this->assertEquals($mysql1->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" dizbdd  > /var/backup/mysql/dizbdd.sql");
+        $this->assertEquals($mysql2->getCommand(), "mysqldump --host=\"somehost\" --port=\"2222\" --user=\"mysql\" --password=\"somepwd\" somebdd  > /var/backup/mysql/somebdd.sql");
 
         // dump specified database with no auth
         $mysql = new MySQLDummy(array(
