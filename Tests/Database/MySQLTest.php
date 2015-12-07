@@ -25,7 +25,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/var/backup/');
 
-        $this->assertEquals($mysql->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' --all-databases  > /var/backup/mysql/all-databases.sql");
+        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" --all-databases  > /var/backup/mysql/all-databases.sql");
     }
 
     /**
@@ -43,7 +43,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_password'   => 'test',
             ),
         ), '/var/backup/');
-
+        
         $mysql2 = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => false,
@@ -55,15 +55,9 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/var/backup/');
 
-        $this->assertEquals($mysql1->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' dizbdd  > /var/backup/mysql/dizbdd.sql");
-        $this->assertEquals($mysql2->getCommand(), "mysqldump --host='somehost' --port='2222' --user='mysql' --password='somepwd' somebdd  > /var/backup/mysql/somebdd.sql");
-    }
+        $this->assertEquals($mysql1->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" dizbdd  > /var/backup/mysql/dizbdd.sql");
+        $this->assertEquals($mysql2->getCommand(), "mysqldump --host=\"somehost\" --port=\"2222\" --user=\"mysql\" --password=\"somepwd\" somebdd  > /var/backup/mysql/somebdd.sql");
 
-    /**
-     * @test
-     */
-    public function shouldDumpSpecifiedDatabaseWithNoAuth()
-    {
         // dump specified database with no auth
         $mysql = new MySQLDummy(array(
             'mysql' => array(
@@ -116,7 +110,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/var/backup/');
 
-        $this->assertEquals($mysql->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' dizbdd --ignore-table=dizbdd.table1 --ignore-table=dizbdd.table2  > /var/backup/mysql/dizbdd.sql");
+        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" dizbdd --ignore-table=dizbdd.table1 --ignore-table=dizbdd.table2  > /var/backup/mysql/dizbdd.sql");
     }
 
     /**
@@ -136,7 +130,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/var/backup/');
 
-        $this->assertEquals($mysql->getCommand(), "mysqldump --host='localhost' --port='3306' --user='root' --password='test' --all-databases --ignore-table=db1.table1 --ignore-table=db2.table2  > /var/backup/mysql/all-databases.sql");
+        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" --all-databases --ignore-table=db1.table1 --ignore-table=db2.table2  > /var/backup/mysql/all-databases.sql");
     }
 
     /**
