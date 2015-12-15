@@ -206,12 +206,6 @@ or simply
 $ php app/console --env=prod dizda:backup:start
 ```
 
-You may point concrete archiver in command line:
-
-```bash
-$ php app/console --env=prod dizda:backup:start zip
-```
-
 ![](https://github.com/dizda/CloudBackupBundle/raw/master/Resources/doc/dizda-Cloud-Backup-Bundle-symfony2.png)
 
 In addition, using -F or --folder option the folders also will be added to the backup.
