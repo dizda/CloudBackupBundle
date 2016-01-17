@@ -52,6 +52,11 @@ services:
         tags:
             -  { name: dizda.cloudbackup.client }
 
+    dizda.cloudbackup.client.flysystem:
+        class: Dizda\CloudBackupBundle\Client\FlysystemClient
+        tags:
+            -  { name: dizda.cloudbackup.client }
+
     dizda.cloudbackup.database.mongodb:
         class: Dizda\CloudBackupBundle\Database\MongoDB
         arguments:

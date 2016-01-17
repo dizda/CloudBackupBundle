@@ -82,6 +82,18 @@ class TaggedServicesPass implements CompilerPassInterface
                 ]);
             }
         }
+
+        // If flysystem is set, assign automatically the specified filesystem adapters
+        if (isset($container->getParameter('dizda_cloud_backup.cloud_storages')['flysystem'])) {
+            $filesystem = $container->getParameter('dizda_cloud_backup.cloud_storages')['flysystem']['service_name'];
+
+            foreach ($filesystem as $filesystemName) {
+                $flysystem = $container->getDefinition('dizda.cloudbackup.client.flysystem');
+                $flysystem->addMethodCall('addFilesystem', [
+                    new Reference($filesystemName),
+                ]);
+            }
+        }
     }
 
     /**

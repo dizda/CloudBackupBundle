@@ -104,6 +104,9 @@ dizda_cloud_backup:
             service_name:   # Gaufrette filesystem(s) service name
                 - local_backup_filesystem
                 - amazon_backup_filesystem
+        flysystem:
+            service_name: # Flysystem filesystem(s) service name
+                - oneup_flysystem.acme_filesystem
         google_drive:
           token_name: ~ # Required
           remote_path: ~ # Not required, default "/", but you can use path like "/Accounts/backups/"
