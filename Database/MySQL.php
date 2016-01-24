@@ -1,6 +1,8 @@
 <?php
 namespace Dizda\CloudBackupBundle\Database;
 
+use Symfony\Component\Process\ProcessUtils;
+
 /**
  * Class MySQL.
  *
@@ -81,7 +83,8 @@ class MySQL extends BaseDatabase
             $this->auth,
             $this->database,
             $this->ignoreTables,
-            $this->dataPath.$this->fileName);
+            ProcessUtils::escapeArgument($this->dataPath.$this->fileName)
+        );
     }
 
     /**
