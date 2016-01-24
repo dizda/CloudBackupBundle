@@ -3,6 +3,7 @@
 namespace Dizda\CloudBackupBundle\Tests\Processor;
 
 use Dizda\CloudBackupBundle\Processor\TarProcessor;
+use Symfony\Component\Process\ProcessUtils;
 
 /**
  * Class TarTest.
@@ -15,8 +16,8 @@ class TarTest extends \PHPUnit_Framework_TestCase
     public function testGetCompressionCommand()
     {
         // build necessary data
-        $outputPath  = '/var/backup/';
-        $archivePath = $outputPath . 'coucou.zip';
+        $outputPath  = ProcessUtils::escapeArgument('/var/backup/');
+        $archivePath = ProcessUtils::escapeArgument($outputPath . 'coucou.zip');
 
         // compress with default params
         $processor = new TarProcessor(array());
