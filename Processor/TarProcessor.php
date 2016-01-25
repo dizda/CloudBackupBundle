@@ -2,6 +2,8 @@
 
 namespace Dizda\CloudBackupBundle\Processor;
 
+use Symfony\Component\Process\ProcessUtils;
+
 class TarProcessor extends BaseProcessor implements ProcessorInterface
 {
     /**
@@ -27,9 +29,9 @@ class TarProcessor extends BaseProcessor implements ProcessorInterface
 
         return sprintf('tar %s c -C %s . | gzip %s > %s',
             implode(' ', $tarParams),
-            $basePath,
+            ProcessUtils::escapeArgument($basePath),
             implode(' ', $zipParams),
-            $archivePath
+            ProcessUtils::escapeArgument($archivePath)
         );
     }
 
