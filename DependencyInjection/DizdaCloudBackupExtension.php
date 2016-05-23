@@ -62,6 +62,13 @@ class DizdaCloudBackupExtension extends Extension
             }
         }
 
+        /* Verify that we have Flysystem library if activated in the config */
+        if (isset($config['cloud_storages']['flysystem'])) {
+            if (!class_exists('Oneup\\FlysystemBundle\\OneupFlysystemBundle')) {
+                throw new \LogicException('You need to install "oneup/flysystem-bundle" library to use it as a cloud storage provider.');
+            }
+        }
+
         // When we launch functional tests, there is no DB specified, so skip it if empty
         if (!$container->hasParameter('dizda_cloud_backup.databases')) {
             $container->setParameter('dizda_cloud_backup.databases', array());

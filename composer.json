@@ -34,6 +34,7 @@
         "happyr/google-site-authenticator-bundle": "To enable upload dumps on google drive.",
         "dropbox/dropbox-sdk": "To enable upload to Dropbox",
         "knplabs/knp-gaufrette-bundle": "To use Gaufrette as a cloud storage",
+        "oneup/flysystem-bundle": "To use Flysystem as a cloud storage",
         "jongotlin/deadmanssnitch-bundle": "To report your successful backups to deadmanssnitch.com"
     },
 
