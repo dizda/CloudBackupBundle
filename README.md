@@ -29,7 +29,7 @@ But also :
 * __sFTP__          (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle) or [OneupFlysystemBundle](https://github.com/1up-lab/OneupFlysystemBundle))
 * __GridFS__        (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle) or [OneupFlysystemBundle](https://github.com/1up-lab/OneupFlysystemBundle))
 * __MogileFS__      (through [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle))
-* __WebDAV__        (thourgh [OneupFlysystemBundle](https://github.com/1up-lab/OneupFlysystemBundle))
+* __WebDAV__        (through [OneupFlysystemBundle](https://github.com/1up-lab/OneupFlysystemBundle))
 
 are supported :-)
 
