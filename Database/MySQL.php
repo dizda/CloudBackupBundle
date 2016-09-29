@@ -57,11 +57,27 @@ class MySQL extends BaseDatabase
 
         /* if user is set, we add authentification */
         if ($params['db_user']) {
-            $this->auth = sprintf('-u%s', $params['db_user']);
+            $cnfFile            = "[client]\n";
+            $cnfPath            = $basePath."mysql.cnf";
+            $cnfParams['user']  = $params['db_user'];
 
             if ($params['db_password']) {
-                $this->auth = sprintf("--host=\"%s\" --port=\"%d\" --user=\"%s\" --password=\"%s\"", $params['db_host'], $params['db_port'], $params['db_user'], $params['db_password']);
+                $cnfParams = array_merge(
+                    $cnfParams,
+                    array(
+                        "password" => $params['db_password'],
+                        "host" => $params['db_host'],
+                        "port" => $params['db_port']
+                    )
+                );
             }
+
+            foreach ($cnfParams as $key => $value) {
+                $cnfFile .= "$key = \"$value\"\n";
+            }
+
+            $this->filesystem->dumpFile($cnfPath, $cnfFile, 0600);
+            $this->auth = sprintf("--defaults-extra-file=\"%s\" ", $cnfPath);
         }
     }
 
