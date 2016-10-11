@@ -25,7 +25,7 @@
     },
 
     "require-dev": {
-        "google/apiclient": "@dev",
+        "google/apiclient": "1.1.7",
         "symfony/symfony": "^2.3.25"
     },
 
