@@ -9,6 +9,15 @@ use Dizda\CloudBackupBundle\Database\MySQL;
  */
 class MySQLTest extends \PHPUnit_Framework_TestCase
 {
+    protected function checkConfigurationFileExistsAndValid($user, $password, $host, $port)
+    {
+        $filePath       = '/tmp/backup/mysql/mysql.cnf';
+        $cnfFileContent = "[client]\nuser = \"$user\"\npassword = \"$password\"\nhost = \"$host\"\nport = \"$port\"\n";
+
+        $this->assertFileExists($filePath);
+        $this->assertContains(file_get_contents($filePath), $cnfFileContent);
+    }
+
     /**
      * @test
      */
@@ -23,9 +32,11 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_user'       => 'root',
                 'db_password'   => 'test',
             ),
-        ), '/var/backup/');
+        ), '/tmp/backup/');
 
-        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" --all-databases  > '/var/backup/mysql/all-databases.sql'");
+        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
+        $this->assertFileExists('/tmp/backup/mysql/mysql.cnf');
+        $this->assertEquals($mysql->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" --all-databases  > '/tmp/backup/mysql/all-databases.sql'");
     }
 
     /**
@@ -42,7 +53,10 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_user'       => 'root',
                 'db_password'   => 'test',
             ),
-        ), '/var/backup/');
+        ), '/tmp/backup/');
+
+        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
+        $this->assertEquals($mysql1->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" dizbdd  > '/tmp/backup/mysql/dizbdd.sql'");
         
         $mysql2 = new MySQLDummy(array(
             'mysql' => array(
@@ -53,10 +67,10 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_user'       => 'mysql',
                 'db_password'   => 'somepwd',
             ),
-        ), '/var/backup/');
+        ), '/tmp/backup/');
 
-        $this->assertEquals($mysql1->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" dizbdd  > '/var/backup/mysql/dizbdd.sql'");
-        $this->assertEquals($mysql2->getCommand(), "mysqldump --host=\"somehost\" --port=\"2222\" --user=\"mysql\" --password=\"somepwd\" somebdd  > '/var/backup/mysql/somebdd.sql'");
+        $this->checkConfigurationFileExistsAndValid('mysql', 'somepwd', 'somehost', '2222');
+        $this->assertEquals($mysql2->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" somebdd  > '/tmp/backup/mysql/somebdd.sql'");
 
         // dump specified database with no auth
         $mysql = new MySQLDummy(array(
@@ -68,9 +82,9 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_user'       => null,
                 'db_password'   => null,
             ),
-        ), '/var/backup/');
+        ), '/tmp/backup/');
 
-        $this->assertEquals($mysql->getCommand(), 'mysqldump  somebdd  > \'/var/backup/mysql/somebdd.sql\'');
+        $this->assertEquals($mysql->getCommand(), 'mysqldump  somebdd  > \'/tmp/backup/mysql/somebdd.sql\'');
     }
 
     /**
@@ -88,9 +102,9 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_user'       => null,
                 'db_password'   => null,
             ),
-        ), '/var/backup/');
+        ), '/tmp/backup/');
 
-        $this->assertEquals($mysql->getCommand(), 'mysqldump  --all-databases  > \'/var/backup/mysql/all-databases.sql\'');
+        $this->assertEquals($mysql->getCommand(), 'mysqldump  --all-databases  > \'/tmp/backup/mysql/all-databases.sql\'');
     }
 
     /**
@@ -108,9 +122,10 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_password'   => 'test',
                 'ignore_tables' => array('table1', 'table2'),
             ),
-        ), '/var/backup/');
+        ), '/tmp/backup/');
 
-        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" dizbdd --ignore-table=dizbdd.table1 --ignore-table=dizbdd.table2  > '/var/backup/mysql/dizbdd.sql'");
+        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
+        $this->assertEquals($mysql->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" dizbdd --ignore-table=dizbdd.table1 --ignore-table=dizbdd.table2  > '/tmp/backup/mysql/dizbdd.sql'");
     }
 
     /**
@@ -128,9 +143,10 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_password'   => 'test',
                 'ignore_tables' => array('db1.table1', 'db2.table2'),
             ),
-        ), '/var/backup/');
+        ), '/tmp/backup/');
 
-        $this->assertEquals($mysql->getCommand(), "mysqldump --host=\"localhost\" --port=\"3306\" --user=\"root\" --password=\"test\" --all-databases --ignore-table=db1.table1 --ignore-table=db2.table2  > '/var/backup/mysql/all-databases.sql'");
+        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
+        $this->assertEquals($mysql->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" --all-databases --ignore-table=db1.table1 --ignore-table=db2.table2  > '/tmp/backup/mysql/all-databases.sql'");
     }
 
     /**
@@ -149,7 +165,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
                 'db_password'   => 'test',
                 'ignore_tables' => array('table1'),
             ),
-        ), '/var/backup/');
+        ), '/tmp/backup/');
 
         $mysql->getCommand();
     }

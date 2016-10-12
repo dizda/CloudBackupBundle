@@ -11,6 +11,7 @@ use Symfony\Component\Process\ProcessUtils;
 class MySQL extends BaseDatabase
 {
     const DB_PATH = 'mysql';
+    const CONFIGURATION_FILE_NAME = 'mysql.cnf';
 
     private $database;
     private $auth = '';
@@ -28,6 +29,11 @@ class MySQL extends BaseDatabase
     {
         parent::__construct($basePath);
         $this->params = $params['mysql'];
+
+        $this->preparePath();
+        $this->prepareFileName();
+        $this->prepareIgnoreTables();
+        $this->prepareConfigurationFile();
     }
 
     /**
@@ -90,7 +96,7 @@ class MySQL extends BaseDatabase
             }
 
             $this->filesystem->dumpFile($this->getConfigurationFilePath(), $cnfFile, 0600);
-            $this->auth = sprintf("--defaults-extra-file=\"%s\" ", $this->getConfigurationFilePath());
+            $this->auth = sprintf("--defaults-extra-file=\"%s\"", $this->getConfigurationFilePath());
         }
     }
 
@@ -108,7 +114,7 @@ class MySQL extends BaseDatabase
      */
     protected function getConfigurationFilePath()
     {
-        return $this->dataPath . "mysql.cnf";
+        return $this->dataPath . static::CONFIGURATION_FILE_NAME;
     }
 
     /**
@@ -116,10 +122,6 @@ class MySQL extends BaseDatabase
      */
     public function dump()
     {
-        $this->preparePath();
-        $this->prepareFileName();
-        $this->prepareIgnoreTables();
-        $this->prepareConfigurationFile();
         $this->execute($this->getCommand());
         $this->removeConfigurationFile();
     }
