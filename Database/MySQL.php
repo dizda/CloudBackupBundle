@@ -71,18 +71,22 @@ class MySQL extends BaseDatabase
      */
     protected function prepareConfigurationFile()
     {
-        if ($this->params['db_user']) {
-            $cnfParams['user']  = $this->params['db_user'];
-            $cnfFile            = "[client]\n";
+        $cnfFile = "[client]\n";
+        $cnfParams = array();
+        $configurationMapping = array(
+            'user'      => 'db_user',
+            'password'  => 'db_password',
+            'host'      => 'db_host',
+            'port'      => 'db_port',
+        );
 
-            if ($this->params['db_password']) {
-                $cnfParams += array(
-                    "password"  => $this->params['db_password'],
-                    "host"      => $this->params['db_host'],
-                    "port"      => $this->params['db_port']
-                );
+        foreach ($configurationMapping as $key => $param) {
+            if ($this->params[$param]) {
+                $cnfParams[$key] = $this->params[$param];
             }
+        }
 
+        if (!empty($cnfParams)) {
             foreach ($cnfParams as $key => $value) {
                 $cnfFile .= "$key = \"$value\"\n";
             }

@@ -12,7 +12,11 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
     protected function checkConfigurationFileExistsAndValid($user, $password, $host, $port)
     {
         $filePath       = '/tmp/backup/mysql/mysql.cnf';
-        $cnfFileContent = "[client]\nuser = \"$user\"\npassword = \"$password\"\nhost = \"$host\"\nport = \"$port\"\n";
+        $cnfFileContent = "[client]\n";
+        $cnfFileContent .= $user ? "user = \"$user\"\n" : "";
+        $cnfFileContent .= $password ? "password = \"$password\"\n" : "";
+        $cnfFileContent .= $host ? "host = \"$host\"\n" : "";
+        $cnfFileContent .= $port ? "port = \"$port\"\n" : "";
 
         $this->assertFileExists($filePath);
         $this->assertContains(file_get_contents($filePath), $cnfFileContent);
@@ -83,7 +87,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/tmp/backup/');
 
-        $this->assertEquals($mysql->getCommand(), 'mysqldump  somebdd  > \'/tmp/backup/mysql/somebdd.sql\'');
+        $this->assertEquals($mysql->getCommand(), 'mysqldump --defaults-extra-file="/tmp/backup/mysql/mysql.cnf" somebdd  > \'/tmp/backup/mysql/somebdd.sql\'');
+        $this->checkConfigurationFileExistsAndValid(null, null, 'somehost', '2222');
     }
 
     /**
@@ -103,7 +108,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/tmp/backup/');
 
-        $this->assertEquals($mysql->getCommand(), 'mysqldump  --all-databases  > \'/tmp/backup/mysql/all-databases.sql\'');
+        $this->assertEquals($mysql->getCommand(), 'mysqldump --defaults-extra-file="/tmp/backup/mysql/mysql.cnf" --all-databases  > \'/tmp/backup/mysql/all-databases.sql\'');
+        $this->checkConfigurationFileExistsAndValid(null, null, 'somehost', '2222');
     }
 
     /**
