@@ -29,11 +29,6 @@ class MySQL extends BaseDatabase
     {
         parent::__construct($basePath);
         $this->params = $params['mysql'];
-
-        $this->preparePath();
-        $this->prepareFileName();
-        $this->prepareIgnoreTables();
-        $this->prepareConfigurationFile();
     }
 
     /**
@@ -115,10 +110,22 @@ class MySQL extends BaseDatabase
     }
 
     /**
+     * Prepare all necessary configurations for mysqldump command
+     */
+    protected function prepareEnvironment()
+    {
+        $this->preparePath();
+        $this->prepareFileName();
+        $this->prepareIgnoreTables();
+        $this->prepareConfigurationFile();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function dump()
     {
+        $this->prepareEnvironment();
         $this->execute($this->getCommand());
         $this->removeConfigurationFile();
     }

@@ -34,9 +34,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/tmp/backup/');
 
-        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
-        $this->assertFileExists('/tmp/backup/mysql/mysql.cnf');
         $this->assertEquals($mysql->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" --all-databases  > '/tmp/backup/mysql/all-databases.sql'");
+        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
     }
 
     /**
@@ -55,9 +54,9 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/tmp/backup/');
 
-        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
         $this->assertEquals($mysql1->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" dizbdd  > '/tmp/backup/mysql/dizbdd.sql'");
-        
+        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
+
         $mysql2 = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => false,
@@ -69,8 +68,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/tmp/backup/');
 
-        $this->checkConfigurationFileExistsAndValid('mysql', 'somepwd', 'somehost', '2222');
         $this->assertEquals($mysql2->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" somebdd  > '/tmp/backup/mysql/somebdd.sql'");
+        $this->checkConfigurationFileExistsAndValid('mysql', 'somepwd', 'somehost', '2222');
 
         // dump specified database with no auth
         $mysql = new MySQLDummy(array(
@@ -124,8 +123,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/tmp/backup/');
 
-        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
         $this->assertEquals($mysql->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" dizbdd --ignore-table=dizbdd.table1 --ignore-table=dizbdd.table2  > '/tmp/backup/mysql/dizbdd.sql'");
+        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
     }
 
     /**
@@ -145,8 +144,8 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ),
         ), '/tmp/backup/');
 
-        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
         $this->assertEquals($mysql->getCommand(), "mysqldump --defaults-extra-file=\"/tmp/backup/mysql/mysql.cnf\" --all-databases --ignore-table=db1.table1 --ignore-table=db2.table2  > '/tmp/backup/mysql/all-databases.sql'");
+        $this->checkConfigurationFileExistsAndValid('root', 'test', 'localhost', '3306');
     }
 
     /**
@@ -175,6 +174,7 @@ class MySQLDummy extends MySQL
 {
     public function getCommand()
     {
+        $this->prepareEnvironment();
         return parent::getCommand();
     }
 }
