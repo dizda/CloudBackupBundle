@@ -81,13 +81,10 @@ class MySQL extends BaseDatabase
             $cnfFile            = "[client]\n";
 
             if ($this->params['db_password']) {
-                $cnfParams = array_merge(
-                    $cnfParams,
-                    array(
-                        "password"  => $this->params['db_password'],
-                        "host"      => $this->params['db_host'],
-                        "port"      => $this->params['db_port']
-                    )
+                $cnfParams += array(
+                    "password"  => $this->params['db_password'],
+                    "host"      => $this->params['db_host'],
+                    "port"      => $this->params['db_port']
                 );
             }
 
