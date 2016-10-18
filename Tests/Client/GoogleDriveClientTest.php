@@ -39,9 +39,6 @@ class GoogleDriveClientTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getClient', 'uploadFileInChunks', 'getMediaUploadFile', 'getDriveService', 'getDriveFile', 'getMimeType', 'getParentFolder'))
             ->getMock();
 
-        $drive->expects($this->any())
-            ->method('output');
-
         $drive->expects($this->once())
             ->method('getDriveService')
             ->willReturn($driveService);
