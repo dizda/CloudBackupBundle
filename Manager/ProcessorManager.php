@@ -2,7 +2,9 @@
 
 namespace Dizda\CloudBackupBundle\Manager;
 
+use Dizda\CloudBackupBundle\Exception\UncompressionNotSupportedException;
 use Dizda\CloudBackupBundle\Processor\ProcessorInterface;
+use Dizda\CloudBackupBundle\Processor\UncompressableProcessorInterface;
 use Dizda\CloudBackupBundle\Splitter\BaseSplitter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
@@ -67,13 +69,19 @@ class ProcessorManager
     protected $splitter;
 
     /**
+     * @var string
+     */
+    protected $restoreFolder;
+
+    /**
      * @param string $rootPath   Path to root folder
      * @param string $outputPath Path to folder with archived files
      * @param string $filePrefix Prefix for archive file (e.g. sitename)
      * @param array  $properties Date function format
      * @param array  $folders    Array of folders to archive (relative to $rootPath)
+     * @param string $restoreFolder Path to restore folder
      */
-    public function __construct($rootPath, $outputPath, $filePrefix, $properties, array $folders = array())
+    public function __construct($rootPath, $outputPath, $filePrefix, $properties, array $folders = array(), $restoreFolder = null)
     {
         $this->rootPath   = $rootPath;
         $this->outputPath = $outputPath;
@@ -81,6 +89,7 @@ class ProcessorManager
         $this->folders    = $folders;
         $this->properties = $properties;
         $this->compressedArchivePath = $this->outputPath.'../backup_compressed/';
+        $this->restoreFolder = $restoreFolder;
 
         $this->filesystem = new Filesystem();
     }
@@ -124,6 +133,22 @@ class ProcessorManager
         if ($this->splitter !== null) {
             $this->split();
         }
+    }
+
+    /**
+     * @param \SplFileInfo $file
+     */
+    public function uncompress(\SplFileInfo $file)
+    {
+        if (!$this->processor instanceof UncompressableProcessorInterface) {
+            throw new UncompressionNotSupportedException(
+                sprintf('Uncompression is not supported for %s.', $this->processor->getName())
+            );
+        }
+
+        $this->archivePath = $this->compressedArchivePath . $this->buildArchiveFilename();
+        $archive = $this->processor->getUncompressCommand($this->restoreFolder, $file->getPathname(), $this->restoreFolder);
+        $this->execute($archive);
     }
 
     /**

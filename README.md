@@ -82,6 +82,7 @@ dizda_cloud_backup:
     # such as: hostname_2014-01-01_21-08-39.tar
     output_file_prefix: hostname
     timeout: 300
+    restore: false # Set to true to enable restore command
     processor:
         type: tar # Required: tar|zip|7z
         options:
@@ -216,6 +217,14 @@ $ php app/console --env=prod dizda:backup:start
 In addition, using -F or --folder option the folders also will be added to the backup.
 
 Obviously, if some problems occurs during the backup process, you can configure monolog to send you emails. 
+
+When working locally or on a staging server, you can configure the bundle to enable restoring. Set `restore: true` and
+the following command is available:
+```bash
+$ php app/console dizda:backup:restore --force
+```
+
+Note! Not all processors, clients and databases supports restoring. Backupped files are not restored.
 
 Which archiver do I use?
 ------------------------

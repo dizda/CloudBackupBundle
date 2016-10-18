@@ -3,6 +3,8 @@
 namespace Dizda\CloudBackupBundle\Manager;
 
 use Dizda\CloudBackupBundle\Database\DatabaseInterface;
+use Dizda\CloudBackupBundle\Database\RestorableDatabaseInterface;
+use Dizda\CloudBackupBundle\Exception\MissingRestorableDatabaseException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -51,5 +53,20 @@ class DatabaseManager
             $this->logger->info(sprintf('[dizda-backup] Dumping %s database', $child->getName()));
             $child->dump();
         }
+    }
+
+    /**
+     * @throws MissingRestorableDatabaseException
+     */
+    public function restore()
+    {
+        foreach ($this->children as $child) {
+            if ($child instanceof RestorableDatabaseInterface) {
+                $child->restore();
+                return;
+            }
+        }
+
+        throw MissingRestorableDatabaseException::create();
     }
 }

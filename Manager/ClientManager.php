@@ -3,6 +3,8 @@
 namespace Dizda\CloudBackupBundle\Manager;
 
 use Dizda\CloudBackupBundle\Client\ClientInterface;
+use Dizda\CloudBackupBundle\Client\DownloadableClientInterface;
+use Dizda\CloudBackupBundle\Exception\MissingDownloadableClientsException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -69,5 +71,21 @@ class ClientManager
         if ($exception) {
             throw $exception;
         }
+    }
+
+    /**
+     * @return \SplFileInfo
+     *
+     * @throws MissingDownloadableClientsException
+     */
+    public function download()
+    {
+        foreach ($this->children as $child) {
+            if ($child instanceof DownloadableClientInterface) {
+                return $child->download();
+            }
+        }
+
+        throw MissingDownloadableClientsException::create();
     }
 }

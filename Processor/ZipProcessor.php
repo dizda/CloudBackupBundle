@@ -2,7 +2,7 @@
 
 namespace Dizda\CloudBackupBundle\Processor;
 
-class ZipProcessor extends BaseProcessor implements ProcessorInterface
+class ZipProcessor extends BaseProcessor implements ProcessorInterface, UncompressableProcessorInterface
 {
     /**
      * {@inheritdoc}
@@ -29,6 +29,14 @@ class ZipProcessor extends BaseProcessor implements ProcessorInterface
         }
 
         return sprintf('cd %s && zip %s %s .', $basePath, implode(' ', $params), $archivePath);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUncompressCommand($basePath, $fileName, $uncompressPath)
+    {
+        return sprintf('cd %s && unzip -o %s -d %s', $basePath, $fileName, $uncompressPath);
     }
 
     /**
