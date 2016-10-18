@@ -20,6 +20,8 @@ class DropboxClient implements ClientInterface
      */
     public function __construct($params)
     {
+        @trigger_error('DropboxClient is deprecated and will be removed in 4.0. Please use DropboxSDKClient', E_USER_DEPRECATED);
+
         $params           = $params['dropbox'];
         $this->user       = $params['user'];
         $this->password   = $params['password'];

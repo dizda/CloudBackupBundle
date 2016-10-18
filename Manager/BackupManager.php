@@ -108,6 +108,8 @@ class BackupManager
      */
     public function getClientManager()
     {
+        @trigger_error(sprintf('%s::%s is deprecated and will be removed in 4.0.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->clientManager;
     }
 
@@ -118,6 +120,8 @@ class BackupManager
      */
     public function getDatabaseManager()
     {
+        @trigger_error(sprintf('%s::%s is deprecated and will be removed in 4.0.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->databaseManager;
     }
 
@@ -128,6 +132,8 @@ class BackupManager
      */
     public function getProcessorManager()
     {
+        @trigger_error(sprintf('%s::%s is deprecated and will be removed in 4.0.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->processorManager;
     }
 }
