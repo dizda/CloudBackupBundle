@@ -4,7 +4,6 @@ namespace Dizda\CloudBackupBundle\Manager;
 
 use Dizda\CloudBackupBundle\Processor\ProcessorInterface;
 use Dizda\CloudBackupBundle\Splitter\BaseSplitter;
-use Dizda\CloudBackupBundle\Splitter\ZipSplitSplitter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
