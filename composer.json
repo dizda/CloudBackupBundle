@@ -21,7 +21,7 @@
     "require": {
         "php": "^5.4 || ^7.0",
         "symfony/framework-bundle": "^2.1 || ^3.0",
-        "symfony/monolog-bundle": "^2.3"
+        "psr/log": "^1.0.1"
     },
 
     "require-dev": {
