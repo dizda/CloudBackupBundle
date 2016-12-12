@@ -34,7 +34,7 @@ class DropboxSdkClient implements ClientInterface, DownloadableClientInterface
      * @param $restoreFolder
      * @param Filesystem $localFilesystem
      */
-    public function __construct(array $params, $restoreFolder, Filesystem $localFilesystem)
+    public function __construct($params, $restoreFolder, Filesystem $localFilesystem)
     {
         $this->restoreFolder = $restoreFolder;
         $this->localFilesystem = $localFilesystem;
