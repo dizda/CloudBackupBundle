@@ -40,6 +40,8 @@ services:
         class: Dizda\CloudBackupBundle\Client\DropboxSdkClient
         arguments:
             - '%dizda_cloud_backup.cloud_storages%'
+            - '%dizda_cloud_backup.restore_folder%'
+            - '@dizda.local_filesystem'
         tags:
             -  { name: dizda.cloudbackup.client }
 
