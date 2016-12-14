@@ -6,19 +6,17 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Interface SplittersInterface.
- *
  * @author Nick Doulgeridis
  */
 abstract class BaseSplitter
 {
     /**
-     * @var string archivePath
+     * @var string
      */
     private $archivePath;
 
     /**
-     * @var integer splitSize
+     * @var integer
      */
     private $splitSize;
 
@@ -69,7 +67,7 @@ abstract class BaseSplitter
     /**
      * @param string $archivePath
      *
-     * @return $this
+     * @return self
      */
     public function setArchivePath($archivePath)
     {
@@ -78,9 +76,6 @@ abstract class BaseSplitter
         return $this;
     }
 
-    /**
-     * @void
-     */
     abstract public function executeSplit();
 
     /**
