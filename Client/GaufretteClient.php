@@ -31,7 +31,7 @@ class GaufretteClient implements ClientInterface, DownloadableClientInterface
      * @param string $restoreFolder
      * @param LocalFilesystem $localFilesystem
      */
-    public function __construct($restoreFolder, LocalFilesystem $localFilesystem)
+    public function __construct($restoreFolder = null, LocalFilesystem $localFilesystem = null)
     {
         $this->restoreFolder = $restoreFolder;
         $this->localFilesystem = $localFilesystem;
