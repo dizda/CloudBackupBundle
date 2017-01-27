@@ -212,13 +212,34 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mysql -uroot --password="foobar" dizbdd < \'/tmp/restore/mysql/dizbdd.sql\'', $mysql->getRestoreCommand());
     }
+
+    /**
+     * @test
+     * @expectedException \Dizda\CloudBackupBundle\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Parameter "$restoreFolder" is not set.
+     */
+    public function throwExceptionIfRestoreFolderIsNotConfigured()
+    {
+        $mysql = new MySQLDummy([
+            'mysql' => [
+                'all_databases' => false,
+                'db_host'       => 'localhost',
+                'db_port'       => 3306,
+                'database'      => 'dizbdd',
+                'db_user'       => 'root',
+                'db_password'   => 'foobar',
+            ],
+        ], '/tmp/backup/', null);
+
+        $mysql->getRestoreCommand();
+    }
 }
 
 class MySQLDummy extends MySQL
 {
-    public function __construct(array $params)
+    public function __construct(array $params, $basePath = '/tmp/backup/', $restoreFolder = '/tmp/restore/')
     {
-        parent::__construct($params, '/tmp/backup/', '/tmp/restore/');
+        parent::__construct($params, $basePath, $restoreFolder);
     }
 
     public function getCommand()

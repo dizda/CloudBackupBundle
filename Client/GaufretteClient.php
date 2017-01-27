@@ -1,6 +1,7 @@
 <?php
 namespace Dizda\CloudBackupBundle\Client;
 
+use Dizda\CloudBackupBundle\Exception\InvalidConfigurationException;
 use Gaufrette\Filesystem;
 use Symfony\Component\Filesystem\Filesystem as LocalFilesystem;
 
@@ -79,6 +80,9 @@ class GaufretteClient implements ClientInterface, DownloadableClientInterface
      */
     public function download()
     {
+        if (!$this->restoreFolder) {
+            throw InvalidConfigurationException::create('$restoreFolder');
+        }
         $fileSystem = $this->getFirstFilesystem();
 
         $files = $fileSystem->keys();

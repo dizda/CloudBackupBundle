@@ -1,6 +1,7 @@
 <?php
 namespace Dizda\CloudBackupBundle\Client;
 
+use Dizda\CloudBackupBundle\Exception\InvalidConfigurationException;
 use Dizda\CloudBackupBundle\Exception\RestoringNotAvailableException;
 use Dizda\CloudBackupBundle\Exception\UploadException;
 use \Dropbox as Dropbox;
@@ -65,6 +66,9 @@ class DropboxSdkClient implements ClientInterface, DownloadableClientInterface
 
     public function download()
     {
+        if (!$this->restoreFolder) {
+            throw InvalidConfigurationException::create('$restoreFolder');
+        }
         $pathError = Dropbox\Path::findErrorNonRoot($this->remotePath);
         if ($pathError !== null) {
             throw new UploadException(sprintf('Invalid path "%s".', $this->remotePath));

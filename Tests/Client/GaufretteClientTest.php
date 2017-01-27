@@ -39,4 +39,15 @@ class GaufretteClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\SplFileInfo', $file);
         $this->assertEquals('/tmp/restore/db_2016-10-19.zip', $file->getPathname());
     }
+
+    /**
+     * @test
+     * @expectedException \Dizda\CloudBackupBundle\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Parameter "$restoreFolder" is not set.
+     */
+    public function throwExceptionIfRestoreFolderIsNotConfigured()
+    {
+        $client = new GaufretteClient(null, $this->getMock(LocalFilesystem::class));
+        $client->download();
+    }
 }

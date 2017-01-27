@@ -1,6 +1,7 @@
 <?php
 namespace Dizda\CloudBackupBundle\Database;
 
+use Dizda\CloudBackupBundle\Exception\InvalidConfigurationException;
 use Symfony\Component\Process\ProcessUtils;
 
 /**
@@ -166,6 +167,10 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
      */
     protected function getRestoreCommand()
     {
+        if (!$this->restoreFolder) {
+            throw InvalidConfigurationException::create('$restoreFolder');
+        }
+
         $restoreAuth = '';
         if ($this->params['db_user']) {
             $restoreAuth = sprintf('-u%s', $this->params['db_user']);
