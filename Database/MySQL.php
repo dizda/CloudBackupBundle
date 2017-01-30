@@ -91,7 +91,8 @@ class MySQL extends BaseDatabase
                 $cnfFile .= "$key = \"$value\"\n";
             }
 
-            $this->filesystem->dumpFile($this->getConfigurationFilePath(), $cnfFile, 0600);
+            $this->filesystem->dumpFile($this->getConfigurationFilePath(), $cnfFile);
+            $this->filesystem->chmod([$this->getConfigurationFilePath()], 0600);
             $this->auth = sprintf("--defaults-extra-file=\"%s\"", $this->getConfigurationFilePath());
         }
     }
