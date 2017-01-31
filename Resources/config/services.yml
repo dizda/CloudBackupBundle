@@ -12,6 +12,9 @@ services:
         arguments:
           - '@logger'
 
+    dizda.local_filesystem:
+        class: Symfony\Component\Filesystem\Filesystem
+
     dizda.cloudbackup.client.cloudapp:
         class: Dizda\CloudBackupBundle\Client\CloudAppClient
         arguments:
@@ -37,6 +40,8 @@ services:
         class: Dizda\CloudBackupBundle\Client\DropboxSdkClient
         arguments:
             - '%dizda_cloud_backup.cloud_storages%'
+            - '%dizda_cloud_backup.restore_folder%'
+            - '@dizda.local_filesystem'
         tags:
             -  { name: dizda.cloudbackup.client }
 
@@ -49,6 +54,9 @@ services:
 
     dizda.cloudbackup.client.gaufrette:
         class: Dizda\CloudBackupBundle\Client\GaufretteClient
+        arguments:
+            - '%dizda_cloud_backup.restore_folder%'
+            - '@dizda.local_filesystem'
         tags:
             -  { name: dizda.cloudbackup.client }
 
@@ -72,6 +80,7 @@ services:
         arguments:
             - '%dizda_cloud_backup.databases%'
             - '%dizda_cloud_backup.output_folder%'
+            - '%dizda_cloud_backup.restore_folder%'
         calls:
             - [ setTimeout, [ '%dizda_cloud_backup.timeout%' ] ]
         tags:
@@ -116,6 +125,17 @@ services:
             - '@dizda.cloudbackup.manager.processor'
             - '@event_dispatcher'
 
+    dizda.cloudbackup.manager.restore:
+        class: Dizda\CloudBackupBundle\Manager\RestoreManager
+        arguments:
+            - '@dizda.cloudbackup.manager.database'
+            - '@dizda.cloudbackup.manager.client'
+            - '@dizda.cloudbackup.manager.processor'
+            - '@event_dispatcher'
+            - '%dizda_cloud_backup.restore_folder%'
+            - '@dizda.cloudbackup.filesystem'
+            - '%dizda_cloud_backup.restore%'
+
     dizda.cloudbackup.manager.processor:
         class: Dizda\CloudBackupBundle\Manager\ProcessorManager
         arguments:
@@ -124,3 +144,38 @@ services:
             - '%dizda_cloud_backup.output_file_prefix%'
             - '%dizda_cloud_backup.processor%'
             - '%dizda_cloud_backup.folders%'
+            - '%dizda_cloud_backup.restore_folder%'
+
+    dizda.cloudbackup.filesystem:
+        class: Symfony\Component\Filesystem\Filesystem
+
+    dizda.cloudbackup.listener.log_restore_completed:
+        class: Dizda\CloudBackupBundle\Listener\LogRestoreCompletedListener
+        arguments:
+            - '@logger'
+        tags:
+            - { name: kernel.event_listener, event: dizda.cloudbackup.restore_completed, method: whenRestoreIsCompleted }
+
+    dizda.cloudbackup.listener.log_restore_failed:
+        class: Dizda\CloudBackupBundle\Listener\LogRestoreFailedListener
+        arguments:
+            - '@logger'
+        tags:
+            - { name: kernel.event_listener, event: dizda.cloudbackup.restore_failed, method: whenRestoreIsFailed }
+
+    dizda.cloudbackup.listener.clean_restore_workspace:
+        class: Dizda\CloudBackupBundle\Listener\CleanRestoreWorkspaceListener
+        arguments:
+            - '%dizda_cloud_backup.restore_folder%'
+            - '@dizda.cloudbackup.filesystem'
+        tags:
+            - { name: kernel.event_listener, event: dizda.cloudbackup.restore_completed, method: whenRestoreIsCompleted }
+            - { name: kernel.event_listener, event: dizda.cloudbackup.restore_failed, method: whenRestoreIsFailed }
+
+    dizda.cloudbackup.command.restore:
+        class: Dizda\CloudBackupBundle\Command\RestoreCommand
+        arguments:
+            - '%dizda_cloud_backup.restore%'
+            - '@dizda.cloudbackup.manager.restore'
+        tags:
+            - { name: console.command }

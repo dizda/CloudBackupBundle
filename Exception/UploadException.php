@@ -7,5 +7,11 @@ namespace Dizda\CloudBackupBundle\Exception;
  */
 class UploadException extends \Exception
 {
-    protected $message = 'Unable to upload the file.';
+    /**
+     * @return UploadException
+     */
+    public function create()
+    {
+        return new self('Unable to upload the file.');
+    }
 }

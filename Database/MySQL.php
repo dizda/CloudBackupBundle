@@ -1,6 +1,7 @@
 <?php
 namespace Dizda\CloudBackupBundle\Database;
 
+use Dizda\CloudBackupBundle\Exception\InvalidConfigurationException;
 use Symfony\Component\Process\ProcessUtils;
 
 /**
@@ -8,7 +9,7 @@ use Symfony\Component\Process\ProcessUtils;
  *
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
-class MySQL extends BaseDatabase
+class MySQL extends BaseDatabase implements RestorableDatabaseInterface
 {
     const DB_PATH = 'mysql';
     const CONFIGURATION_FILE_NAME = 'mysql.cnf';
@@ -20,14 +21,20 @@ class MySQL extends BaseDatabase
     private $params;
 
     /**
-     * DB Auth.
-     *
+     * @var string
+     */
+    private $restoreFolder;
+
+    /**
      * @param array $params
      * @param string $basePath
+     * @param string $restoreFolder
      */
-    public function __construct($params, $basePath)
+    public function __construct($params, $basePath, $restoreFolder = null)
     {
         parent::__construct($basePath);
+
+        $this->restoreFolder = $restoreFolder;
         $this->params = $params['mysql'];
     }
 
@@ -138,6 +145,14 @@ class MySQL extends BaseDatabase
     /**
      * {@inheritdoc}
      */
+    public function restore()
+    {
+        $this->execute($this->getRestoreCommand());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getCommand()
     {
         return sprintf('mysqldump %s %s %s > %s',
@@ -146,6 +161,35 @@ class MySQL extends BaseDatabase
             $this->ignoreTables,
             ProcessUtils::escapeArgument($this->dataPath.$this->fileName)
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRestoreCommand()
+    {
+        if (!$this->restoreFolder) {
+            throw InvalidConfigurationException::create('$restoreFolder');
+        }
+
+        $restoreAuth = '';
+        if ($this->params['db_user']) {
+            $restoreAuth = sprintf('-u%s', $this->params['db_user']);
+
+            if ($this->params['db_password']) {
+                $restoreAuth = $restoreAuth . sprintf(" --password=\"%s\"", $this->params['db_password']);
+            }
+        }
+
+        $this->prepareFileName();
+
+        $command = sprintf('mysql %s %s < %s',
+            $restoreAuth,
+            $this->params['database'],
+            ProcessUtils::escapeArgument(sprintf('%smysql/%s', $this->restoreFolder, $this->fileName))
+        );
+
+        return $command;
     }
 
     /**

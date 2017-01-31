@@ -135,6 +135,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
+            ->booleanNode('restore')->defaultFalse()->end()
         ->end();
 
         return $treeBuilder;

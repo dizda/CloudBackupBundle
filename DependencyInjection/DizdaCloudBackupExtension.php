@@ -29,6 +29,7 @@ class DizdaCloudBackupExtension extends Extension
         /* Config output file */
         $container->setParameter('dizda_cloud_backup.root_folder', $container->getParameter('kernel.root_dir').'/../');
         $container->setParameter('dizda_cloud_backup.output_folder', $container->getParameter('kernel.cache_dir').'/backup/');
+        $container->setParameter('dizda_cloud_backup.restore_folder', $container->getParameter('kernel.cache_dir').'/restore/');
 
         /* Assign all config vars */
         foreach ($config as $k => $v) {
