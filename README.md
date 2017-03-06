@@ -176,7 +176,7 @@ dizda_cloud_backup:
 
 ```yml
 # app/config/parameters.yml
-	# ...
+  # ...
     database_driver: pdo_mysql
     database_host: localhost
     database_port: null
