@@ -28,7 +28,7 @@ class ZipProcessor extends BaseProcessor implements ProcessorInterface, Uncompre
             $params[] = '-'.$compression_ratio;
         }
 
-        $binaryFile = escapeshellarg(isset($this->options['executable']) ? $this->options['executable'] : 'zip');
+        $binaryFile = escapeshellarg($this->options['executable'] ?: 'zip');
 
         return sprintf('cd %s && %s %s %s .', $basePath, $binaryFile, implode(' ', $params), $archivePath);
     }
