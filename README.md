@@ -86,6 +86,7 @@ dizda_cloud_backup:
     processor:
         type: tar # Required: tar|zip|7z
         options:
+            executable: zip|7z # If not added to path variable please set binary path for zip and 7z! e.g. on Windows: 'C:\Program Files\7-Zip\7z.exe'
             compression_ratio: 6
             password: qwerty
             # Split into many files of `split_size` bytes
@@ -175,7 +176,7 @@ dizda_cloud_backup:
 
 ```yml
 # app/config/parameters.yml
-	# ...
+  # ...
     database_driver: pdo_mysql
     database_host: localhost
     database_port: null

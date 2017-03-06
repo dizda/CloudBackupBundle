@@ -33,7 +33,9 @@ class SevenZipProcessor extends BaseProcessor implements ProcessorInterface
             $params[] = '-mx'.$compression_ratio;
         }
 
-        return sprintf('cd %s && 7z a %s %s', $basePath, implode(' ', $params), $archivePath);
+        $binaryFile = escapeshellarg($this->options['executable'] ?: '7z');
+
+        return sprintf('cd %s && %s a %s %s', $basePath, $binaryFile, implode(' ', $params), $archivePath);
     }
 
     /**

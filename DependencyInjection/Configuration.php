@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('options')
                         ->addDefaultsIfNotSet()
                         ->children()
+                            ->scalarNode('executable')->defaultNull()->end()
                             ->scalarNode('password')->defaultNull()->end()
                             ->integerNode('compression_ratio')->defaultValue(6)->min(0)->max(100)->end()
                             ->arrayNode('split')
