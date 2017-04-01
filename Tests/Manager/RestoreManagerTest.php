@@ -12,12 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-// backward compatibility
-if (!class_exists('\PHPUnit\Framework\TestCase') &&
-    class_exists('\PHPUnit_Framework_TestCase')) {
-    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
-}
-class RestoreManagerTest extends \PHPUnit\Framework\TestCase
+class RestoreManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -29,11 +24,11 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), '')])
             ->getMock();
 
-        $databaseManagerMock = $this->getMock(DatabaseManager::class)->disableOriginalConstructor()->getMock();
+        $databaseManagerMock = $this->getMockBuilder(DatabaseManager::class)->disableOriginalConstructor()->getMock();
         $databaseManagerMock->expects($this->once())->method('restore');
-        $clientManagerMock = $this->getMock(ClientManager::class)->disableOriginalConstructor()->getMock();
+        $clientManagerMock = $this->getMockBuilder(ClientManager::class)->disableOriginalConstructor()->getMock();
         $clientManagerMock->expects($this->once())->method('download')->willReturn($fileMock);
-        $processorManagerMock = $this->getMock(ProcessorManager::class)->disableOriginalConstructor()->getMock();
+        $processorManagerMock = $this->getMockBuilder(ProcessorManager::class)->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->once())->method('uncompress');
         $eventDispatcherMock = $this->getMock(EventDispatcherInterface::class);
         $eventDispatcherMock->expects($this->once())->method('dispatch')->with(RestoreEvent::RESTORE_COMPLETED);
@@ -59,11 +54,11 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function shouldNotRestoreDatabase()
     {
-        $databaseManagerMock = $this->getMock(DatabaseManager::class)->disableOriginalConstructor()->getMock();
+        $databaseManagerMock = $this->getMockBuilder(DatabaseManager::class)->disableOriginalConstructor()->getMock();
         $databaseManagerMock->expects($this->never())->method('restore');
-        $clientManagerMock = $this->getMock(ClientManager::class)->disableOriginalConstructor()->getMock();
+        $clientManagerMock = $this->getMockBuilder(ClientManager::class)->disableOriginalConstructor()->getMock();
         $clientManagerMock->expects($this->never())->method('download');
-        $processorManagerMock = $this->getMock(ProcessorManager::class)->disableOriginalConstructor()->getMock();
+        $processorManagerMock = $this->getMockBuilder(ProcessorManager::class)->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->never())->method('uncompress');
         $eventDispatcherMock = $this->getMock(EventDispatcherInterface::class);
         $eventDispatcherMock->expects($this->never())->method('dispatch');
@@ -87,11 +82,11 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function shouldDispachRestoreFailedEventIfExceptionOccur()
     {
-        $databaseManagerMock = $this->getMock(DatabaseManager::class)->disableOriginalConstructor()->getMock();
+        $databaseManagerMock = $this->getMockBuilder(DatabaseManager::class)->disableOriginalConstructor()->getMock();
         $databaseManagerMock->expects($this->never())->method('restore');
-        $clientManagerMock = $this->getMock(ClientManager::class)->disableOriginalConstructor()->getMock();
+        $clientManagerMock = $this->getMockBuilder(ClientManager::class)->disableOriginalConstructor()->getMock();
         $clientManagerMock->expects($this->never())->method('download');
-        $processorManagerMock = $this->getMock(ProcessorManager::class)->disableOriginalConstructor()->getMock();
+        $processorManagerMock = $this->getMockBuilder(ProcessorManager::class)->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->never())->method('uncompress');
         $eventDispatcherMock = $this->getMock(EventDispatcherInterface::class);
         $eventDispatcherMock->expects($this->any())->method('dispatch')->with(

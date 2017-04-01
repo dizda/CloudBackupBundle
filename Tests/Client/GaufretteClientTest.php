@@ -6,12 +6,8 @@ use Dizda\CloudBackupBundle\Client\GaufretteClient;
 use Gaufrette\File;
 use Gaufrette\Filesystem;
 use Symfony\Component\Filesystem\Filesystem as LocalFilesystem;
-// backward compatibility
-if (!class_exists('\PHPUnit\Framework\TestCase') &&
-    class_exists('\PHPUnit_Framework_TestCase')) {
-    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
-}
-class GaufretteClientTest extends \PHPUnit\Framework\TestCase
+
+class GaufretteClientTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
