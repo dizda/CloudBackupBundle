@@ -24,7 +24,7 @@ class ClientManagerTest extends \PHPUnit\Framework\TestCase
         $fileMock = $this
             ->getMockBuilder(\SplFileInfo::class)
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), '')])
-            ->createMock();
+            ->getMock();
         $clientMock->expects($this->once())->method('download')->willReturn($fileMock);
         $clients[] = $clientMock;
 

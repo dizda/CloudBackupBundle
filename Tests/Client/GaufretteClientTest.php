@@ -26,14 +26,14 @@ class GaufretteClientTest extends \PHPUnit\Framework\TestCase
             ->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->setMethods(['getContent'])
-            ->createMock()
+            ->getMock()
         ;
         $fileMock->method('getContent')->willReturn('foo bar');
         $fileSystemMock = $this
             ->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->setMethods(['keys', 'get'])
-            ->createMock();
+            ->getMock();
         $fileSystemMock->method('keys')->willReturn(['db_2016-10-19.zip']);
         $fileSystemMock->method('get')->with('db_2016-10-19.zip')->willReturn($fileMock);
         $client->addFilesystem($fileSystemMock);

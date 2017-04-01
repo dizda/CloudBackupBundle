@@ -16,11 +16,11 @@ class BackupManagerTest extends \PHPUnit\Framework\TestCase
     {
         $loggerMock = $this->createMock('Psr\Log\LoggerInterface');
         $databaseManagerMock = $this->getMockBuilder('Dizda\CloudBackupBundle\Manager\DatabaseManager')
-            ->disableOriginalConstructor()->createMock();
+            ->disableOriginalConstructor()->getMock();
         $clientManagerMock = $this->getMockBuilder('Dizda\CloudBackupBundle\Manager\ClientManager')
-            ->disableOriginalConstructor()->createMock();
+            ->disableOriginalConstructor()->getMock();
         $processorManagerMock = $this->getMockBuilder('Dizda\CloudBackupBundle\Manager\ProcessorManager')
-            ->disableOriginalConstructor()->createMock();
+            ->disableOriginalConstructor()->getMock();
         $eventDispatcherMock = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $eventDispatcherMock->expects($this->once())->method('dispatch')->with(BackupEvent::BACKUP_COMPLETED);
 
@@ -34,11 +34,11 @@ class BackupManagerTest extends \PHPUnit\Framework\TestCase
     {
         $loggerMock = $this->createMock('Psr\Log\LoggerInterface');
         $databaseManagerMock = $this->getMockBuilder('Dizda\CloudBackupBundle\Manager\DatabaseManager')
-            ->disableOriginalConstructor()->createMock();
+            ->disableOriginalConstructor()->getMock();
         $clientManagerMock = $this->getMockBuilder('Dizda\CloudBackupBundle\Manager\ClientManager')
-            ->disableOriginalConstructor()->createMock();
+            ->disableOriginalConstructor()->getMock();
         $processorManagerMock = $this->getMockBuilder('Dizda\CloudBackupBundle\Manager\ProcessorManager')
-            ->disableOriginalConstructor()->createMock();
+            ->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->once())->method('copyFolders')
             ->will($this->throwException(new \Exception()));
         $eventDispatcherMock = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
