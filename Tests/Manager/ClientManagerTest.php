@@ -6,7 +6,12 @@ use Dizda\CloudBackupBundle\Client\DownloadableClientInterface;
 use Dizda\CloudBackupBundle\Manager\ClientManager;
 use Psr\Log\LoggerInterface;
 
-class ClientManagerTest extends \PHPUnit_Framework_TestCase
+// backward compatibility
+if (!class_exists('\PHPUnit\Framework\TestCase') &&
+    class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
+class ClientManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

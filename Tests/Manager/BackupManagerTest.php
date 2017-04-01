@@ -5,7 +5,12 @@ namespace Dizda\CloudBackupBundle\Tests\Manager;
 use Dizda\CloudBackupBundle\Event\BackupEvent;
 use Dizda\CloudBackupBundle\Manager\BackupManager;
 
-class BackupManagerTest extends \PHPUnit_Framework_TestCase
+// backward compatibility
+if (!class_exists('\PHPUnit\Framework\TestCase') &&
+    class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
+class BackupManagerTest extends \PHPUnit\Framework\TestCase
 {
     public function testBackupCompletedEventIsCalledOnSuccess()
     {
