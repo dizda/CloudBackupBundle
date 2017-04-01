@@ -18,8 +18,8 @@ class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
     {
         $archive = '/biz/baz/boz';
         $mime = 'mime';
-        $clientProvider = $this->createMock('Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider');
-        $driveParent = $this->createMock('Google_Service_Drive_ParentReference');
+        $clientProvider = $this->getMockBuilder('Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider');
+        $driveParent = $this->getMockBuilder('Google_Service_Drive_ParentReference');
         $driveService = $this->getDriveService();
 
         $client = $this->getMockBuilder('Google_Client')
@@ -30,7 +30,7 @@ class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
         $client->expects($this->once())
             ->method('setDefer');
 
-        $driveFile = $this->createMock('Google_Service_Drive_DriveFile');
+        $driveFile = $this->getMockBuilder('Google_Service_Drive_DriveFile');
         $driveFile->expects($this->once())
             ->method('setMimeType')
             ->with($this->equalTo($mime));
