@@ -12,7 +12,7 @@ if (!class_exists('\PHPUnit\Framework\TestCase') &&
     class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
 }
 
-class GaufretteClientTest extends \PHPUnit_Framework_TestCase
+class GaufretteClientTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
