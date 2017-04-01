@@ -107,7 +107,11 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
         $processorManagerMock = $this->getMockBuilder(ProcessorManager::class)->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->never())->method('uncompress');
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
-        $eventDispatcherMock->expects($this->any())->method('dispatch')->with(
+		 // backward compatibility
+		if (!class_exists('PHPUnit_Framework_Constraint_Not')
+			class_alias('\PHPUnit\Constraint\Not','\PHPUnit_Framework_Constraint_Not');
+		}
+		$eventDispatcherMock->expects($this->any())->method('dispatch')->with(
             new \PHPUnit_Framework_Constraint_Not(RestoreEvent::RESTORE_COMPLETED)
         );
         $eventDispatcherMock->expects($this->once())->method('dispatch')->with(RestoreFailedEvent::RESTORE_FAILED);
