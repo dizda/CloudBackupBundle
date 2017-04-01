@@ -6,6 +6,7 @@ use Dizda\CloudBackupBundle\Client\GaufretteClient;
 use Gaufrette\File;
 use Gaufrette\Filesystem;
 use Symfony\Component\Filesystem\Filesystem as LocalFilesystem;
+require_once 'PHPUnit/Autoload.php';
 
 class GaufretteClientTest extends \PHPUnit_Framework_TestCase
 {
