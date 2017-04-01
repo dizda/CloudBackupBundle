@@ -116,6 +116,10 @@ dizda_cloud_backup:
         # Using dropbox via official API. You need to add "dropbox/dropbox-sdk": "1.1.*" in your composer.json file
         dropbox_sdk:
             remote_path: ~ # Required. Path to upload files (where the root '/' will be application folder)
+            remote_month_path: ~ # Required. Path to upload monthly files (where the root '/' will be application folder)
+			file_prefix:  ~ # Required. Type in the same value you have in your output_file_prefix parameter
+			remote_files_count: 3 # Required Set the limit of files you want to store in your (remote_path) folder
+            remote_month_count: 2 # Required Set the limit of files you want to store in your monthly (remote_month_path) folder 
             access_token: ~ # Required. Access token provided by DropBox to authenticate your application. You can follow instructions at https://www.dropbox.com/developers/core/start/php
 
     databases:
@@ -158,6 +162,10 @@ dizda_cloud_backup:
         dropbox_sdk:
             access_token: %dizda_cloud_dropbox_token%
             remote_path: /backup
+            remote_month_path: '/backupmonth'
+			file_prefix: 'hostname'
+            remote_files_count: 3 
+            remote_month_count: 2
 
     databases:
         mongodb:
