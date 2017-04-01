@@ -26,8 +26,7 @@
 
     "require-dev": {
         "google/apiclient": "1.1.7",
-        "symfony/symfony": "^2.3.25",
-		"happyr/google-site-authenticator-bundle": "^0.3.2"
+        "symfony/symfony": "^2.3.25"
     },
 
     "suggest": {
