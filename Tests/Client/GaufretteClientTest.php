@@ -18,7 +18,7 @@ class GaufretteClientTest extends \PHPUnit\Framework\TestCase
      */
     public function shouldDownloadAndSaveContentInANewFile()
     {
-        $localFilesystemMock = $this->getMockBuilder(LocalFilesystem::class);
+        $localFilesystemMock = $this->createMock(LocalFilesystem::class);
         $localFilesystemMock->expects($this->once())->method('dumpFile')
             ->with('/tmp/restore/db_2016-10-19.zip', 'foo bar');
         $client = new GaufretteClient('/tmp/restore/', $localFilesystemMock);
@@ -51,7 +51,7 @@ class GaufretteClientTest extends \PHPUnit\Framework\TestCase
      */
     public function throwExceptionIfRestoreFolderIsNotConfigured()
     {
-        $client = new GaufretteClient(null, $this->getMockBuilder(LocalFilesystem::class));
+        $client = new GaufretteClient(null, $this->createMock(LocalFilesystem::class));
         $client->download();
     }
 }

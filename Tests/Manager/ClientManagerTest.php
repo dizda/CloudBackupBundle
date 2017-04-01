@@ -19,8 +19,8 @@ class ClientManagerTest extends \PHPUnit\Framework\TestCase
     public function shouldExecuteDownloadForFirstDownloadableClient()
     {
         $clients = [];
-        $clients[] = $this->getMockBuilder(ClientInterface::class);
-        $clientMock = $this->getMockBuilder(DownloadableClientInterface::class);
+        $clients[] = $this->createMock(ClientInterface::class);
+        $clientMock = $this->createMock(DownloadableClientInterface::class);
         $fileMock = $this
             ->getMockBuilder(\SplFileInfo::class)
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), '')])
@@ -28,7 +28,7 @@ class ClientManagerTest extends \PHPUnit\Framework\TestCase
         $clientMock->expects($this->once())->method('download')->willReturn($fileMock);
         $clients[] = $clientMock;
 
-        $clientManager = new ClientManager($this->getMockBuilder(LoggerInterface::class), $clients);
+        $clientManager = new ClientManager($this->createMock(LoggerInterface::class), $clients);
         $this->assertSame($fileMock, $clientManager->download());
     }
 
@@ -40,10 +40,10 @@ class ClientManagerTest extends \PHPUnit\Framework\TestCase
     public function shouldThrowExceptionIfNoChildIsADownloadableClient()
     {
         $clients = [];
-        $clients[] = $this->getMockBuilder(ClientInterface::class);
-        $clients[] = $this->getMockBuilder(ClientInterface::class);
+        $clients[] = $this->createMock(ClientInterface::class);
+        $clients[] = $this->createMock(ClientInterface::class);
 
-        $clientManager = new ClientManager($this->getMockBuilder(LoggerInterface::class), $clients);
+        $clientManager = new ClientManager($this->createMock(LoggerInterface::class), $clients);
         $clientManager->download();
     }
 }
