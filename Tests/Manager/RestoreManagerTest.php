@@ -36,15 +36,15 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), '')])
             ->getMock();
 
-        $databaseManagerMock = $this->newGetMock(DatabaseManager::class)->disableOriginalConstructor()->getMock();
+        $databaseManagerMock = $this->getMock(DatabaseManager::class)->disableOriginalConstructor()->getMock();
         $databaseManagerMock->expects($this->once())->method('restore');
-        $clientManagerMock = $this->newGetMock(ClientManager::class)->disableOriginalConstructor()->getMock();
+        $clientManagerMock = $this->getMock(ClientManager::class)->disableOriginalConstructor()->getMock();
         $clientManagerMock->expects($this->once())->method('download')->willReturn($fileMock);
-        $processorManagerMock = $this->newGetMock(ProcessorManager::class)->disableOriginalConstructor()->getMock();
+        $processorManagerMock = $this->getMock(ProcessorManager::class)->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->once())->method('uncompress');
-        $eventDispatcherMock = $this->newGetMock(EventDispatcherInterface::class);
+        $eventDispatcherMock = $this->getMock(EventDispatcherInterface::class);
         $eventDispatcherMock->expects($this->once())->method('dispatch')->with(RestoreEvent::RESTORE_COMPLETED);
-        $filesystemMock = $this->newGetMock(Filesystem::class);
+        $filesystemMock = $this->getMock(Filesystem::class);
 
         $restoreManager = new RestoreManager(
             $databaseManagerMock,
@@ -66,15 +66,15 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function shouldNotRestoreDatabase()
     {
-        $databaseManagerMock = $this->newGetMock(DatabaseManager::class)->disableOriginalConstructor()->getMock();
+        $databaseManagerMock = $this->getMock(DatabaseManager::class)->disableOriginalConstructor()->getMock();
         $databaseManagerMock->expects($this->never())->method('restore');
-        $clientManagerMock = $this->newGetMock(ClientManager::class)->disableOriginalConstructor()->getMock();
+        $clientManagerMock = $this->getMock(ClientManager::class)->disableOriginalConstructor()->getMock();
         $clientManagerMock->expects($this->never())->method('download');
-        $processorManagerMock = $this->newGetMock(ProcessorManager::class)->disableOriginalConstructor()->getMock();
+        $processorManagerMock = $this->getMock(ProcessorManager::class)->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->never())->method('uncompress');
-        $eventDispatcherMock = $this->newGetMock(EventDispatcherInterface::class);
+        $eventDispatcherMock = $this->getMock(EventDispatcherInterface::class);
         $eventDispatcherMock->expects($this->never())->method('dispatch');
-        $filesystemMock = $this->newGetMock(Filesystem::class);
+        $filesystemMock = $this->getMock(Filesystem::class);
 
         $restoreManager = new RestoreManager(
             $databaseManagerMock,
@@ -94,18 +94,18 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function shouldDispachRestoreFailedEventIfExceptionOccur()
     {
-        $databaseManagerMock = $this->newGetMock(DatabaseManager::class)->disableOriginalConstructor()->getMock();
+        $databaseManagerMock = $this->getMock(DatabaseManager::class)->disableOriginalConstructor()->getMock();
         $databaseManagerMock->expects($this->never())->method('restore');
-        $clientManagerMock = $this->newGetMock(ClientManager::class)->disableOriginalConstructor()->getMock();
+        $clientManagerMock = $this->getMock(ClientManager::class)->disableOriginalConstructor()->getMock();
         $clientManagerMock->expects($this->never())->method('download');
-        $processorManagerMock = $this->newGetMock(ProcessorManager::class)->disableOriginalConstructor()->getMock();
+        $processorManagerMock = $this->getMock(ProcessorManager::class)->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->never())->method('uncompress');
-        $eventDispatcherMock = $this->newGetMock(EventDispatcherInterface::class);
+        $eventDispatcherMock = $this->getMock(EventDispatcherInterface::class);
         $eventDispatcherMock->expects($this->any())->method('dispatch')->with(
             new \PHPUnit_Framework_Constraint_Not(RestoreEvent::RESTORE_COMPLETED)
         );
         $eventDispatcherMock->expects($this->once())->method('dispatch')->with(RestoreFailedEvent::RESTORE_FAILED);
-        $filesystemMock = $this->newGetMock(Filesystem::class);
+        $filesystemMock = $this->getMock(Filesystem::class);
         $filesystemMock->expects($this->once())->method('mkdir')->will($this->throwException(new \Exception()));
 
         $restoreManager = new RestoreManager(

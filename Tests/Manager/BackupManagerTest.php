@@ -21,14 +21,14 @@ class BackupManagerTest extends \PHPUnit\Framework\TestCase
 	}
     public function testBackupCompletedEventIsCalledOnSuccess()
     {
-        $loggerMock = $this->newGetMock('Psr\Log\LoggerInterface');
-        $databaseManagerMock = $this->newGetMock('Dizda\CloudBackupBundle\Manager\DatabaseManager')
+        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $databaseManagerMock = $this->getMock('Dizda\CloudBackupBundle\Manager\DatabaseManager')
             ->disableOriginalConstructor()->getMock();
-        $clientManagerMock = $this->newGetMock('Dizda\CloudBackupBundle\Manager\ClientManager')
+        $clientManagerMock = $this->getMock('Dizda\CloudBackupBundle\Manager\ClientManager')
             ->disableOriginalConstructor()->getMock();
-        $processorManagerMock = $this->newGetMock('Dizda\CloudBackupBundle\Manager\ProcessorManager')
+        $processorManagerMock = $this->getMock('Dizda\CloudBackupBundle\Manager\ProcessorManager')
             ->disableOriginalConstructor()->getMock();
-        $eventDispatcherMock = $this->newGetMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $eventDispatcherMock = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $eventDispatcherMock->expects($this->once())->method('dispatch')->with(BackupEvent::BACKUP_COMPLETED);
 
         $backupManager = new BackupManager(
@@ -39,16 +39,16 @@ class BackupManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testBackupCompletedEventIsNotCalledWhenFailed()
     {
-        $loggerMock = $this->newGetMock('Psr\Log\LoggerInterface');
-        $databaseManagerMock = $this->newGetMock('Dizda\CloudBackupBundle\Manager\DatabaseManager')
+        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $databaseManagerMock = $this->getMock('Dizda\CloudBackupBundle\Manager\DatabaseManager')
             ->disableOriginalConstructor()->getMock();
-        $clientManagerMock = $this->newGetMock('Dizda\CloudBackupBundle\Manager\ClientManager')
+        $clientManagerMock = $this->getMock('Dizda\CloudBackupBundle\Manager\ClientManager')
             ->disableOriginalConstructor()->getMock();
-        $processorManagerMock = $this->newGetMock('Dizda\CloudBackupBundle\Manager\ProcessorManager')
+        $processorManagerMock = $this->getMock('Dizda\CloudBackupBundle\Manager\ProcessorManager')
             ->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->once())->method('copyFolders')
             ->will($this->throwException(new \Exception()));
-        $eventDispatcherMock = $this->newGetMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $eventDispatcherMock = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $eventDispatcherMock->expects($this->never())->method('dispatch')->with(BackupEvent::BACKUP_COMPLETED);
 
         $backupManager = new BackupManager(
