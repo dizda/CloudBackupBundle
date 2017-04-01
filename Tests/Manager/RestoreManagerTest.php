@@ -109,7 +109,7 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
 		 // backward compatibility
 		if (!class_exists('PHPUnit_Framework_Constraint_Not')){
-			class_alias('\PHPUnit\Constraint\Not','\PHPUnit_Framework_Constraint_Not');
+			class_alias('\PHPUnit\Framework\Constraint\Not','\PHPUnit_Framework_Constraint_Not');
 		}
 		$eventDispatcherMock->expects($this->any())->method('dispatch')->with(
             new \PHPUnit_Framework_Constraint_Not(RestoreEvent::RESTORE_COMPLETED)
