@@ -13,12 +13,19 @@ if (!class_exists('\PHPUnit\Framework\TestCase') &&
 }
 class GaufretteClientTest extends \PHPUnit\Framework\TestCase
 {
+	public function newGetMock($class){
+		if(!class_exists('\PHPUnit\Framework\TestCase')){
+			$this->getMock($class);
+		}else{
+			$this-getMockBuilder($class);
+		}
+	}
     /**
      * @test
      */
     public function shouldDownloadAndSaveContentInANewFile()
     {
-        $localFilesystemMock = $this->createMock(LocalFilesystem::class);
+        $localFilesystemMock = $this->newGetMock(LocalFilesystem::class);
         $localFilesystemMock->expects($this->once())->method('dumpFile')
             ->with('/tmp/restore/db_2016-10-19.zip', 'foo bar');
         $client = new GaufretteClient('/tmp/restore/', $localFilesystemMock);
@@ -51,7 +58,7 @@ class GaufretteClientTest extends \PHPUnit\Framework\TestCase
      */
     public function throwExceptionIfRestoreFolderIsNotConfigured()
     {
-        $client = new GaufretteClient(null, $this->createMock(LocalFilesystem::class));
+        $client = new GaufretteClient(null, $this->newGetMock(LocalFilesystem::class));
         $client->download();
     }
 }

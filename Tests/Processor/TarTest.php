@@ -15,6 +15,13 @@ if (!class_exists('\PHPUnit\Framework\TestCase') &&
 }
 class TarTest extends \PHPUnit\Framework\TestCase
 {
+	public function newGetMock($class){
+		if(!class_exists('\PHPUnit\Framework\TestCase')){
+			$this->getMock($class);
+		}else{
+			$this-getMockBuilder($class);
+		}
+	}
     /**
      * Test different commands.
      */

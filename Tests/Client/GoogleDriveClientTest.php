@@ -14,15 +14,22 @@ if (!class_exists('\PHPUnit\Framework\TestCase') &&
 }
 class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
 {
+	public function newGetMock($class){
+		if(!class_exists('\PHPUnit\Framework\TestCase')){
+			$this->getMock($class);
+		}else{
+			$this-getMockBuilder($class);
+		}
+	}
     public function testUpload()
     {
         $archive = '/biz/baz/boz';
         $mime = 'mime';
-        $clientProvider = $this->createMock('Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider');
-        $driveParent = $this->createMock('Google_Service_Drive_ParentReference');
+        $clientProvider = $this->newGetMock('Happyr\GoogleSiteAuthenticatorBundle\Service\ClientProvider');
+        $driveParent = $this->newGetMock('Google_Service_Drive_ParentReference');
         $driveService = $this->getDriveService();
 
-        $client = $this->createMock('Google_Client')
+        $client = $this->newGetMock('Google_Client')
             ->disableOriginalConstructor()
             ->setMethods(array('setDefer'))
             ->getMock();
@@ -30,7 +37,7 @@ class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
         $client->expects($this->once())
             ->method('setDefer');
 
-        $driveFile = $this->createMock('Google_Service_Drive_DriveFile');
+        $driveFile = $this->newGetMock('Google_Service_Drive_DriveFile');
         $driveFile->expects($this->once())
             ->method('setMimeType')
             ->with($this->equalTo($mime));
@@ -39,7 +46,7 @@ class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
             ->method('setParents')
             ->with($this->equalTo(array($driveParent)));
 
-        $drive = $this->createMock('Dizda\CloudBackupBundle\Client\GoogleDriveClient')
+        $drive = $this->newGetMock('Dizda\CloudBackupBundle\Client\GoogleDriveClient')
             ->setConstructorArgs(array($clientProvider, 'foobar', '/foo/bar', '100'))
             ->setMethods(array('getClient', 'uploadFileInChunks', 'getMediaUploadFile', 'getDriveService', 'getDriveFile', 'getMimeType', 'getParentFolder'))
             ->getMock();
@@ -85,7 +92,7 @@ class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
      */
     private function getDriveService()
     {
-        $driveFiles = $this->createMock('Google_Service_Drive_Files_Resource')
+        $driveFiles = $this->newGetMock('Google_Service_Drive_Files_Resource')
             ->disableOriginalConstructor()
             ->setMethods(array('insert'))
             ->getMock();
@@ -93,7 +100,7 @@ class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
             ->method('insert')
             ->willReturn('request');
 
-        $driveService = $this->createMock('Google_Service_Drive')
+        $driveService = $this->newGetMock('Google_Service_Drive')
             ->disableOriginalConstructor()
             ->getMock();
 

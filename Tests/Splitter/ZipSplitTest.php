@@ -14,6 +14,13 @@ if (!class_exists('\PHPUnit\Framework\TestCase') &&
 }
 class ZipSplitTest extends \PHPUnit\Framework\TestCase
 {
+	public function newGetMock($class){
+		if(!class_exists('\PHPUnit\Framework\TestCase')){
+			$this->getMock($class);
+		}else{
+			$this-getMockBuilder($class);
+		}
+	}
     public function testZipSplitCommand()
     {
         $file = '/var/backup/test.zip';

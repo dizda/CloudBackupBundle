@@ -14,6 +14,13 @@ if (!class_exists('\PHPUnit\Framework\TestCase') &&
 }
 class MySQLTest extends \PHPUnit\Framework\TestCase
 {
+	public function newGetMock($class){
+		if(!class_exists('\PHPUnit\Framework\TestCase')){
+			$this->getMock($class);
+		}else{
+			$this-getMockBuilder($class);
+		}
+	}
     protected function checkConfigurationFileExistsAndValid($user, $password, $host, $port)
     {
         $filePath       = '/tmp/backup/mysql/mysql.cnf';
