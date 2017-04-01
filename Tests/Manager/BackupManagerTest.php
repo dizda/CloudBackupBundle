@@ -12,13 +12,6 @@ if (!class_exists('\PHPUnit\Framework\TestCase') &&
 }
 class BackupManagerTest extends \PHPUnit\Framework\TestCase
 {
-	public function newGetMock($class){
-		if(class_exists('\PHPUnit_Framework_TestCase')){
-			$this->getMock($class);
-		}else{
-			$this->getMockBuilder($class);
-		}
-	}
     public function testBackupCompletedEventIsCalledOnSuccess()
     {
         $loggerMock = $this->getMock('Psr\Log\LoggerInterface');

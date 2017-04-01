@@ -14,13 +14,6 @@ if (!class_exists('\PHPUnit\Framework\TestCase') &&
 }
 class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
 {
-	public function newGetMock($class){
-		if(class_exists('\PHPUnit_Framework_TestCase')){
-			$this->getMock($class);
-		}else{
-			$this->getMockBuilder($class);
-		}
-	}
     public function testUpload()
     {
         $archive = '/biz/baz/boz';
