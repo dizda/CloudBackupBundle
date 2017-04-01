@@ -18,7 +18,7 @@ class MySQLTest extends \PHPUnit\Framework\TestCase
 		if(!class_exists('\PHPUnit\Framework\TestCase')){
 			$this->getMock($class);
 		}else{
-			$this-getMockBuilder($class);
+			$this->getMockBuilder($class);
 		}
 	}
     protected function checkConfigurationFileExistsAndValid($user, $password, $host, $port)

@@ -23,7 +23,7 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
 		if(!class_exists('\PHPUnit\Framework\TestCase')){
 			$this->getMock($class);
 		}else{
-			$this-getMockBuilder($class);
+			$this->getMockBuilder($class);
 		}
 	}
     /**
