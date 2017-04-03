@@ -25,9 +25,24 @@ class DropboxSdkClient implements ClientInterface, DownloadableClientInterface
     private $restoreFolder;
 
     /**
+     * @var string
+     */
+    private $remoteMonthPath;
+
+    /**
      * @var Filesystem
      */
     private $localFilesystem;
+
+    /**
+     * @var int
+     */
+    private $remote_files_count;
+
+    /**
+     * @var int
+     */
+    private $remote_month_count;
 
     /**
      *
@@ -42,6 +57,10 @@ class DropboxSdkClient implements ClientInterface, DownloadableClientInterface
         $params             = $params['dropbox_sdk'];
         $this->access_token = $params['access_token'];
         $this->remotePath   = $params['remote_path'];
+        $this->remoteMonthPath   = $params['remote_month_path'];
+        $this->file_prefix   = $params['file_prefix'];
+        $this->remote_files_count   = $params['remote_files_count'];
+        $this->remote_month_count   = $params['remote_month_count'];
     }
 
     /**
@@ -49,18 +68,28 @@ class DropboxSdkClient implements ClientInterface, DownloadableClientInterface
      */
     public function upload($archive)
     {
-        $fileName  = explode('/', $archive);
-        $pathError = Dropbox\Path::findErrorNonRoot($this->remotePath);
+        $fileName = explode('/', $archive);
+        //change the path and limit if today is the first day of the month
+        $files_path= (date('j') === '1') ? $this->remoteMonthPath:$this->remotePath;
+        $limit_file= (date('j') === '1') ? $this->remote_month_count:$this->remote_files_count;
+        $pathError = Dropbox\Path::findErrorNonRoot($files_path);
 
         if ($pathError !== null) {
             throw new UploadException(sprintf('Invalid path "%s".', $archive));
         }
 
         $client = new Dropbox\Client($this->access_token, 'CloudBackupBundle');
-        $size   = filesize($archive);
+        $size = filesize($archive);
 
         $fp = fopen($archive, 'rb');
-        $client->uploadFile($this->remotePath.'/'.end($fileName), Dropbox\WriteMode::add(), $fp, $size);
+        $client->uploadFile($files_path . '/' . end($fileName), Dropbox\WriteMode::add(), $fp, $size);
+        //get files list and remove if limit is matt
+        $list_files = array_reverse($client->searchFileNames($files_path, $this->file_prefix));
+        $i = 1;
+        foreach ($list_files as $file) {
+            if ($i > $limit_file) $client->delete($file['path']);
+            $i++;
+        }
         fclose($fp);
     }
 
