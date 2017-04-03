@@ -25,6 +25,11 @@ class DropboxSdkClient implements ClientInterface, DownloadableClientInterface
     private $restoreFolder;
 
     /**
+     * @var string
+     */
+    private $remoteMonthPath;
+
+    /**
      * @var Filesystem
      */
     private $localFilesystem;
