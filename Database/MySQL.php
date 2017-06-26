@@ -164,7 +164,7 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
      */
     protected function getCommand()
     {
-        return sprintf('mysqldump %s %s %s > %s',
+        return sprintf('mysqldump %s %s %s %s > %s',
             $this->auth,
             $this->database,
             $this->ignoreTables,
