@@ -18,6 +18,7 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
     private $auth = '';
     private $fileName;
     private $ignoreTables = '';
+    private $singleTransaction = '';
     private $params;
 
     /**
@@ -49,6 +50,13 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
         } else {
             $this->database = $this->params['database'];
             $this->fileName = $this->database . '.sql';
+        }
+    }
+
+    protected function prepareSingleTransaction()
+    {
+        if ($this->params['single_transaction']) {
+            $this->singleTransaction = '--single-transaction';
         }
     }
 
@@ -129,6 +137,7 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
         $this->preparePath();
         $this->prepareFileName();
         $this->prepareIgnoreTables();
+        $this->prepareSingleTransaction();
         $this->prepareConfigurationFile();
     }
 
@@ -159,6 +168,7 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
             $this->auth,
             $this->database,
             $this->ignoreTables,
+            $this->singleTransaction,
             ProcessUtils::escapeArgument($this->dataPath.$this->fileName)
         );
     }
