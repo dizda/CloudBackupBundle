@@ -124,6 +124,7 @@ dizda_cloud_backup:
             database:     ~ # Required if all_databases is false
             db_user:     ~ # Not required, leave empty if no auth is required
             db_password: ~ # Not required
+            restore:     false # Required to Enable Restore of MongoDb
 
         mysql:
             all_databases: false # Only required when no database is set
