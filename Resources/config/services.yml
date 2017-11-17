@@ -70,6 +70,7 @@ services:
         arguments:
             - '%dizda_cloud_backup.databases%'
             - '%dizda_cloud_backup.output_folder%'
+            - '%dizda_cloud_backup.restore_folder%'            
         calls:
             - [ setTimeout, [ '%dizda_cloud_backup.timeout%' ] ]
         tags:

@@ -1,12 +1,14 @@
 <?php
 namespace Dizda\CloudBackupBundle\Database;
 
+use Dizda\CloudBackupBundle\Exception\InvalidConfigurationException;
+
 /**
  * Class MongoDB.
  *
  * @author  Jonathan Dizdarevic <dizda@dizda.fr>
  */
-class MongoDB extends BaseDatabase
+class MongoDB extends BaseDatabase implements RestorableDatabaseInterface
 {
     const DB_PATH = 'mongo';
 
@@ -14,18 +16,31 @@ class MongoDB extends BaseDatabase
     private $auth = '';
 
     /**
+     * @var string
+     */
+    private $restoreFolder;
+    
+    /**
+     * @var string
+     */
+    private $doRestore;
+    
+    /**
      * DB Auth.
      *
      * @param array  $params
      * @param string $basePath
+     * @param string $restoreFolder
      */
-    public function __construct($params, $basePath)
+    public function __construct($params, $basePath, $restoreFolder = null)
     {
         parent::__construct($basePath);
 
-        $params         = $params['mongodb'];
-        $this->database     = $params['database'];
-        $this->auth         = '';
+        $this->restoreFolder    = $restoreFolder;        
+        $params                 = $params['mongodb'];
+        $this->doRestore        = $params['restore'];
+        $this->database         = $params['database'];
+        $this->auth             = '';
 
         if ($params['all_databases']) {
             $this->database = '';
@@ -55,6 +70,7 @@ class MongoDB extends BaseDatabase
         $this->execute($this->getCommand());
     }
 
+    
     /**
      * {@inheritdoc}
      */
@@ -73,4 +89,29 @@ class MongoDB extends BaseDatabase
     {
         return 'MongoDB';
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function restore()
+    {
+        if ($this->doRestore) {
+            $this->execute($this->getRestoreCommand());
+        } 
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRestoreCommand()
+    {
+        if (!$this->restoreFolder) {
+            throw InvalidConfigurationException::create('$restoreFolder');
+        }
+        
+        return sprintf('mongorestore %s %s',
+            $this->auth,
+            $this->restoreFolder . self::DB_PATH);
+    }    
+    
 }

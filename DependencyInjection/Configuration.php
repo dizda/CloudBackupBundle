@@ -108,6 +108,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('db_port')->defaultValue(27017)->end()
                             ->scalarNode('db_user')->defaultValue(null)->end()
                             ->scalarNode('db_password')->defaultValue(null)->end()
+                            ->booleanNode('restore')->defaultFalse()->end()
                         ->end()
                     ->end()
                     ->arrayNode('mysql')
