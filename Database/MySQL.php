@@ -193,8 +193,20 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
 
         $this->prepareFileName();
 
-        $command = sprintf('mysql %s %s < %s',
+        $restoreHost = '';
+        if ($this->params['db_host']) {
+            $restoreHost = sprintf('-h%s', $this->params['db_host']);
+        }
+
+        $restorePort = '';
+        if ($this->params['db_port']) {
+            $restorePort = sprintf('-P%s', $this->params['db_port']);
+        }
+
+        $command = sprintf('mysql %s %s %s %s < %s',
             $restoreAuth,
+            $restoreHost,
+            $restorePort,
             $this->params['database'],
             ProcessUtils::escapeArgument(sprintf('%smysql/%s', $this->restoreFolder, $this->fileName))
         );
