@@ -30,6 +30,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
         $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => true,
+                'single_transaction' => false,
                 'db_host'       => 'localhost',
                 'db_port'       => 3306,
                 'database'      => 'dizbdd',
@@ -50,6 +51,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
         $mysql1 = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => false,
+                'single_transaction' => false,
                 'db_host'       => 'localhost',
                 'db_port'       => 3306,
                 'database'      => 'dizbdd',
@@ -64,6 +66,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
         $mysql2 = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => false,
+                'single_transaction' => false,
                 'db_host'       => 'somehost',
                 'db_port'       => 2222,
                 'database'      => 'somebdd',
@@ -79,6 +82,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
         $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => false,
+                'single_transaction' => false,
                 'db_host'       => 'somehost',
                 'db_port'       => 2222,
                 'database'      => 'somebdd',
@@ -100,6 +104,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
         $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => true,
+                'single_transaction' => false,
                 'db_host'       => 'somehost',
                 'db_port'       => 2222,
                 'database'      => 'somebdd',
@@ -120,6 +125,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
         $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => false,
+                'single_transaction' => false,
                 'db_host'       => 'localhost',
                 'db_port'       => 3306,
                 'database'      => 'dizbdd',
@@ -141,6 +147,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
         $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => true,
+                'single_transaction' => false,
                 'db_host'       => 'localhost',
                 'db_port'       => 3306,
                 'database'      => null,
@@ -163,6 +170,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
         $mysql = new MySQLDummy(array(
             'mysql' => array(
                 'all_databases' => true,
+                'single_transaction' => false,
                 'db_host'       => 'localhost',
                 'db_port'       => 3306,
                 'database'      => null,
@@ -191,7 +199,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertEquals('mysql -uroot dizbdd < \'/tmp/restore/mysql/dizbdd.sql\'', $mysql->getRestoreCommand());
+        $this->assertEquals('mysql -uroot -hlocalhost -P3306 dizbdd < \'/tmp/restore/mysql/dizbdd.sql\'', $mysql->getRestoreCommand());
     }
 
     /**
@@ -210,7 +218,7 @@ class MySQLTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertEquals('mysql -uroot --password="foobar" dizbdd < \'/tmp/restore/mysql/dizbdd.sql\'', $mysql->getRestoreCommand());
+        $this->assertEquals('mysql -uroot --password="foobar" -hlocalhost -P3306 dizbdd < \'/tmp/restore/mysql/dizbdd.sql\'', $mysql->getRestoreCommand());
     }
 
     /**
