@@ -60,13 +60,16 @@ class DatabaseManager
      */
     public function restore()
     {
+        $Restored = 0;
         foreach ($this->children as $child) {
             if ($child instanceof RestorableDatabaseInterface) {
                 $child->restore();
-                return;
+                $Restored++;
             }
         }
-
-        throw MissingRestorableDatabaseException::create();
+        
+        if ( !$Restored ) {
+            throw MissingRestorableDatabaseException::create();            
+        } 
     }
 }
