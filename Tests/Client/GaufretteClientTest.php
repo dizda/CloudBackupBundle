@@ -7,8 +7,27 @@ use Gaufrette\File;
 use Gaufrette\Filesystem;
 use Symfony\Component\Filesystem\Filesystem as LocalFilesystem;
 
+// backward compatibility
+if (!class_exists('\PHPUnit\Framework\TestCase') &&
+    class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
 class GaufretteClientTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Compatibility for older PHPUnit versions
+     *
+     * @param string $originalClassName
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createMock($originalClassName) {
+        if(is_callable(array('parent', 'createMock'))) {
+            return parent::createMock($originalClassName);
+        } else {
+            return $this->getMock($originalClassName);
+        }
+    }
+
     /**
      * @test
      */

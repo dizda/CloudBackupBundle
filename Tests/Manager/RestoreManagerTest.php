@@ -12,8 +12,27 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
+// backward compatibility
+if (!class_exists('\PHPUnit\Framework\TestCase') &&
+    class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
 class RestoreManagerTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Compatibility for older PHPUnit versions
+     *
+     * @param string $originalClassName
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createMock($originalClassName) {
+        if(is_callable(array('parent', 'createMock'))) {
+            return parent::createMock($originalClassName);
+        } else {
+            return $this->getMock($originalClassName);
+        }
+    }
+
     /**
      * @test
      */
@@ -89,9 +108,11 @@ class RestoreManagerTest extends \PHPUnit\Framework\TestCase
         $processorManagerMock = $this->getMockBuilder(ProcessorManager::class)->disableOriginalConstructor()->getMock();
         $processorManagerMock->expects($this->never())->method('uncompress');
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
-        $eventDispatcherMock->expects($this->any())->method('dispatch')->with(
-            new \PHPUnit\Framework\Constraint\LogicalNot(RestoreEvent::RESTORE_COMPLETED)
-        );
+        if(class_exists('PHPUnit_Framework_Constraint_Not')){
+            $eventDispatcherMock->expects($this->any())->method('dispatch')->with(
+                new \PHPUnit_Framework_Constraint_Not(RestoreEvent::RESTORE_COMPLETED)
+            );
+        }
         $eventDispatcherMock->expects($this->once())->method('dispatch')->with(RestoreFailedEvent::RESTORE_FAILED);
         $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock->expects($this->once())->method('mkdir')->will($this->throwException(new \Exception()));

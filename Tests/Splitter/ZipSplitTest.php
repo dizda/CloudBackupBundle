@@ -7,6 +7,11 @@ use Dizda\CloudBackupBundle\Splitter\ZipSplitSplitter;
 /**
  * @author Nick Doulgeridis
  */
+// backward compatibility
+if (!class_exists('\PHPUnit\Framework\TestCase') &&
+    class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
 class ZipSplitTest extends \PHPUnit\Framework\TestCase
 {
     public function testZipSplitCommand()

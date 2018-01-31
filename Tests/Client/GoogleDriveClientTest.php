@@ -7,8 +7,27 @@ use Dizda\CloudBackupBundle\Client\GoogleDriveClient;
 /**
  * @author Tobias Nyholm
  */
+// backward compatibility
+if (!class_exists('\PHPUnit\Framework\TestCase') &&
+    class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
 class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Compatibility for older PHPUnit versions
+     *
+     * @param string $originalClassName
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createMock($originalClassName) {
+        if(is_callable(array('parent', 'createMock'))) {
+            return parent::createMock($originalClassName);
+        } else {
+            return $this->getMock($originalClassName);
+        }
+    }
+
     public function testUpload()
     {
         $archive = '/biz/baz/boz';
@@ -88,7 +107,7 @@ class GoogleDriveClientTest extends \PHPUnit\Framework\TestCase
             ->method('insert')
             ->willReturn('request');
 
-        $driveService = $this->createMockBuilder('Google_Service_Drive')
+        $driveService = $this->getMockBuilder('Google_Service_Drive')
             ->disableOriginalConstructor()
             ->getMock();
 
