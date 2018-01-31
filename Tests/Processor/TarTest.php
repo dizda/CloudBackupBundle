@@ -8,7 +8,7 @@ use Symfony\Component\Process\ProcessUtils;
 /**
  * Class TarTest.
  */
-class TarTest extends \PHPUnit_Framework_TestCase
+class TarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test different commands.

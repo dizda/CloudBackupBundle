@@ -7,14 +7,14 @@ use Gaufrette\File;
 use Gaufrette\Filesystem;
 use Symfony\Component\Filesystem\Filesystem as LocalFilesystem;
 
-class GaufretteClientTest extends \PHPUnit_Framework_TestCase
+class GaufretteClientTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
      */
     public function shouldDownloadAndSaveContentInANewFile()
     {
-        $localFilesystemMock = $this->getMock(LocalFilesystem::class);
+        $localFilesystemMock = $this->createMock(LocalFilesystem::class);
         $localFilesystemMock->expects($this->once())->method('dumpFile')
             ->with('/tmp/restore/db_2016-10-19.zip', 'foo bar');
         $client = new GaufretteClient('/tmp/restore/', $localFilesystemMock);
@@ -47,7 +47,7 @@ class GaufretteClientTest extends \PHPUnit_Framework_TestCase
      */
     public function throwExceptionIfRestoreFolderIsNotConfigured()
     {
-        $client = new GaufretteClient(null, $this->getMock(LocalFilesystem::class));
+        $client = new GaufretteClient(null, $this->createMock(LocalFilesystem::class));
         $client->download();
     }
 }

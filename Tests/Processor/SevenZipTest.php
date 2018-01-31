@@ -7,7 +7,7 @@ use Dizda\CloudBackupBundle\Processor\SevenZipProcessor;
 /**
  * Class SevenZipTest.
  */
-class SevenZipTest extends \PHPUnit_Framework_TestCase
+class SevenZipTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test different commands.

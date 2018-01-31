@@ -7,7 +7,7 @@ use Dizda\CloudBackupBundle\Database\MySQL;
 /**
  * Class MySQLTest.
  */
-class MySQLTest extends \PHPUnit_Framework_TestCase
+class MySQLTest extends \PHPUnit\Framework\TestCase
 {
     protected function checkConfigurationFileExistsAndValid($user, $password, $host, $port)
     {

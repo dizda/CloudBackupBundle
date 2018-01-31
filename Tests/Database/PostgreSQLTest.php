@@ -7,7 +7,7 @@ use Dizda\CloudBackupBundle\Database\PostgreSQL;
 /**
  * Class PostgreSQLTest.
  */
-class PostgreSQLTest extends \PHPUnit_Framework_TestCase
+class PostgreSQLTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test different commands.

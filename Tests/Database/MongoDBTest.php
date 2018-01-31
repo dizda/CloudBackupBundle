@@ -7,7 +7,7 @@ use Dizda\CloudBackupBundle\Database\MongoDB;
 /**
  * Class MongoDBTest.
  */
-class MongoDBTest extends \PHPUnit_Framework_TestCase
+class MongoDBTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test different commands.
