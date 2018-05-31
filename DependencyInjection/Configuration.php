@@ -119,6 +119,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('db_port')->defaultValue(3306)->end()
                             ->scalarNode('db_user')->defaultNull()->end()
                             ->scalarNode('db_password')->defaultNull()->end()
+                            ->booleanNode('single_transaction')->defaultFalse()->end()
                             ->arrayNode('ignore_tables')
                                 ->prototype('scalar')->end()
                             ->end()

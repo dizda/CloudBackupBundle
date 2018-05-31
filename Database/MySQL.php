@@ -18,6 +18,7 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
     private $auth = '';
     private $fileName;
     private $ignoreTables = '';
+    private $singleTransaction = '';
     private $params;
 
     /**
@@ -49,6 +50,13 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
         } else {
             $this->database = $this->params['database'];
             $this->fileName = $this->database . '.sql';
+        }
+    }
+
+    protected function prepareSingleTransaction()
+    {
+        if ($this->params['single_transaction']) {
+            $this->singleTransaction = '--single-transaction';
         }
     }
 
@@ -129,6 +137,7 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
         $this->preparePath();
         $this->prepareFileName();
         $this->prepareIgnoreTables();
+        $this->prepareSingleTransaction();
         $this->prepareConfigurationFile();
     }
 
@@ -155,10 +164,11 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
      */
     protected function getCommand()
     {
-        return sprintf('mysqldump %s %s %s > %s',
+        return sprintf('mysqldump %s %s %s %s> %s',
             $this->auth,
             $this->database,
             $this->ignoreTables,
+            $this->singleTransaction,
             ProcessUtils::escapeArgument($this->dataPath.$this->fileName)
         );
     }
@@ -183,8 +193,20 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
 
         $this->prepareFileName();
 
-        $command = sprintf('mysql %s %s < %s',
+        $restoreHost = '';
+        if ($this->params['db_host']) {
+            $restoreHost = sprintf('-h%s', $this->params['db_host']);
+        }
+
+        $restorePort = '';
+        if ($this->params['db_port']) {
+            $restorePort = sprintf('-P%s', $this->params['db_port']);
+        }
+
+        $command = sprintf('mysql %s %s %s %s < %s',
             $restoreAuth,
+            $restoreHost,
+            $restorePort,
             $this->params['database'],
             ProcessUtils::escapeArgument(sprintf('%smysql/%s', $this->restoreFolder, $this->fileName))
         );

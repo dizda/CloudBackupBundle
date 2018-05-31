@@ -132,6 +132,7 @@ dizda_cloud_backup:
             db_port: ~           # Default 3306
             db_user: ~
             db_password: ~
+	    single_transaction: false
             ignore_tables:       # Specify full name if dumping all databases. `dbname.tablename`
                 - table1
                 - table2

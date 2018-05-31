@@ -7,7 +7,12 @@ use Dizda\CloudBackupBundle\Database\MongoDB;
 /**
  * Class MongoDBTest.
  */
-class MongoDBTest extends \PHPUnit_Framework_TestCase
+// backward compatibility
+if (!class_exists('\PHPUnit\Framework\TestCase') &&
+    class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
+class MongoDBTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test different commands.

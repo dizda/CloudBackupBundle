@@ -8,7 +8,12 @@ use Symfony\Component\Process\ProcessUtils;
 /**
  * Class TarTest.
  */
-class TarTest extends \PHPUnit_Framework_TestCase
+// backward compatibility
+if (!class_exists('\PHPUnit\Framework\TestCase') &&
+    class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
+}
+class TarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test different commands.
