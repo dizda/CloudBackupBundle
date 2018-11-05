@@ -137,9 +137,15 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
      */
     public function dump()
     {
-        $databases = explode(',', $this->params['database']);
-        foreach ($databases as $database) {
-            $this->params['database'] = $database;
+        if(strpos($this->params['database'] , ',') == false) {
+            $databases = explode(',', $this->params['database']);
+            foreach ($databases as $database) {
+                $this->params['database'] = $database;
+                $this->prepareEnvironment();
+                $this->execute($this->getCommand());
+                $this->removeConfigurationFile();
+            }
+        }else{
             $this->prepareEnvironment();
             $this->execute($this->getCommand());
             $this->removeConfigurationFile();
