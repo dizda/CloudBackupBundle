@@ -27,7 +27,7 @@
     "require-dev": {
         "google/apiclient": "1.1.7",
         "symfony/symfony": "^2.3.25",
-        "phpunit/phpunit": "^6.0"
+        "phpunit/phpunit": "^5.0"
     },
 
     "suggest": {
