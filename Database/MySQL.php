@@ -147,7 +147,9 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
      */
     public function restore()
     {
+        $this->prepareEnvironment();
         $this->execute($this->getRestoreCommand());
+        $this->removeConfigurationFile();
     }
 
     /**
@@ -172,19 +174,8 @@ class MySQL extends BaseDatabase implements RestorableDatabaseInterface
             throw InvalidConfigurationException::create('$restoreFolder');
         }
 
-        $restoreAuth = '';
-        if ($this->params['db_user']) {
-            $restoreAuth = sprintf('-u%s', $this->params['db_user']);
-
-            if ($this->params['db_password']) {
-                $restoreAuth = $restoreAuth . sprintf(" --password=\"%s\"", $this->params['db_password']);
-            }
-        }
-
-        $this->prepareFileName();
-
         $command = sprintf('mysql %s %s < %s',
-            $restoreAuth,
+            $this->auth,
             $this->params['database'],
             ProcessUtils::escapeArgument(sprintf('%smysql/%s', $this->restoreFolder, $this->fileName))
         );
